@@ -2,6 +2,8 @@ dependencies {
   fun dep(dependencyId: String) = rootProject.property("dep.$dependencyId").toString()
 
   implementation(project(":paper:api"))
+  implementation(project(":paper:nms:v1_8_R3"))
+  implementation(project(":paper:nms:v1_18_R2"))
 
   implementation(dep("smol"))
 

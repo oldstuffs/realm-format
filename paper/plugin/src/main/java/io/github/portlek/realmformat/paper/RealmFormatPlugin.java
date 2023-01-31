@@ -1,5 +1,7 @@
 package io.github.portlek.realmformat.paper;
 
+import io.github.portlek.realmformat.modifier.Modifier;
+import io.github.portlek.realmformat.modifier.ModifierBackend;
 import io.github.portlek.realmformat.paper.cloud.Cloud;
 import io.github.portlek.realmformat.paper.command.RealmFormatCommand;
 import io.github.portlek.realmformat.paper.configurate.Configs;
@@ -67,8 +69,14 @@ final class RealmFormatPlugin implements TerminableConsumer, Terminable {
     new RealmFormatCommand().bindModuleWith(this);
   }
 
+  @NotNull
+  private ModifierBackend backend() {
+    return null;
+  }
+
   private void onLoad() {
     BukkitTasks.init(this.boostrap).bindWith(this);
     Plugins.init(this.boostrap, new PaperEventManager());
+    Modifier.initiateBackend(this.backend());
   }
 }
