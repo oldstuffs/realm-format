@@ -4,8 +4,14 @@ dependencies {
   api(project(":modifier:core"))
 
   implementation(dep("javassist"))
+  implementation(dep("snakeyaml"))
 }
 
 tasks {
-  jar { manifest { attributes["Premain-Class"] = "io.github.portlek.realmformat.modifier.Agent" } }
+  shadowJar { archiveVersion.set("") }
+
+  jar {
+    archiveVersion.set("")
+    manifest { attributes["Premain-Class"] = "io.github.portlek.realmformat.modifier.Transformer" }
+  }
 }

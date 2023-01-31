@@ -4,8 +4,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public interface ModifierBackend {
-  boolean flushEntities(@NotNull Object storage);
-
   @Nullable
   Object chunkAt(@NotNull Object world, int x, int z);
 
@@ -19,6 +17,8 @@ public interface ModifierBackend {
     @NotNull Object priority,
     @NotNull Object status
   );
+
+  boolean flushEntities(@NotNull Object storage);
 
   @NotNull
   Object injectCustomWorlds();
