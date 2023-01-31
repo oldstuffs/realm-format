@@ -1,4 +1,0 @@
----
-name: "RealmFormat"
-main: "io.github.portlek.realmformat.paper.RealmFormatPlugin"
-version: "${projectVersion}"
