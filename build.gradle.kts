@@ -75,10 +75,7 @@ subprojects {
   tasks {
     compileJava { options.encoding = Charsets.UTF_8.name() }
 
-    jar {
-      archiveBaseName.set(projectName)
-      archiveVersion.set("")
-    }
+    jar { archiveBaseName.set(projectName) }
 
     build { dependsOn(jar) }
 
@@ -89,17 +86,7 @@ subprojects {
         mergeServiceFiles()
 
         archiveBaseName.set(projectName)
-        archiveVersion.set("")
         archiveClassifier.set("")
-
-        findProperty("destination.property")?.let { destinationProperty ->
-          rootProject.findProperty(destinationProperty.toString())?.let { destination ->
-            val p = destination.toString()
-            if (p.isNotEmpty() && p.isNotBlank()) {
-              destinationDirectory.set(File(p))
-            }
-          }
-        }
 
         if (findProperty("shadow.relocation")?.toString().toBoolean()) {
           relocations.forEach { relocate(it, "$shadePackage.$it") }

@@ -10,4 +10,11 @@ pluginManagement {
 
 rootProject.name = "realm-format"
 
-include("api", "paper:api", "paper:nms", "paper:plugin")
+include(
+    "common",
+    "modifier",
+    "modifier:core",
+    "modifier:agent",
+    "paper:api",
+    "paper:nms",
+    "paper:plugin")
