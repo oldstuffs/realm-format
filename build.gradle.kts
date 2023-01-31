@@ -33,7 +33,7 @@ if (spotlessApply) {
     isEnforceCheck = false
 
     format("encoding") {
-      target("*.*")
+      target("**/*.*")
       encoding("UTF-8")
       endWithNewline()
       trimTrailingWhitespace()
@@ -109,17 +109,21 @@ subprojects {
 
   repositories {
     mavenCentral()
-    maven("https://jitpack.io")
     maven("https://oss.sonatype.org/content/repositories/snapshots/")
     maven("https://repo.spongepowered.org/maven/")
     maven("https://papermc.io/repo/repository/maven-public/")
-    mavenLocal()
   }
 
   dependencies {
     fun dep(dependencyId: String) = rootProject.property("dep.$dependencyId").toString()
 
+    compileOnly(dep("lombok"))
+    compileOnly(dep("annotations"))
+
     annotationProcessor(dep("lombok"))
+    annotationProcessor(dep("annotations"))
+
     testAnnotationProcessor(dep("lombok"))
+    testAnnotationProcessor(dep("annotations"))
   }
 }

@@ -1,0 +1,6 @@
+{
+     java.lang.Object obj = io.github.portlek.realmformat.modifier.Modifier.injectCustomWorlds();
+     if (obj != null) {
+        return (net.minecraft.core.RegistryMaterials) obj;
+     }
+}

@@ -1,0 +1,5 @@
+{
+    if (io.github.portlek.realmformat.modifier.Modifier.storeEntities($0, $1)) {
+        return;
+    }
+}
