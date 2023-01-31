@@ -8,6 +8,7 @@ import io.github.portlek.realmformat.paper.configurate.Configs;
 import io.github.portlek.realmformat.paper.file.RealmFormatConfig;
 import io.github.portlek.realmformat.paper.file.RealmFormatMessages;
 import io.github.portlek.realmformat.paper.misc.Services;
+import io.github.portlek.realmformat.paper.nms.v1_18_R2.ModifierBackend1_18_R2;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
 import lombok.AccessLevel;
@@ -20,9 +21,14 @@ import tr.com.infumia.task.BukkitTasks;
 import tr.com.infumia.terminable.CompositeTerminable;
 import tr.com.infumia.terminable.Terminable;
 import tr.com.infumia.terminable.TerminableConsumer;
+import tr.com.infumia.versionmatched.VersionMatched;
 
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 final class RealmFormatPlugin implements TerminableConsumer, Terminable {
+
+  private static final VersionMatched<ModifierBackend> BACKEND_VERSION_MATCHED = new VersionMatched<>(
+    ModifierBackend1_18_R2.class
+  );
 
   private static final AtomicReference<RealmFormatPlugin> INSTANCE = new AtomicReference<>();
 
@@ -69,14 +75,14 @@ final class RealmFormatPlugin implements TerminableConsumer, Terminable {
     new RealmFormatCommand().bindModuleWith(this);
   }
 
-  @NotNull
-  private ModifierBackend backend() {
-    return null;
-  }
-
   private void onLoad() {
     BukkitTasks.init(this.boostrap).bindWith(this);
     Plugins.init(this.boostrap, new PaperEventManager());
-    Modifier.initiateBackend(this.backend());
+    Modifier.initiateBackend(
+      RealmFormatPlugin.BACKEND_VERSION_MATCHED
+        .of()
+        .create()
+        .orElseThrow(() -> new UnsupportedOperationException("This version is not supported!"))
+    );
   }
 }

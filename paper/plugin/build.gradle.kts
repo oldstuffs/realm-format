@@ -16,6 +16,7 @@ dependencies {
   smol(dep("task-bukkit"))
   smol(dep("event-common"))
   smol(dep("event-paper"))
+  smol(dep("versionmatched"))
   smol(dep("cloud-core"))
   smol(dep("cloud-annotations"))
   smol(dep("cloud-paper"))
