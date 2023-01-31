@@ -8,7 +8,10 @@ import io.github.portlek.smol.tasks.SmolJar
 plugins {
   java
   `java-library`
+  `maven-publish`
+  signing
   id("com.diffplug.spotless") version "6.14.0"
+  id("io.github.gradle-nexus.publish-plugin") version "1.1.0"
   id("com.github.johnrengelman.shadow") version "7.1.2" apply false
   id("io.github.portlek.smol-plugin-gradle") version "0.2.2-SNAPSHOT" apply false
   id("io.papermc.paperweight.userdev") version "1.4.1" apply false
@@ -16,6 +19,7 @@ plugins {
 
 val spotlessApply = property("spotless.apply").toString().toBoolean()
 val shadePackage = property("shade.package")
+val signRequired = !property("dev").toString().toBoolean()
 val relocations =
     property("relocations")
         .toString()
@@ -114,6 +118,87 @@ subprojects {
     }
   }
 
+  if (findProperty("maven.publish")?.toString().toBoolean()) {
+    apply<MavenPublishPlugin>()
+    apply<SigningPlugin>()
+
+    tasks {
+      javadoc {
+        options.encoding = Charsets.UTF_8.name()
+        (options as StandardJavadocDocletOptions).tags("todo")
+      }
+
+      val javadocJar by
+          creating(Jar::class) {
+            dependsOn("javadoc")
+            archiveClassifier.set("javadoc")
+            archiveBaseName.set(projectName)
+            archiveVersion.set(project.version.toString())
+            from(javadoc)
+          }
+
+      val sourcesJar by
+          creating(Jar::class) {
+            dependsOn("classes")
+            archiveClassifier.set("sources")
+            archiveBaseName.set(projectName)
+            archiveVersion.set(project.version.toString())
+            from(sourceSets["main"].allSource)
+          }
+
+      build {
+        dependsOn(javadocJar)
+        dependsOn(sourcesJar)
+      }
+    }
+
+    publishing {
+      publications {
+        val publication =
+            create<MavenPublication>("mavenJava") {
+              groupId = project.group.toString()
+              artifactId = projectName
+              version = project.version.toString()
+
+              from(components["java"])
+              artifact(tasks["sourcesJar"])
+              artifact(tasks["javadocJar"])
+              pom {
+                name.set("Event")
+                description.set("A builder-like event library for Paper/Velocity.")
+                url.set("https://infumia.com.tr/")
+                licenses {
+                  license {
+                    name.set("MIT License")
+                    url.set("https://mit-license.org/license.txt")
+                  }
+                }
+                developers {
+                  developer {
+                    id.set("portlek")
+                    name.set("Hasan Demirtaş")
+                    email.set("utsukushihito@outlook.com")
+                  }
+                }
+                scm {
+                  connection.set("scm:git:git://github.com/infumia/event.git")
+                  developerConnection.set("scm:git:ssh://github.com/infumia/event.git")
+                  url.set("https://github.com/infumia/event")
+                }
+              }
+            }
+
+        signing {
+          isRequired = signRequired
+          if (isRequired) {
+            useGpgCmd()
+            sign(publication)
+          }
+        }
+      }
+    }
+  }
+
   repositories {
     mavenCentral()
     maven("https://oss.sonatype.org/content/repositories/snapshots/")
@@ -134,3 +219,5 @@ subprojects {
     testAnnotationProcessor(dep("annotations"))
   }
 }
+
+nexusPublishing { repositories { sonatype() } }
