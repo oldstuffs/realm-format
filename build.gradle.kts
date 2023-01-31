@@ -33,7 +33,7 @@ if (spotlessApply) {
     isEnforceCheck = false
 
     format("encoding") {
-      target("**/*.*")
+      target("**/modifier/agent/src/main/resources/**/*.*")
       encoding("UTF-8")
       endWithNewline()
       trimTrailingWhitespace()
@@ -41,12 +41,16 @@ if (spotlessApply) {
 
     yaml {
       target("**/src/main/resources/*.yaml", "**/src/main/resources/*.yml")
+      endWithNewline()
+      trimTrailingWhitespace()
       jackson()
     }
 
     kotlinGradle {
       target("**/*.gradle.kts")
       indentWithSpaces(2)
+      endWithNewline()
+      trimTrailingWhitespace()
       ktfmt()
     }
 
@@ -55,6 +59,8 @@ if (spotlessApply) {
       importOrder()
       removeUnusedImports()
       indentWithSpaces(2)
+      endWithNewline()
+      trimTrailingWhitespace()
       prettier(mapOf("prettier" to "2.8.3", "prettier-plugin-java" to "2.0.0"))
           .config(
               mapOf("parser" to "java", "tabWidth" to 2, "useTabs" to false, "printWidth" to 100))
