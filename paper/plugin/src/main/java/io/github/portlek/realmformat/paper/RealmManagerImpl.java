@@ -21,6 +21,8 @@ import io.github.portlek.realmformat.paper.loader.MongoLoader;
 import io.github.portlek.realmformat.paper.loader.UpdatableLoader;
 import io.github.portlek.realmformat.paper.misc.Services;
 import io.github.portlek.realmformat.paper.nms.RealmNmsBackend;
+import io.github.shiruka.nbt.Tag;
+import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -35,6 +37,8 @@ import tr.com.infumia.terminable.TerminableModule;
 
 @Log4j2
 final class RealmManagerImpl implements RealmManager, TerminableModule {
+
+  private final Map<String, RealmWorld> loadedWorlds = new ConcurrentHashMap<>();
 
   private final Map<String, RealmLoader> loaders = new ConcurrentHashMap<>();
 
@@ -96,7 +100,28 @@ final class RealmManagerImpl implements RealmManager, TerminableModule {
     final boolean readOnly,
     @NotNull final RealmPropertyMap propertyMap
   ) throws WorldAlreadyExistsException, IOException {
-    return null;
+    WorldAlreadyExistsException.check(!loader.worldExists(worldName), worldName);
+    RealmManagerImpl.log.info("Creating empty world " + worldName + ".");
+    final var start = System.currentTimeMillis();
+    final var world =
+      this.nms.createRealmWorld(
+          loader,
+          worldName,
+          new Long2ObjectOpenHashMap<>(),
+          Tag.createCompound(),
+          Tag.createList(),
+          this.nms.worldVersion(),
+          propertyMap,
+          readOnly,
+          !readOnly,
+          new Long2ObjectOpenHashMap<>()
+        );
+    loader.saveWorld(worldName, world.serialize(), !readOnly);
+    RealmManagerImpl.log.info(
+      "World " + worldName + " created in " + (System.currentTimeMillis() - start) + "ms."
+    );
+    this.registerWorld(world);
+    return world;
   }
 
   @Override
@@ -197,5 +222,9 @@ final class RealmManagerImpl implements RealmManager, TerminableModule {
     if (config.mongo().enabled()) {
       this.registerLoader("mongo", new MongoLoader(config.mongo()));
     }
+  }
+
+  private void registerWorld(@NotNull final RealmWorld world) {
+    this.loadedWorlds.put(world.name(), world);
   }
 }
