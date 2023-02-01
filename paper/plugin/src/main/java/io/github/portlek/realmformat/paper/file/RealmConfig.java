@@ -2,8 +2,6 @@ package io.github.portlek.realmformat.paper.file;
 
 import io.github.portlek.realmformat.paper.configurate.Config;
 import io.github.portlek.realmformat.paper.misc.MongoCredential;
-import java.io.File;
-import java.nio.file.Path;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.configurate.loader.ConfigurationLoader;
@@ -18,7 +16,7 @@ public final class RealmConfig implements Config {
   private final ConfigurationLoader<?> loader;
 
   @Setting
-  private Path fileLoaderPath = new File("realms").toPath();
+  private String fileLoaderPath = "realms";
 
   @Setting
   private MongoCredential mongo = MongoCredential

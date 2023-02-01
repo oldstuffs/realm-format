@@ -225,7 +225,7 @@ final class RealmManagerImpl implements RealmManager, TerminableModule {
   @Override
   public void setup(@NotNull final TerminableConsumer consumer) {
     final var config = Services.load(RealmConfig.class);
-    this.registerLoader("file", new FileLoader(config.fileLoaderPath().toFile()));
+    this.registerLoader("file", new FileLoader(new File(config.fileLoaderPath())));
     if (config.mongo().enabled()) {
       this.registerLoader("mongo", new MongoLoader(config.mongo()));
     }

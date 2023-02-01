@@ -206,7 +206,7 @@ public final class RealmCommand implements TerminableModule {
                     final var location = new Location(Bukkit.getWorld(worldName), 0, 61, 0);
                     location.getBlock().setType(Material.BEDROCK);
                     worlds.worlds().put(worldName, worldData);
-                    config.save();
+                    worlds.save();
                     sender.sendMessage(
                       Components.deserialize(
                         "&aWorld &e" +
