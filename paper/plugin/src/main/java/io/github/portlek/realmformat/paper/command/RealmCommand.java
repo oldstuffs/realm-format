@@ -73,7 +73,15 @@ public final class RealmCommand implements TerminableModule {
       });
     final var create = builder
       .literal("create")
-      .argument(StringArgument.of("world"))
+      .argument(
+        StringArgument
+          .<CommandSender>builder("world")
+          .single()
+          .withSuggestionsProvider((context, input) ->
+            input.isEmpty() ? List.of("<world>") : List.of(input)
+          )
+          .build()
+      )
       .argument(
         StringArgument
           .<CommandSender>builder("datasource")

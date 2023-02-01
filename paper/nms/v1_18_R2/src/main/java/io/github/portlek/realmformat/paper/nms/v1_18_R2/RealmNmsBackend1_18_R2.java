@@ -313,8 +313,8 @@ public final class RealmNmsBackend1_18_R2 implements RealmNmsBackend {
   @Override
   public void generateWorld(@NotNull final RealmWorld world) {
     final var worldName = world.name();
-    Preconditions.checkNotNull(
-      Bukkit.getWorld(worldName),
+    Preconditions.checkArgument(
+      Bukkit.getWorld(worldName) == null,
       "World %s already exists! Maybe it's an outdated RealmWorld object?",
       worldName
     );
