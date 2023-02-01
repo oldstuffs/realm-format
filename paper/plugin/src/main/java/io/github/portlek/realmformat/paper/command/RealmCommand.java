@@ -5,6 +5,7 @@ import cloud.commandframework.arguments.standard.StringArgument;
 import cloud.commandframework.bukkit.parsers.PlayerArgument;
 import cloud.commandframework.bukkit.parsers.WorldArgument;
 import cloud.commandframework.context.CommandContext;
+import cloud.commandframework.minecraft.extras.MinecraftExtrasMetaKeys;
 import io.github.portlek.realmformat.format.exception.WorldAlreadyExistsException;
 import io.github.portlek.realmformat.paper.api.RealmManager;
 import io.github.portlek.realmformat.paper.cloud.Cloud;
@@ -21,6 +22,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.function.BiFunction;
 import lombok.extern.log4j.Log4j2;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -84,6 +86,10 @@ public final class RealmCommand implements TerminableModule {
         PlayerArgument.optional("target"),
         ArgumentDescription.of("Specified player to teleport.")
       )
+      .meta(
+        MinecraftExtrasMetaKeys.DESCRIPTION,
+        Component.text("Teleports to the specified world.")
+      )
       .permission("realmformat.command.goto")
       .handler(context -> {
         final var world = context.<World>get("world");
@@ -108,7 +114,7 @@ public final class RealmCommand implements TerminableModule {
                 : "&e" + target.getName() + "&7"
             ) +
             " to &b" +
-            world +
+            world.getName() +
             "&7..."
           )
         );
