@@ -1,7 +1,5 @@
 package io.github.portlek.realmformat.paper;
 
-import io.github.portlek.realmformat.modifier.Modifier;
-import io.github.portlek.realmformat.modifier.ModifierBackend;
 import io.github.portlek.realmformat.paper.api.RealmManager;
 import io.github.portlek.realmformat.paper.cloud.Cloud;
 import io.github.portlek.realmformat.paper.command.RealmCommand;
@@ -9,8 +7,10 @@ import io.github.portlek.realmformat.paper.configurate.Configs;
 import io.github.portlek.realmformat.paper.file.RealmConfig;
 import io.github.portlek.realmformat.paper.file.RealmMessages;
 import io.github.portlek.realmformat.paper.file.RealmWorlds;
+import io.github.portlek.realmformat.paper.misc.Misc;
 import io.github.portlek.realmformat.paper.misc.Services;
-import io.github.portlek.realmformat.paper.nms.v1_18_R2.ModifierBackend1_18_R2;
+import io.github.portlek.realmformat.paper.nms.RealmNmsBackend;
+import io.github.portlek.realmformat.paper.nms.v1_18_R2.RealmNmsBackend1_18_R2;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
 import lombok.experimental.Delegate;
@@ -25,8 +25,8 @@ import tr.com.infumia.versionmatched.VersionMatched;
 
 final class RealmPlugin implements TerminableConsumer, Terminable {
 
-  private static final VersionMatched<ModifierBackend> BACKEND_VERSION_MATCHED = new VersionMatched<>(
-    ModifierBackend1_18_R2.class
+  private static final VersionMatched<RealmNmsBackend> BACKEND_VERSION_MATCHED = new VersionMatched<>(
+    RealmNmsBackend1_18_R2.class
   );
 
   private static final AtomicReference<RealmPlugin> INSTANCE = new AtomicReference<>();
@@ -78,11 +78,9 @@ final class RealmPlugin implements TerminableConsumer, Terminable {
   private void onLoad() {
     BukkitTasks.init(this.boostrap).bindWith(this);
     Plugins.init(this.boostrap, new PaperEventManager());
-    Modifier.initiateBackend(
-      RealmPlugin.BACKEND_VERSION_MATCHED
-        .of()
-        .create()
-        .orElseThrow(() -> new UnsupportedOperationException("This version is not supported!"))
-    );
+    RealmPlugin.BACKEND_VERSION_MATCHED
+      .ofPrimitive(boolean.class)
+      .create(Misc.isPaper())
+      .orElseThrow(() -> new UnsupportedOperationException("This version is not supported!"));
   }
 }

@@ -132,7 +132,7 @@ final class RealmManagerImpl implements RealmManager, TerminableModule {
   @Nullable
   @Override
   public RealmLoader loader(@NotNull final String dataSource) {
-    return null;
+    return this.loaders.get(dataSource);
   }
 
   @Override

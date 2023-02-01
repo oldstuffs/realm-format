@@ -2,8 +2,9 @@ dependencies {
   fun dep(dependencyId: String) = rootProject.property("dep.$dependencyId").toString()
 
   implementation(project(":paper:api"))
+  implementation(project(":paper:nms:common"))
   implementation(project(":paper:nms:v1_8_R3"))
-  implementation(project(":paper:nms:v1_18_R2"))
+  implementation(project(":paper:nms:v1_18_R2", "reobf"))
 
   implementation(dep("smol"))
 
@@ -26,6 +27,8 @@ dependencies {
   smol(dep("mariadb"))
   smol(dep("mongodb"))
   smol(dep("commonsio"))
+  smol(dep("nbt"))
+  smol(dep("zstd"))
 }
 
 tasks {
