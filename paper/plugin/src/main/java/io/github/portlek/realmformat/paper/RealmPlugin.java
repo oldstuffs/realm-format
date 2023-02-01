@@ -25,9 +25,12 @@ import tr.com.infumia.versionmatched.VersionMatched;
 
 final class RealmPlugin implements TerminableConsumer, Terminable {
 
-  private static final VersionMatched<RealmNmsBackend> BACKEND_VERSION_MATCHED = new VersionMatched<>(
+  private static final RealmNmsBackend BACKEND_VERSION_MATCHED = new VersionMatched<>(
     RealmNmsBackend1_18_R2.class
-  );
+  )
+    .ofPrimitive(boolean.class)
+    .create(Misc.isPaper())
+    .orElseThrow(() -> new UnsupportedOperationException("This version is not supported!"));
 
   private static final AtomicReference<RealmPlugin> INSTANCE = new AtomicReference<>();
 
@@ -71,6 +74,7 @@ final class RealmPlugin implements TerminableConsumer, Terminable {
     Services
       .provide(RealmWorlds.class, new RealmWorlds(Configs.yaml(folder.resolve("worlds.yaml"))))
       .reload();
+    Services.provide(RealmNmsBackend.class, RealmPlugin.BACKEND_VERSION_MATCHED);
     Services.provide(RealmManager.class, this.bindModule(new RealmManagerImpl()));
     new RealmCommand().bindModuleWith(this);
   }
@@ -78,9 +82,5 @@ final class RealmPlugin implements TerminableConsumer, Terminable {
   private void onLoad() {
     BukkitTasks.init(this.boostrap).bindWith(this);
     Plugins.init(this.boostrap, new PaperEventManager());
-    RealmPlugin.BACKEND_VERSION_MATCHED
-      .ofPrimitive(boolean.class)
-      .create(Misc.isPaper())
-      .orElseThrow(() -> new UnsupportedOperationException("This version is not supported!"));
   }
 }

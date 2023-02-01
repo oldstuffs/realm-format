@@ -13,11 +13,14 @@ import io.github.portlek.realmformat.format.loader.RealmLoader;
 import io.github.portlek.realmformat.format.property.RealmPropertyMap;
 import io.github.portlek.realmformat.format.realm.RealmWorld;
 import io.github.portlek.realmformat.paper.api.RealmManager;
+import io.github.portlek.realmformat.paper.api.event.PostGenerateRealmWorldEvent;
+import io.github.portlek.realmformat.paper.api.event.PreGenerateRealmWorldEvent;
 import io.github.portlek.realmformat.paper.file.RealmConfig;
 import io.github.portlek.realmformat.paper.loader.FileLoader;
 import io.github.portlek.realmformat.paper.loader.MongoLoader;
 import io.github.portlek.realmformat.paper.loader.UpdatableLoader;
 import io.github.portlek.realmformat.paper.misc.Services;
+import io.github.portlek.realmformat.paper.nms.RealmNmsBackend;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -34,6 +37,8 @@ import tr.com.infumia.terminable.TerminableModule;
 final class RealmManagerImpl implements RealmManager, TerminableModule {
 
   private final Map<String, RealmLoader> loaders = new ConcurrentHashMap<>();
+
+  private final RealmNmsBackend nms = Services.load(RealmNmsBackend.class);
 
   @NotNull
   @Override
@@ -95,7 +100,19 @@ final class RealmManagerImpl implements RealmManager, TerminableModule {
   }
 
   @Override
-  public void generateWorld(@NotNull final RealmWorld world) {}
+  public void generateWorld(@NotNull final RealmWorld world) {
+    Preconditions.checkArgument(
+      world.readOnly() || world.locked(),
+      "This world cannot be loaded, as it has not been locked."
+    );
+    final var preEvent = new PreGenerateRealmWorldEvent(world);
+    preEvent.callEvent();
+    if (preEvent.isCancelled()) {
+      return;
+    }
+    this.nms.generateWorld(preEvent.world());
+    new PostGenerateRealmWorldEvent(preEvent.world()).callEvent();
+  }
 
   @NotNull
   @Override
