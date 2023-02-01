@@ -1,6 +1,9 @@
 package io.github.portlek.realmformat.paper.command;
 
+import cloud.commandframework.ArgumentDescription;
 import cloud.commandframework.arguments.standard.StringArgument;
+import cloud.commandframework.bukkit.parsers.PlayerArgument;
+import cloud.commandframework.bukkit.parsers.WorldArgument;
 import cloud.commandframework.context.CommandContext;
 import io.github.portlek.realmformat.format.exception.WorldAlreadyExistsException;
 import io.github.portlek.realmformat.paper.api.RealmManager;
@@ -9,6 +12,8 @@ import io.github.portlek.realmformat.paper.file.RealmConfig;
 import io.github.portlek.realmformat.paper.file.RealmMessages;
 import io.github.portlek.realmformat.paper.file.RealmWorlds;
 import io.github.portlek.realmformat.paper.misc.Components;
+import io.github.portlek.realmformat.paper.misc.Misc;
+import io.github.portlek.realmformat.paper.misc.Point3d;
 import io.github.portlek.realmformat.paper.misc.Services;
 import io.github.portlek.realmformat.paper.misc.WorldData;
 import java.io.IOException;
@@ -19,8 +24,10 @@ import lombok.extern.log4j.Log4j2;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
 import tr.com.infumia.task.Schedulers;
@@ -38,24 +45,23 @@ public final class RealmCommand implements TerminableModule {
     final var worlds = Services.load(RealmWorlds.class);
     final var manager = Services.load(RealmManager.class);
     final BiFunction<CommandContext<CommandSender>, String, List<String>> datasourceSuggestions = (
-      context,
-      input
-    ) -> {
-      return manager
+        context,
+        input
+      ) ->
+      manager
         .availableLoaders()
         .keySet()
         .stream()
         .filter(name -> StringUtil.startsWithIgnoreCase(name, input))
         .sorted(String.CASE_INSENSITIVE_ORDER)
         .toList();
-    };
     final var commandManager = Services.load(Cloud.KEY);
     final var builder = commandManager
       .commandBuilder("realmformat", "rf")
       .permission("realmformat.command.base");
     Cloud.registerHelpCommand(commandManager, builder, "realmformat");
     final var reload = builder
-      .literal("reload")
+      .literal("reload", ArgumentDescription.of("Reloads configuration files."))
       .permission("realmformat.command.reload")
       .handler(context -> {
         final var now = System.currentTimeMillis();
@@ -70,6 +76,56 @@ public final class RealmCommand implements TerminableModule {
               .sendP(context.getSender(), "took", System.currentTimeMillis() - now);
           })
           .bindWith(consumer);
+      });
+    final var goTo = builder
+      .literal("goto", ArgumentDescription.of("Teleports to the specified world."))
+      .argument(WorldArgument.of("world"))
+      .argument(
+        PlayerArgument.optional("target"),
+        ArgumentDescription.of("Specified player to teleport.")
+      )
+      .permission("realmformat.command.goto")
+      .handler(context -> {
+        final var world = context.<World>get("world");
+        final Player target;
+        final var sender = context.getSender();
+        if (context.contains("target")) {
+          target = context.get("target");
+        } else if (!(sender instanceof Player self)) {
+          sender.sendMessage(
+            Components.deserialize("&cIn order to use this command, you MUST be a player!")
+          );
+          return;
+        } else {
+          target = self;
+        }
+        sender.sendMessage(
+          Components.deserialize(
+            "Teleporting " +
+            (
+              target.getName().equals(sender.getName())
+                ? "yourself"
+                : "&e" + target.getName() + "&7"
+            ) +
+            " to &b" +
+            world +
+            "&7..."
+          )
+        );
+        final Location spawnLocation;
+        final var realmWorld = worlds.worlds().get(world.getName());
+        if (realmWorld != null) {
+          final var spawn = realmWorld.spawn();
+          spawnLocation =
+            new Location(world, spawn.x(), spawn.y(), spawn.z(), spawn.yaw(), spawn.pitch());
+        } else {
+          spawnLocation = world.getSpawnLocation();
+        }
+        if (Misc.isPaper()) {
+          target.teleportAsync(spawnLocation);
+        } else {
+          target.teleport(spawnLocation);
+        }
       });
     final var create = builder
       .literal("create")
@@ -124,7 +180,7 @@ public final class RealmCommand implements TerminableModule {
             try {
               final var start = System.currentTimeMillis();
               final var worldData = new WorldData();
-              worldData.spawn("0, 64, 0");
+              worldData.spawn(Point3d.builder().y(64.0d).build());
               worldData.dataSource(datasource);
               final var propertyMap = worldData.toPropertyMap();
               final var realmWorld = manager.createEmptyWorld(
@@ -188,6 +244,6 @@ public final class RealmCommand implements TerminableModule {
           })
           .bindWith(consumer);
       });
-    commandManager.command(reload).command(create);
+    commandManager.command(reload).command(goTo).command(create);
   }
 }

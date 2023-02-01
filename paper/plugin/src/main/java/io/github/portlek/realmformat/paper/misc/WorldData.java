@@ -44,7 +44,7 @@ public final class WorldData {
   private boolean readOnly = false;
 
   @Setting
-  private String spawn = "0.5, 255, 0.5";
+  private Point3d spawn = Point3d.builder().x(0.5d).y(255.0d).z(0.5d).build();
 
   @Setting
   private String worldType = "DEFAULT";
@@ -55,17 +55,6 @@ public final class WorldData {
       Enum.valueOf(Difficulty.class, this.difficulty.toUpperCase());
     } catch (final IllegalArgumentException ex) {
       throw new IllegalArgumentException("unknown difficulty '" + this.difficulty + "'");
-    }
-    final var spawnLocationSplit = this.spawn.split(", ");
-    final double spawnX;
-    final double spawnY;
-    final double spawnZ;
-    try {
-      spawnX = Double.parseDouble(spawnLocationSplit[0]);
-      spawnY = Double.parseDouble(spawnLocationSplit[1]);
-      spawnZ = Double.parseDouble(spawnLocationSplit[2]);
-    } catch (final NumberFormatException | ArrayIndexOutOfBoundsException ex) {
-      throw new IllegalArgumentException("invalid spawn location '" + this.spawn + "'");
     }
     var environment = this.environment;
     try {
@@ -82,9 +71,9 @@ public final class WorldData {
       }
     }
     final var propertyMap = new RealmPropertyMap();
-    propertyMap.setValue(RealmProperties.SPAWN_X, (int) spawnX);
-    propertyMap.setValue(RealmProperties.SPAWN_Y, (int) spawnY);
-    propertyMap.setValue(RealmProperties.SPAWN_Z, (int) spawnZ);
+    propertyMap.setValue(RealmProperties.SPAWN_X, (int) this.spawn.x());
+    propertyMap.setValue(RealmProperties.SPAWN_Y, (int) this.spawn.y());
+    propertyMap.setValue(RealmProperties.SPAWN_Z, (int) this.spawn.z());
     propertyMap.setValue(RealmProperties.DIFFICULTY, this.difficulty);
     propertyMap.setValue(RealmProperties.ALLOW_MONSTERS, this.allowMonsters);
     propertyMap.setValue(RealmProperties.ALLOW_ANIMALS, this.allowAnimals);
