@@ -14,7 +14,7 @@ import org.spongepowered.configurate.objectmapping.meta.Setting;
 
 @Getter
 @ConfigSerializable
-public final class RealmFormatMessages implements Config {
+public final class RealmMessages implements Config {
 
   @NotNull
   private final ConfigurationLoader<?> loader;
@@ -22,7 +22,7 @@ public final class RealmFormatMessages implements Config {
   @Setting
   private FormattedMessage reloadComplete = of(text("Reload complete! Took %took%ms").color(GREEN));
 
-  public RealmFormatMessages(@NotNull final ConfigurationLoader<?> loader) {
+  public RealmMessages(@NotNull final ConfigurationLoader<?> loader) {
     this.loader = loader;
   }
 }

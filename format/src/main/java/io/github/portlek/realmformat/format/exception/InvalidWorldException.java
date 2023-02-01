@@ -5,7 +5,7 @@ import lombok.experimental.StandardException;
 import org.jetbrains.annotations.NotNull;
 
 @StandardException
-public final class InvalidWorldException extends RealmFormatException {
+public final class InvalidWorldException extends RealmException {
 
   private static final String MESSAGE = "Directory %s does not contain a valid MC world!%s";
 

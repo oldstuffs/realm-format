@@ -17,7 +17,7 @@ public interface RealmLoader {
   byte@NotNull[] loadWorld(@NotNull String worldName, boolean readOnly)
     throws UnknownWorldException, WorldInUseException, IOException;
 
-  void saveWorld(@NotNull String worldName, byte[] serializedWorld, boolean lock)
+  void saveWorld(@NotNull String worldName, byte@NotNull[] serializedWorld, boolean lock)
     throws IOException;
 
   void unlockWorld(@NotNull String worldName) throws UnknownWorldException, IOException;

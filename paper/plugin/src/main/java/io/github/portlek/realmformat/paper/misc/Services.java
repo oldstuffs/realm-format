@@ -1,7 +1,7 @@
 package io.github.portlek.realmformat.paper.misc;
 
 import com.google.common.reflect.TypeToken;
-import io.github.portlek.realmformat.paper.RealmFormatBoostrap;
+import io.github.portlek.realmformat.paper.RealmBoostrap;
 import java.util.Optional;
 import lombok.experimental.UtilityClass;
 import org.bukkit.Bukkit;
@@ -53,7 +53,7 @@ public class Services {
       .register(
         serviceType.getRawType(),
         instance,
-        JavaPlugin.getPlugin(RealmFormatBoostrap.class),
+        JavaPlugin.getPlugin(RealmBoostrap.class),
         ServicePriority.Normal
       );
     return instance;

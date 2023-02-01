@@ -4,7 +4,7 @@ import lombok.experimental.StandardException;
 import org.jetbrains.annotations.NotNull;
 
 @StandardException
-public final class UnknownWorldException extends RealmFormatException {
+public final class UnknownWorldException extends RealmException {
 
   private static final String MESSAGE = "Unknown world %s";
 

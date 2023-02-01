@@ -80,7 +80,7 @@ public interface RealmManager {
   @NotNull
   List<RealmWorld> loadedWorlds();
 
-  @NotNull
+  @Nullable
   RealmLoader loader(@NotNull String dataSource);
 
   void migrateWorld(

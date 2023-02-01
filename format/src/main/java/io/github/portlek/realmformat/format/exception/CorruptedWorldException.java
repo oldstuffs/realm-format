@@ -5,7 +5,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 @StandardException
-public final class CorruptedWorldException extends RealmFormatException {
+public final class CorruptedWorldException extends RealmException {
 
   private static final String MESSAGE = "World %s seems to be corrupted";
 

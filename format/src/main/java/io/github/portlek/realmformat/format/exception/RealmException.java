@@ -4,4 +4,4 @@ import lombok.AccessLevel;
 import lombok.experimental.StandardException;
 
 @StandardException(access = AccessLevel.PROTECTED)
-abstract class RealmFormatException extends Exception {}
+abstract class RealmException extends Exception {}

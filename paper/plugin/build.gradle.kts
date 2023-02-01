@@ -24,7 +24,8 @@ dependencies {
   smol(dep("cloud-tasks"))
   smol(dep("cloud-minecraft-extras")) { isTransitive = false }
   smol(dep("mariadb"))
-  smol(dep("morphia")) { exclude("org.jetbrains", "annotations") }
+  smol(dep("mongodb"))
+  smol(dep("commonsio"))
 }
 
 tasks {

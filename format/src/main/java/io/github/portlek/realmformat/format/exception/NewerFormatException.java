@@ -3,7 +3,7 @@ package io.github.portlek.realmformat.format.exception;
 import lombok.experimental.StandardException;
 
 @StandardException
-public final class NewerFormatException extends RealmFormatException {
+public final class NewerFormatException extends RealmException {
 
   private static final String MESSAGE = "v%s";
 

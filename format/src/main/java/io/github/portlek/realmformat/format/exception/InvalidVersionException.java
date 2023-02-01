@@ -4,7 +4,7 @@ import lombok.experimental.StandardException;
 import org.jetbrains.annotations.NotNull;
 
 @StandardException
-public final class InvalidVersionException extends RealmFormatException {
+public final class InvalidVersionException extends RealmException {
 
   private static final String MESSAGE = "RealmFormat does not support Minecraft %s!";
 

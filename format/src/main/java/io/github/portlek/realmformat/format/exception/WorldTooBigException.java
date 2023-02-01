@@ -4,7 +4,7 @@ import lombok.experimental.StandardException;
 import org.jetbrains.annotations.NotNull;
 
 @StandardException
-public final class WorldTooBigException extends RealmFormatException {
+public final class WorldTooBigException extends RealmException {
 
   private static final String MESSAGE = "World %s is too big to be converted into the SRF!";
 

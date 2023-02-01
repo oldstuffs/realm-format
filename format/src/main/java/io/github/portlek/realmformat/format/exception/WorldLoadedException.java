@@ -4,7 +4,7 @@ import lombok.experimental.StandardException;
 import org.jetbrains.annotations.NotNull;
 
 @StandardException
-public final class WorldLoadedException extends RealmFormatException {
+public final class WorldLoadedException extends RealmException {
 
   private static final String MESSAGE = "World %s is loaded! Unload it before importing it.";
 
