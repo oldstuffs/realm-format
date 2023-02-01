@@ -1,6 +1,7 @@
 package io.github.portlek.realmformat.modifier;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public interface ModifierBackend {
   @NotNull
@@ -19,12 +20,12 @@ public interface ModifierBackend {
 
   boolean flushEntities(@NotNull Object storage);
 
-  @NotNull
+  @Nullable
   Object injectCustomWorlds();
 
   boolean isCustomWorld(@NotNull Object world);
 
-  @NotNull
+  @Nullable
   Object loadEntities(@NotNull Object storage, @NotNull Object chunkCoordinates);
 
   boolean saveChunk(@NotNull Object world, @NotNull Object chunkAccess);

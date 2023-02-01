@@ -11,9 +11,7 @@ import io.github.portlek.realmformat.paper.misc.Services;
 import io.github.portlek.realmformat.paper.nms.v1_18_R2.ModifierBackend1_18_R2;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
-import lombok.AccessLevel;
 import lombok.experimental.Delegate;
-import lombok.experimental.FieldDefaults;
 import org.jetbrains.annotations.NotNull;
 import tr.com.infumia.event.common.Plugins;
 import tr.com.infumia.event.paper.PaperEventManager;
@@ -23,7 +21,6 @@ import tr.com.infumia.terminable.Terminable;
 import tr.com.infumia.terminable.TerminableConsumer;
 import tr.com.infumia.versionmatched.VersionMatched;
 
-@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 final class RealmFormatPlugin implements TerminableConsumer, Terminable {
 
   private static final VersionMatched<ModifierBackend> BACKEND_VERSION_MATCHED = new VersionMatched<>(
@@ -33,10 +30,10 @@ final class RealmFormatPlugin implements TerminableConsumer, Terminable {
   private static final AtomicReference<RealmFormatPlugin> INSTANCE = new AtomicReference<>();
 
   @NotNull
-  RealmFormatBoostrap boostrap;
+  private final RealmFormatBoostrap boostrap;
 
   @Delegate(types = { TerminableConsumer.class, Terminable.class })
-  CompositeTerminable terminable = CompositeTerminable.simple();
+  private final CompositeTerminable terminable = CompositeTerminable.simple();
 
   private RealmFormatPlugin(@NotNull final RealmFormatBoostrap boostrap) {
     this.boostrap = boostrap;

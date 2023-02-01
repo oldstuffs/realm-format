@@ -1,5 +1,3 @@
-dependencies { api(project(":common")) }
-
 tasks {
   shadowJar { archiveVersion.set("") }
 

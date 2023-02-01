@@ -4,7 +4,6 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.experimental.FieldDefaults;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 import org.spongepowered.configurate.objectmapping.meta.Setting;
@@ -12,30 +11,29 @@ import org.spongepowered.configurate.objectmapping.meta.Setting;
 @Getter
 @Builder
 @ConfigSerializable
-@FieldDefaults(level = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class MongoCredential {
 
   @Setting
-  String address;
+  private String address;
 
   @Setting
-  String authSource;
+  private String authSource;
 
   @Setting
-  String database;
+  private String database;
 
   @Setting
-  String password;
+  private String password;
 
   @Setting
-  int port;
+  private int port;
 
   @Setting
-  String uri;
+  private String uri;
 
   @Setting
-  String username;
+  private String username;
 
   private MongoCredential(
     final String address,
