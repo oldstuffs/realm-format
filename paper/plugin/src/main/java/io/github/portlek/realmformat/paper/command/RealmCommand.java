@@ -79,7 +79,7 @@ public final class RealmCommand implements TerminableModule {
       });
     final var goTo = builder
       .literal("goto", ArgumentDescription.of("Teleports to the specified world."))
-      .argument(WorldArgument.of("world"))
+      .argument(WorldArgument.of("world"), ArgumentDescription.of("The world to be teleported."))
       .argument(
         PlayerArgument.optional("target"),
         ArgumentDescription.of("Specified player to teleport.")
@@ -128,8 +128,11 @@ public final class RealmCommand implements TerminableModule {
         }
       });
     final var create = builder
-      .literal("create")
-      .argument(StringArgument.of("world"))
+      .literal("create", ArgumentDescription.of("Creates an empty realm world."))
+      .argument(
+        StringArgument.of("world"),
+        ArgumentDescription.of("The name of the world to be created.")
+      )
       .argument(
         StringArgument
           .<CommandSender>builder("datasource")
