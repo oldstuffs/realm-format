@@ -25,6 +25,7 @@ import io.github.shiruka.nbt.Tag;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import java.io.File;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -90,6 +91,12 @@ final class RealmManagerImpl implements RealmManager, TerminableModule {
     @NotNull final RealmLoader newLoader
   ) {
     return null;
+  }
+
+  @NotNull
+  @Override
+  public Map<String, RealmLoader> availableLoaders() {
+    return Collections.unmodifiableMap(this.loaders);
   }
 
   @NotNull

@@ -1,6 +1,7 @@
 package io.github.portlek.realmformat.paper.command;
 
 import cloud.commandframework.arguments.standard.StringArgument;
+import cloud.commandframework.context.CommandContext;
 import io.github.portlek.realmformat.format.exception.WorldAlreadyExistsException;
 import io.github.portlek.realmformat.paper.api.RealmManager;
 import io.github.portlek.realmformat.paper.cloud.Cloud;
@@ -12,12 +13,15 @@ import io.github.portlek.realmformat.paper.misc.Services;
 import io.github.portlek.realmformat.paper.misc.WorldData;
 import java.io.IOException;
 import java.util.HashSet;
+import java.util.List;
+import java.util.function.BiFunction;
 import lombok.extern.log4j.Log4j2;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.util.StringUtil;
 import org.jetbrains.annotations.NotNull;
 import tr.com.infumia.task.Schedulers;
 import tr.com.infumia.terminable.TerminableConsumer;
@@ -33,6 +37,18 @@ public final class RealmCommand implements TerminableModule {
     final var messages = Services.load(RealmMessages.class);
     final var worlds = Services.load(RealmWorlds.class);
     final var manager = Services.load(RealmManager.class);
+    final BiFunction<CommandContext<CommandSender>, String, List<String>> datasourceSuggestions = (
+      context,
+      input
+    ) -> {
+      return manager
+        .availableLoaders()
+        .keySet()
+        .stream()
+        .filter(name -> StringUtil.startsWithIgnoreCase(name, input))
+        .sorted(String.CASE_INSENSITIVE_ORDER)
+        .toList();
+    };
     final var commandManager = Services.load(Cloud.KEY);
     final var builder = commandManager
       .commandBuilder("realmformat", "rf")
@@ -62,7 +78,7 @@ public final class RealmCommand implements TerminableModule {
         StringArgument
           .<CommandSender>builder("datasource")
           .single()
-          .withSuggestionsProvider(Cloud.DATASOURCE_SUGGESTER)
+          .withSuggestionsProvider(datasourceSuggestions)
           .build()
       )
       .permission("realmformat.command.create")
