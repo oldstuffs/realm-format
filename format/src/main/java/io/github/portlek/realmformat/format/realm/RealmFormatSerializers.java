@@ -1,7 +1,7 @@
 package io.github.portlek.realmformat.format.realm;
 
 import com.google.common.base.Preconditions;
-import io.github.portlek.realmformat.format.property.RealmPropertyMap;
+import io.github.portlek.realmformat.format.property.RealmFormatPropertyMap;
 import io.github.portlek.realmformat.format.realm.v1.RealmFormatSerializerV1;
 import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
 import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
@@ -45,7 +45,7 @@ public class RealmFormatSerializers {
   @NotNull
   public RealmFormatWorld deserialize(
     final byte@NotNull[] serialized,
-    @NotNull final RealmPropertyMap properties
+    @NotNull final RealmFormatPropertyMap properties
   ) throws IOException {
     @Cleanup
     final var input = new DataInputStream(new ByteArrayInputStream(serialized));

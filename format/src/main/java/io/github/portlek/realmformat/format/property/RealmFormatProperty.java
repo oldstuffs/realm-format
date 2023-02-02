@@ -11,7 +11,7 @@ import org.jetbrains.annotations.Nullable;
 
 @Getter
 @ToString(onlyExplicitlyIncluded = true)
-public abstract class RealmProperty<T> {
+public abstract class RealmFormatProperty<T> {
 
   @NotNull
   @ToString.Include
@@ -23,7 +23,7 @@ public abstract class RealmProperty<T> {
 
   private final Predicate<T> validator;
 
-  protected RealmProperty(
+  protected RealmFormatProperty(
     @NotNull final String nbtName,
     @NotNull final T defaultValue,
     @Nullable final Predicate<T> validator

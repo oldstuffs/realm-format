@@ -1,6 +1,6 @@
 package io.github.portlek.realmformat.format.realm;
 
-import io.github.portlek.realmformat.format.property.RealmPropertyMap;
+import io.github.portlek.realmformat.format.property.RealmFormatPropertyMap;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -23,7 +23,7 @@ public interface RealmFormatSerializer {
   @NotNull
   RealmFormatWorld deserialize(
     @NotNull DataInputStream input,
-    @NotNull RealmPropertyMap properties
+    @NotNull RealmFormatPropertyMap properties
   ) throws IOException;
 
   /**

@@ -1,6 +1,6 @@
 package io.github.portlek.realmformat.format.realm;
 
-import io.github.portlek.realmformat.format.property.RealmPropertyMap;
+import io.github.portlek.realmformat.format.property.RealmFormatPropertyMap;
 import io.github.shiruka.nbt.CompoundTag;
 import java.util.Map;
 import org.jetbrains.annotations.NotNull;
@@ -30,7 +30,7 @@ public interface RealmFormatWorld {
    * @return Properties of the world.
    */
   @NotNull
-  RealmPropertyMap properties();
+  RealmFormatPropertyMap properties();
 
   /**
    * Gets world version.

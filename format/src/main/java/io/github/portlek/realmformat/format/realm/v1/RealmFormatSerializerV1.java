@@ -1,6 +1,6 @@
 package io.github.portlek.realmformat.format.realm.v1;
 
-import io.github.portlek.realmformat.format.property.RealmPropertyMap;
+import io.github.portlek.realmformat.format.property.RealmFormatPropertyMap;
 import io.github.portlek.realmformat.format.realm.RealmFormatSerializer;
 import io.github.portlek.realmformat.format.realm.RealmFormatWorld;
 import io.github.shiruka.nbt.Tag;
@@ -20,27 +20,13 @@ public final class RealmFormatSerializerV1 implements RealmFormatSerializer {
   @Override
   public RealmFormatWorld deserialize(
     @NotNull final DataInputStream input,
-    @NotNull final RealmPropertyMap properties
+    @NotNull final RealmFormatPropertyMap properties
   ) throws IOException {
     final var worldVersion = input.readByte();
-    final var chunkBytes = RealmFormatSerializerHelperV1.readCompressed(input);
-    final var chunks = RealmFormatSerializerHelperV1.readChunks(chunkBytes, properties);
-    final var entities = RealmFormatSerializerHelperV1.readCompressed(input);
-    final var tileEntities = RealmFormatSerializerHelperV1.readCompressed(input);
-    final var extra = RealmFormatSerializerHelperV1.readCompressed(input);
-    final var entitiesCompound = RealmFormatSerializerHelperV1.readCompound(entities);
-    if (entitiesCompound != null) {
-      RealmFormatSerializerHelperV1.readEntities(chunks, entitiesCompound);
-    }
-    final var tileEntitiesCompound = RealmFormatSerializerHelperV1.readCompound(tileEntities);
-    if (tileEntitiesCompound != null) {
-      RealmFormatSerializerHelperV1.readTileEntities(chunks, tileEntitiesCompound);
-    }
-    final var extraCompound = RealmFormatSerializerHelperV1.readCompound(extra);
-    final var newProperties = new RealmPropertyMap();
-    if (extraCompound != null) {
-      newProperties.merge(extraCompound.getCompoundTag("properties").orElse(Tag.createCompound()));
-    }
+    final var chunks = RealmFormatSerializerHelperV1.readChunks(input, properties);
+    final var extraCompound = RealmFormatSerializerHelperV1.readExtra(input);
+    final var newProperties = new RealmFormatPropertyMap();
+    newProperties.merge(extraCompound.getCompoundTag("properties").orElse(Tag.createCompound()));
     newProperties.merge(properties);
     return RealmFormatWorldV1
       .builder()
@@ -57,5 +43,13 @@ public final class RealmFormatSerializerV1 implements RealmFormatSerializer {
     @NotNull final RealmFormatWorld world
   ) throws IOException {
     output.writeByte(world.worldVersion());
+    RealmFormatSerializerHelperV1.writeChunks(output, world.chunks(), world.properties());
+    final var extra = world.extra();
+    final var properties = new RealmFormatPropertyMap(
+      extra.getCompoundTag("properties").orElse(Tag.createCompound())
+    );
+    properties.merge(world.properties());
+    extra.set("properties", properties.tag());
+    RealmFormatSerializerHelperV1.writeExtra(output, extra);
   }
 }

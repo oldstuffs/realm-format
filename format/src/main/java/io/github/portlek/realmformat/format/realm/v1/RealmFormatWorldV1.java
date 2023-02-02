@@ -1,6 +1,6 @@
 package io.github.portlek.realmformat.format.realm.v1;
 
-import io.github.portlek.realmformat.format.property.RealmPropertyMap;
+import io.github.portlek.realmformat.format.property.RealmFormatPropertyMap;
 import io.github.portlek.realmformat.format.realm.RealmFormatChunk;
 import io.github.portlek.realmformat.format.realm.RealmFormatChunkPosition;
 import io.github.portlek.realmformat.format.realm.RealmFormatWorld;
@@ -20,7 +20,7 @@ final class RealmFormatWorldV1 implements RealmFormatWorld {
 
   private CompoundTag extra;
 
-  private RealmPropertyMap properties;
+  private RealmFormatPropertyMap properties;
 
   private byte worldVersion;
 

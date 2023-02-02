@@ -9,21 +9,21 @@ import org.jetbrains.annotations.NotNull;
 
 @Getter
 @ToString
-public final class RealmPropertyMap {
+public final class RealmFormatPropertyMap {
 
   @NotNull
   private final CompoundTag tag;
 
-  public RealmPropertyMap(@NotNull final CompoundTag tag) {
+  public RealmFormatPropertyMap(@NotNull final CompoundTag tag) {
     this.tag = tag;
   }
 
-  public RealmPropertyMap() {
+  public RealmFormatPropertyMap() {
     this(Tag.createCompound());
   }
 
   @NotNull
-  public <T> T getValue(@NotNull final RealmProperty<T> property) {
+  public <T> T getValue(@NotNull final RealmFormatProperty<T> property) {
     return this.tag.get(property.nbtName())
       .map(property::readValue)
       .orElse(property.defaultValue());
@@ -33,11 +33,11 @@ public final class RealmPropertyMap {
     tag.all().forEach(this.tag::set);
   }
 
-  public void merge(@NotNull final RealmPropertyMap map) {
+  public void merge(@NotNull final RealmFormatPropertyMap map) {
     this.merge(map.tag);
   }
 
-  public <T> void setValue(@NotNull final RealmProperty<T> property, @NotNull final T value) {
+  public <T> void setValue(@NotNull final RealmFormatProperty<T> property, @NotNull final T value) {
     Preconditions.checkArgument(
       property.validator() == null || property.validator().test(value),
       "'%s' is not a valid property value.",

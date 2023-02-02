@@ -1,15 +1,15 @@
 package io.github.portlek.realmformat.format.property.type;
 
-import io.github.portlek.realmformat.format.property.RealmProperty;
+import io.github.portlek.realmformat.format.property.RealmFormatProperty;
 import io.github.shiruka.nbt.CompoundTag;
 import io.github.shiruka.nbt.Tag;
 import java.util.function.Predicate;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public final class RealmPropertyInt extends RealmProperty<Integer> {
+public final class RealmFormatPropertyInt extends RealmFormatProperty<Integer> {
 
-  public RealmPropertyInt(
+  public RealmFormatPropertyInt(
     @NotNull final String nbtName,
     @Nullable final Integer defaultValue,
     @Nullable final Predicate<Integer> validator
@@ -17,11 +17,14 @@ public final class RealmPropertyInt extends RealmProperty<Integer> {
     super(nbtName, defaultValue, validator);
   }
 
-  public RealmPropertyInt(@NotNull final String nbtName, @Nullable final Integer defaultValue) {
+  public RealmFormatPropertyInt(
+    @NotNull final String nbtName,
+    @Nullable final Integer defaultValue
+  ) {
     this(nbtName, defaultValue, null);
   }
 
-  public RealmPropertyInt(@NotNull final String nbtName) {
+  public RealmFormatPropertyInt(@NotNull final String nbtName) {
     this(nbtName, null, null);
   }
 
