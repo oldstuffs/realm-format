@@ -1,7 +1,7 @@
 package io.github.portlek.realmformat.format.format.realm;
 
 /**
- * An interface that contains common constants for RealmFormat.
+ * An interface that contains common constants for Realm format.
  */
 public interface RealmFormat {
   /**
