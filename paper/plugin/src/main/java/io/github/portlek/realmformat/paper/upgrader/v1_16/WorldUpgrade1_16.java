@@ -1,16 +1,11 @@
 package io.github.portlek.realmformat.paper.upgrader.v1_16;
 
-import com.flowpowered.nbt.CompoundTag;
-import com.flowpowered.nbt.LongArrayTag;
-import com.flowpowered.nbt.Tag;
-import com.grinderwolf.swm.api.world.SlimeChunk;
-import com.grinderwolf.swm.api.world.SlimeChunkSection;
-import com.grinderwolf.swm.nms.CraftSlimeChunk;
-import com.grinderwolf.swm.nms.CraftSlimeChunkSection;
-import com.grinderwolf.swm.nms.world.SlimeLoadedWorld;
-import com.grinderwolf.swm.plugin.upgrade.Upgrade;
+import io.github.portlek.realmformat.paper.upgrader.Upgrade;
+import io.github.shiruka.nbt.CompoundTag;
+import io.github.shiruka.nbt.array.LongArrayTag;
 import java.util.ArrayList;
 import java.util.Arrays;
+import org.bukkit.Tag;
 
 public class WorldUpgrade1_16 implements Upgrade {
 
