@@ -38,8 +38,13 @@ public final class WorldUpgrade1_14 implements Upgrade {
     WorldUpgrade1_14.NEW_TO_OLD_MAP.put(newName, oldName);
   }
 
-  private static void updateBlockEntities(@NotNull final RealmChunk chunk, final int sectionIndex, final int paletteIndex,
-                                          @NotNull final String oldName, @NotNull final String newName) {
+  private static void updateBlockEntities(
+    @NotNull final RealmChunk chunk,
+    final int sectionIndex,
+    final int paletteIndex,
+    @NotNull final String oldName,
+    @NotNull final String newName
+  ) {
     final var tileEntities = chunk.tileEntities();
     if (tileEntities == null) {
       return;
@@ -64,7 +69,13 @@ public final class WorldUpgrade1_14 implements Upgrade {
             val = (int) (blockData[startIndex] >>> startBitSubIndex & maxEntryValue);
           } else {
             final var endBitSubIndex = 64 - startBitSubIndex;
-            val = (int) ((blockData[startIndex] >>> startBitSubIndex | blockData[endIndex] << endBitSubIndex) & maxEntryValue);
+            val =
+              (int) (
+                (
+                  blockData[startIndex] >>> startBitSubIndex | blockData[endIndex] << endBitSubIndex
+                ) &
+                  maxEntryValue
+              );
           }
           if (val == paletteIndex) {
             final var blockX = x + chunk.x() * 16;
@@ -78,7 +89,9 @@ public final class WorldUpgrade1_14 implements Upgrade {
               if (tileX == blockX && tileY == blockY && tileZ == blockZ) {
                 final var type = compoundTag.getString("id").get();
                 if (!type.equals(oldName)) {
-                  throw new IllegalStateException("Expected block entity to be " + oldName + ", not " + type);
+                  throw new IllegalStateException(
+                    "Expected block entity to be " + oldName + ", not " + type
+                  );
                 }
                 compoundTag.setString("id", newName);
                 break;
@@ -92,10 +105,23 @@ public final class WorldUpgrade1_14 implements Upgrade {
 
   @NotNull
   private static String villagerProfession(final int profession, final int career) {
-    return profession == 0 ? career == 2 ? "minecraft:fisherman" : career == 3 ? "minecraft:shepherd" : career == 4 ? "minecraft:fletcher" : "minecraft:farmer"
-      : profession == 1 ? career == 2 ? "minecraft:cartographer" : "minecraft:librarian" : profession == 2 ? "minecraft:cleric" :
-      profession == 3 ? career == 2 ? "minecraft:weaponsmith" : career == 3 ? "minecraft:toolsmith" : "minecraft:armorer" :
-        profession == 4 ? career == 2 ? "minecraft:leatherworker" : "minecraft:butcher" : profession == 5 ? "minecraft:nitwit" : "minecraft:none";
+    return profession == 0
+      ? career == 2
+      ? "minecraft:fisherman"
+      : career == 3
+      ? "minecraft:shepherd"
+      : career == 4 ? "minecraft:fletcher" : "minecraft:farmer"
+      : profession == 1
+      ? career == 2 ? "minecraft:cartographer" : "minecraft:librarian"
+      : profession == 2
+      ? "minecraft:cleric"
+      : profession == 3
+      ? career == 2
+      ? "minecraft:weaponsmith"
+      : career == 3 ? "minecraft:toolsmith" : "minecraft:armorer"
+      : profession == 4
+      ? career == 2 ? "minecraft:leatherworker" : "minecraft:butcher"
+      : profession == 5 ? "minecraft:nitwit" : "minecraft:none";
   }
 
   private static int @NotNull [] villagerProfession(@NotNull final String profession) {
@@ -129,7 +155,13 @@ public final class WorldUpgrade1_14 implements Upgrade {
               final var blockTag = palette.get(paletteIndex).get().asCompound();
               final var name = blockTag.getString("Name").get();
               if (name.equals("minecraft:trapped_chest")) {
-                WorldUpgrade1_14.updateBlockEntities(chunk, sectionIndex, paletteIndex, "minecraft:chest", "minecraft:trapped_chest");
+                WorldUpgrade1_14.updateBlockEntities(
+                  chunk,
+                  sectionIndex,
+                  paletteIndex,
+                  "minecraft:chest",
+                  "minecraft:trapped_chest"
+                );
               }
               final var newName = WorldUpgrade1_14.OLD_TO_NEW_MAP.get(name);
               if (newName != null) {
@@ -165,28 +197,45 @@ public final class WorldUpgrade1_14 implements Upgrade {
               final var offersOpt = compoundTag.getCompoundTag("Offers");
               if (offersOpt.isPresent()) {
                 if (careerLevel == 0 || careerLevel == 1) {
-                  final int amount = offersOpt.flatMap(offers -> offers.getCompoundTag("Recipes")).map(ContainerTag::size).orElse(0);
+                  final int amount = offersOpt
+                    .flatMap(offers -> offers.getCompoundTag("Recipes"))
+                    .map(ContainerTag::size)
+                    .orElse(0);
                   careerLevel = WorldUpgrade1_14.clamp(amount / 2, 1, 5);
                 }
               }
               final var xp = compoundTag.getCompoundTag("Xp");
               if (xp.isEmpty()) {
-                compoundTag.setInteger("Xp", WorldUpgrade1_14.VILLAGER_XP[WorldUpgrade1_14.clamp(careerLevel - 1, 0, WorldUpgrade1_14.VILLAGER_XP.length - 1)]);
+                compoundTag.setInteger(
+                  "Xp",
+                  WorldUpgrade1_14.VILLAGER_XP[WorldUpgrade1_14.clamp(
+                    careerLevel - 1,
+                    0,
+                    WorldUpgrade1_14.VILLAGER_XP.length - 1
+                  )]
+                );
               }
               compoundTag.remove("Profession");
               compoundTag.remove("Career");
               compoundTag.remove("CareerLevel");
               final var dataMap = Tag.createCompound();
               dataMap.setString("type", "minecraft:plains");
-              dataMap.setString("profession", WorldUpgrade1_14.villagerProfession(profession, career));
+              dataMap.setString(
+                "profession",
+                WorldUpgrade1_14.villagerProfession(profession, career)
+              );
               dataMap.setInteger("level", careerLevel);
               compoundTag.set("VillagerData", dataMap);
             }
             case "minecraft:banner" -> {
               final var customName = compoundTag.getString("CustomName");
               if (customName.isPresent()) {
-                final var newName = customName.get().replace("\"translate\":\"block.minecraft.illager_banner\"",
-                  "\"translate\":\"block.minecraft.ominous_banner\"");
+                final var newName = customName
+                  .get()
+                  .replace(
+                    "\"translate\":\"block.minecraft.illager_banner\"",
+                    "\"translate\":\"block.minecraft.ominous_banner\""
+                  );
                 compoundTag.setString("CustomName", newName);
               }
             }

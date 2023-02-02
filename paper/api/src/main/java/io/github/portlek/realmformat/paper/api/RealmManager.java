@@ -13,7 +13,7 @@ import io.github.portlek.realmformat.format.property.RealmPropertyMap;
 import io.github.portlek.realmformat.format.realm.RealmWorld;
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
+import java.util.Collection;
 import java.util.Map;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -82,7 +82,7 @@ public interface RealmManager {
     throws UnknownWorldException, IOException, CorruptedWorldException, NewerFormatException, WorldInUseException;
 
   @NotNull
-  List<RealmWorld> loadedWorlds();
+  Collection<RealmWorld> loadedWorlds();
 
   @Nullable
   RealmLoader loader(@NotNull String dataSource);

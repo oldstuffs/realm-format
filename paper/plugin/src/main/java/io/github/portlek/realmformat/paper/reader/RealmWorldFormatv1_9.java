@@ -43,7 +43,10 @@ public final class RealmWorldFormatv1_9 implements RealmWorldReader {
 
   @NotNull
   private static ChunkSectionData readChunkSections(
-    @NotNull final DataInputStream dataStream, final byte worldVersion, final int version) throws IOException {
+    @NotNull final DataInputStream dataStream,
+    final byte worldVersion,
+    final int version
+  ) throws IOException {
     final var chunkSectionArray = new RealmChunkSection[16];
     final var sectionBitmask = new byte[2];
     dataStream.read(sectionBitmask);
@@ -87,7 +90,17 @@ public final class RealmWorldFormatv1_9 implements RealmWorldReader {
           final var hypixelBlocksLength = dataStream.readShort();
           dataStream.skip(hypixelBlocksLength);
         }
-        chunkSectionArray[i] = new RealmChunkSectionImpl(null, null, paletteTag, blockStatesArray, blockLightArray, skyLightArray, null, null);
+        chunkSectionArray[i] =
+          new RealmChunkSectionImpl(
+            null,
+            null,
+            paletteTag,
+            blockStatesArray,
+            blockLightArray,
+            skyLightArray,
+            null,
+            null
+          );
       }
     }
     return new ChunkSectionData(chunkSectionArray, 0, 16);
@@ -95,7 +108,10 @@ public final class RealmWorldFormatv1_9 implements RealmWorldReader {
 
   @NotNull
   private static ChunkSectionData readChunkSectionsNew(
-    @NotNull final DataInputStream dataStream, final int worldVersion, final int version) throws IOException {
+    @NotNull final DataInputStream dataStream,
+    final int worldVersion,
+    final int version
+  ) throws IOException {
     final var minSectionY = dataStream.readInt();
     final var maxSectionY = dataStream.readInt();
     final var sectionCount = dataStream.readInt();
@@ -128,14 +144,33 @@ public final class RealmWorldFormatv1_9 implements RealmWorldReader {
         final var hypixelBlocksLength = dataStream.readShort();
         dataStream.skip(hypixelBlocksLength);
       }
-      chunkSectionArray[y] = new RealmChunkSectionImpl(null, null, null, null, blockLightArray, skyLightArray, blockStateTag, biomeTag);
+      chunkSectionArray[y] =
+        new RealmChunkSectionImpl(
+          null,
+          null,
+          null,
+          null,
+          blockLightArray,
+          skyLightArray,
+          blockStateTag,
+          biomeTag
+        );
     }
     return new ChunkSectionData(chunkSectionArray, minSectionY, maxSectionY);
   }
 
   @NotNull
   private static Long2ObjectOpenHashMap<RealmChunk> readChunks(
-    final byte worldVersion, final int version, @NotNull final String worldName, final int minX, final int minZ, final int width, final int depth, @NotNull final BitSet chunkBitset, final byte @NotNull [] chunkData) throws IOException {
+    final byte worldVersion,
+    final int version,
+    @NotNull final String worldName,
+    final int minX,
+    final int minZ,
+    final int width,
+    final int depth,
+    @NotNull final BitSet chunkBitset,
+    final byte @NotNull [] chunkData
+  ) throws IOException {
     @Cleanup final var dataStream = new DataInputStream(new ByteArrayInputStream(chunkData));
     final var chunkMap = new Long2ObjectOpenHashMap<RealmChunk>();
     for (var z = 0; z < depth; z++) {
@@ -174,11 +209,26 @@ public final class RealmWorldFormatv1_9 implements RealmWorldReader {
               biomes[i] = dataStream.readInt();
             }
           }
-          final var data = worldVersion < 0x08 ? RealmWorldFormatv1_9.readChunkSections(dataStream, worldVersion, version) : RealmWorldFormatv1_9.readChunkSectionsNew(dataStream, worldVersion, version);
+          final var data = worldVersion < 0x08
+            ? RealmWorldFormatv1_9.readChunkSections(dataStream, worldVersion, version)
+            : RealmWorldFormatv1_9.readChunkSectionsNew(dataStream, worldVersion, version);
           final var chunkX = minX + x;
           final var chunkZ = minZ + z;
-          chunkMap.put(Misc.asLong(chunkX, chunkZ), new RealmChunkImpl(chunkX, chunkZ,
-            data.sections, heightMaps, biomes, Tag.createList(), Tag.createList(), data.minSectionY, data.maxSectionY, null));
+          chunkMap.put(
+            Misc.asLong(chunkX, chunkZ),
+            new RealmChunkImpl(
+              chunkX,
+              chunkZ,
+              data.sections,
+              heightMaps,
+              biomes,
+              Tag.createList(),
+              Tag.createList(),
+              data.minSectionY,
+              data.maxSectionY,
+              null
+            )
+          );
         }
       }
     }
@@ -186,7 +236,8 @@ public final class RealmWorldFormatv1_9 implements RealmWorldReader {
   }
 
   @Nullable
-  private static CompoundTag readCompoundTag(final byte @NotNull [] serializedCompound) throws IOException {
+  private static CompoundTag readCompoundTag(final byte @NotNull [] serializedCompound)
+    throws IOException {
     if (serializedCompound.length == 0) {
       return null;
     }
@@ -203,13 +254,14 @@ public final class RealmWorldFormatv1_9 implements RealmWorldReader {
 
   @NotNull
   @Override
-  public RealmWorld read(final byte version,
-                         @NotNull final RealmLoader loader,
-                         @NotNull final String worldName,
-                         @NotNull final DataInputStream dataStream,
-                         @NotNull final RealmPropertyMap propertyMap,
-                         final boolean readOnly)
-    throws IOException, CorruptedWorldException {
+  public RealmWorld read(
+    final byte version,
+    @NotNull final RealmLoader loader,
+    @NotNull final String worldName,
+    @NotNull final DataInputStream dataStream,
+    @NotNull final RealmPropertyMap propertyMap,
+    final boolean readOnly
+  ) throws IOException, CorruptedWorldException {
     try {
       final byte worldVersion;
       if (version >= 6) {
@@ -278,11 +330,23 @@ public final class RealmWorldFormatv1_9 implements RealmWorldReader {
       Zstd.decompress(entities, compressedEntities);
       Zstd.decompress(extraTag, compressedExtraTag);
       Zstd.decompress(mapsTag, compressedMapsTag);
-      final var chunks = RealmWorldFormatv1_9.readChunks(worldVersion, version, worldName, minX, minZ, width, depth, chunkBitset, chunkData);
+      final var chunks = RealmWorldFormatv1_9.readChunks(
+        worldVersion,
+        version,
+        worldName,
+        minX,
+        minZ,
+        width,
+        depth,
+        chunkBitset,
+        chunkData
+      );
       final var entitiesCompound = RealmWorldFormatv1_9.readCompoundTag(entities);
       final var entityStorage = new Long2ObjectOpenHashMap<ListTag>();
       if (entitiesCompound != null) {
-        final var serializedEntities = entitiesCompound.getListTag("entities").orElse(Tag.createList());
+        final var serializedEntities = entitiesCompound
+          .getListTag("entities")
+          .orElse(Tag.createList());
         RealmWorldFormatv1_9.log.warning("Serialized entities: " + serializedEntities);
         for (final var entityCompound : serializedEntities) {
           final var compoundTag = entityCompound.asCompound();
@@ -305,7 +369,9 @@ public final class RealmWorldFormatv1_9 implements RealmWorldReader {
       }
       final var tileEntitiesCompound = RealmWorldFormatv1_9.readCompoundTag(tileEntities);
       if (tileEntitiesCompound != null) {
-        final var tileEntitiesList = tileEntitiesCompound.getListTag("tiles").orElse(Tag.createList());
+        final var tileEntitiesList = tileEntitiesCompound
+          .getListTag("tiles")
+          .orElse(Tag.createList());
         for (final var tileEntityCompound : tileEntitiesList) {
           final var compoundTag = tileEntityCompound.asCompound();
           final var chunkX = compoundTag.getInteger("x").get() >> 4;
@@ -328,13 +394,23 @@ public final class RealmWorldFormatv1_9 implements RealmWorldReader {
         mapList = Tag.createList();
       }
       var worldPropertyMap = propertyMap;
-      final var propertiesMap = extraCompound
-        .getCompoundTag("properties");
+      final var propertiesMap = extraCompound.getCompoundTag("properties");
       if (propertiesMap.isPresent()) {
         worldPropertyMap = new RealmPropertyMap(propertiesMap.get());
         worldPropertyMap.merge(propertyMap);
       }
-      return this.nms.createRealmWorld(loader, worldName, chunks, extraCompound, mapList, worldVersion, worldPropertyMap, readOnly, !readOnly, entityStorage);
+      return this.nms.createRealmWorld(
+        loader,
+        worldName,
+        chunks,
+        extraCompound,
+        mapList,
+        worldVersion,
+        worldPropertyMap,
+        readOnly,
+        !readOnly,
+        entityStorage
+      );
     } catch (final EOFException ex) {
       throw new CorruptedWorldException(worldName, ex);
     }
@@ -349,7 +425,11 @@ public final class RealmWorldFormatv1_9 implements RealmWorldReader {
 
     private final RealmChunkSection[] sections;
 
-    private ChunkSectionData(final RealmChunkSection[] sections, final int minSectionY, final int maxSectionY) {
+    private ChunkSectionData(
+      final RealmChunkSection[] sections,
+      final int minSectionY,
+      final int maxSectionY
+    ) {
       this.sections = sections;
       this.minSectionY = minSectionY;
       this.maxSectionY = maxSectionY;

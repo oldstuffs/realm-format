@@ -5,9 +5,9 @@ import io.github.portlek.realmformat.paper.misc.Services;
 import io.github.portlek.realmformat.paper.nms.RealmNmsBackend;
 import io.github.portlek.realmformat.paper.upgrader.v1_11.WorldUpgrade1_11;
 import io.github.portlek.realmformat.paper.upgrader.v1_13.WorldUpgrade1_13;
-import io.github.portlek.realmformat.paper.upgrader.v1_17.WorldUpgrade1_17;
 import io.github.portlek.realmformat.paper.upgrader.v1_14.WorldUpgrade1_14;
 import io.github.portlek.realmformat.paper.upgrader.v1_16.WorldUpgrade1_16;
+import io.github.portlek.realmformat.paper.upgrader.v1_17.WorldUpgrade1_17;
 import io.github.portlek.realmformat.paper.upgrader.v1_18.WorldUpgrade1_18;
 import io.github.portlek.realmformat.paper.upgrader.v1_9.WorldUpgrade1_9;
 import java.util.HashMap;
@@ -19,6 +19,8 @@ import org.jetbrains.annotations.NotNull;
 @Log4j2
 @UtilityClass
 public class WorldUpgrader {
+
+  private final RealmNmsBackend nms = Services.load(RealmNmsBackend.class);
 
   private final Map<Byte, Upgrade> upgrades = new HashMap<>();
 
@@ -32,13 +34,14 @@ public class WorldUpgrader {
     WorldUpgrader.upgrades.put((byte) 8, new WorldUpgrade1_18());
   }
 
-  private final RealmNmsBackend nms = Services.load(RealmNmsBackend.class);
   public void upgradeWorld(@NotNull final RealmWorld world) {
-    final byte serverVersion = nms.worldVersion();
+    final byte serverVersion = WorldUpgrader.nms.worldVersion();
     for (byte ver = (byte) (world.version() + 1); ver <= serverVersion; ver++) {
       final Upgrade upgrade = WorldUpgrader.upgrades.get(ver);
       if (upgrade == null) {
-        log.error("Missing world upgrader for version " + ver + ". World will not be upgraded.");
+        WorldUpgrader.log.error(
+          "Missing world upgrader for version " + ver + ". World will not be upgraded."
+        );
         continue;
       }
       upgrade.upgrade(world);

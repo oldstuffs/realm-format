@@ -30,6 +30,7 @@ import java.io.File;
 import java.io.IOException;
 import java.time.Duration;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -187,7 +188,8 @@ final class RealmManagerImpl implements RealmManager, TerminableModule {
     final byte[] serializedWorld = loader.loadWorld(worldName, readOnly);
     final RealmWorld world;
     try {
-      world = RealmWorldReaderRegistry.read(loader, worldName, serializedWorld, propertyMap, readOnly);
+      world =
+        RealmWorldReaderRegistry.read(loader, worldName, serializedWorld, propertyMap, readOnly);
       NewerFormatException.check(this.nms.worldVersion() >= world.version(), world.version());
       if (world.version() < this.nms.worldVersion()) {
         WorldUpgrader.upgradeWorld(world);
@@ -198,15 +200,17 @@ final class RealmManagerImpl implements RealmManager, TerminableModule {
       }
       throw ex;
     }
-    RealmManagerImpl.log.info("World " + worldName + " loaded in " + (System.currentTimeMillis() - start) + "ms.");
+    RealmManagerImpl.log.info(
+      "World " + worldName + " loaded in " + (System.currentTimeMillis() - start) + "ms."
+    );
     this.registerWorld(world);
     return world;
   }
 
   @NotNull
   @Override
-  public List<RealmWorld> loadedWorlds() {
-    return null;
+  public Collection<RealmWorld> loadedWorlds() {
+    return this.loadedWorlds.values();
   }
 
   @Nullable

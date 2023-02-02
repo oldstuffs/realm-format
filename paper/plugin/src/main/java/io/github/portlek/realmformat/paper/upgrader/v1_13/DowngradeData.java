@@ -1,78 +1,77 @@
 package io.github.portlek.realmformat.paper.upgrader.v1_13;
 
 import com.google.gson.annotations.SerializedName;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-
 import java.util.List;
 import java.util.Map;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
 public class DowngradeData {
 
-    private final Map<String, BlockEntry> blocks;
+  private final Map<String, BlockEntry> blocks;
 
-    @Getter
-    @RequiredArgsConstructor
-    public static class BlockEntry {
+  @Getter
+  public enum Operation {
+    REPLACE,
+    OR,
+  }
 
-        private final int id;
-        private final int data;
+  @Getter
+  @RequiredArgsConstructor
+  public static class BlockEntry {
 
-        private final List<BlockProperty> properties;
-        private final TileEntityData tileEntityData;
+    private final int data;
 
-    }
+    private final int id;
 
-    @Getter
-    @RequiredArgsConstructor
-    public static class BlockProperty {
+    private final List<BlockProperty> properties;
 
-        private final Map<String, String> conditions;
+    private final TileEntityData tileEntityData;
+  }
 
-        private final int id;
-        private final int data;
+  @Getter
+  @RequiredArgsConstructor
+  public static class BlockProperty {
 
-        private final Operation operation;
+    private final Map<String, String> conditions;
 
-    }
+    private final int data;
 
-    @Getter
-    public enum Operation {
-        REPLACE, OR;
-    }
+    private final int id;
 
-    @Getter
-    public static class TileEntityData {
+    private final Operation operation;
+  }
 
-        @SerializedName("create")
-        private TileCreateAction createAction;
-        @SerializedName("set")
-        private TileSetAction setAction;
+  @Getter
+  public static class TileCreateAction {
 
-    }
+    private String name;
+  }
 
-    @Getter
-    public static class TileCreateAction {
+  @Getter
+  public static class TileEntityData {
 
-        private String name;
+    @SerializedName("create")
+    private TileCreateAction createAction;
 
-    }
+    @SerializedName("set")
+    private TileSetAction setAction;
+  }
 
-    @Getter
-    @RequiredArgsConstructor
-    public static class TileSetAction {
+  @Getter
+  @RequiredArgsConstructor
+  public static class TileSetAction {
 
-        private final Map<String, TileSetEntry> entries;
+    private final Map<String, TileSetEntry> entries;
+  }
 
-    }
+  @Getter
+  public static class TileSetEntry {
 
-    @Getter
-    public static class TileSetEntry {
+    private String type;
 
-        private String type;
-        private String value;
-
-    }
+    private String value;
+  }
 }

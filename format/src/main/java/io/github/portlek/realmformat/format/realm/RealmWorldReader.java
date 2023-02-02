@@ -9,12 +9,13 @@ import java.io.IOException;
 import org.jetbrains.annotations.NotNull;
 
 public interface RealmWorldReader {
-
   @NotNull
-  RealmWorld read(byte version,
-                  @NotNull RealmLoader loader,
-                  @NotNull String worldName,
-                  @NotNull DataInputStream dataStream,
-                  @NotNull RealmPropertyMap propertyMap,
-                  boolean readOnly) throws IOException, CorruptedWorldException, NewerFormatException;
+  RealmWorld read(
+    byte version,
+    @NotNull RealmLoader loader,
+    @NotNull String worldName,
+    @NotNull DataInputStream dataStream,
+    @NotNull RealmPropertyMap propertyMap,
+    boolean readOnly
+  ) throws IOException, CorruptedWorldException, NewerFormatException;
 }

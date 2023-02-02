@@ -27,7 +27,13 @@ public class RealmWorldReaderRegistry {
   }
 
   @NotNull
-  public RealmWorld read(@NotNull final RealmLoader loader, @NotNull final String worldName, final byte @NotNull [] serializedWorld, @NotNull final RealmPropertyMap propertyMap, final boolean readOnly) throws IOException, CorruptedWorldException, NewerFormatException {
+  public RealmWorld read(
+    @NotNull final RealmLoader loader,
+    @NotNull final String worldName,
+    final byte @NotNull [] serializedWorld,
+    @NotNull final RealmPropertyMap propertyMap,
+    final boolean readOnly
+  ) throws IOException, CorruptedWorldException, NewerFormatException {
     @Cleanup final var dataStream = new DataInputStream(new ByteArrayInputStream(serializedWorld));
     final var fileHeader = new byte[RealmConstants.HEADER.length];
     dataStream.read(fileHeader);

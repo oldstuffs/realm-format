@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public interface RealmChunk {
-  int@Nullable [] biomes();
+  int@Nullable[] biomes();
 
   @Nullable
   ListTag entities();
