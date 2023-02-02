@@ -47,9 +47,9 @@ public final class RealmCommand implements TerminableModule {
     final var worlds = Services.load(RealmWorlds.class);
     final var manager = Services.load(RealmManager.class);
     final BiFunction<CommandContext<CommandSender>, String, List<String>> datasourceSuggestions = (
-      context,
-      input
-    ) ->
+        context,
+        input
+      ) ->
       manager
         .availableLoaders()
         .keySet()
@@ -108,14 +108,14 @@ public final class RealmCommand implements TerminableModule {
         sender.sendMessage(
           Components.deserialize(
             "Teleporting " +
-              (
-                target.getName().equals(sender.getName())
-                  ? "yourself"
-                  : "&e" + target.getName() + "&7"
-              ) +
-              " to &b" +
-              world.getName() +
-              "&7..."
+            (
+              target.getName().equals(sender.getName())
+                ? "yourself"
+                : "&e" + target.getName() + "&7"
+            ) +
+            " to &b" +
+            world.getName() +
+            "&7..."
           )
         );
         final Location spawnLocation;
@@ -155,8 +155,8 @@ public final class RealmCommand implements TerminableModule {
           sender.sendMessage(
             Components.deserialize(
               "&cWorld " +
-                worldName +
-                " is already being used on another command! Wait some time and try again."
+              worldName +
+              " is already being used on another command! Wait some time and try again."
             )
           );
           return;
@@ -210,10 +210,10 @@ public final class RealmCommand implements TerminableModule {
                     sender.sendMessage(
                       Components.deserialize(
                         "&aWorld &e" +
-                          worldName +
-                          "&a created in " +
-                          (System.currentTimeMillis() - start) +
-                          "ms!"
+                        worldName +
+                        "&a created in " +
+                        (System.currentTimeMillis() - start) +
+                        "ms!"
                       )
                     );
                   } catch (final IllegalArgumentException ex) {
@@ -229,10 +229,10 @@ public final class RealmCommand implements TerminableModule {
               sender.sendMessage(
                 Components.deserialize(
                   "&cFailed to create world " +
-                    worldName +
-                    ": world already exists (using data source '" +
-                    datasource +
-                    "')."
+                  worldName +
+                  ": world already exists (using data source '" +
+                  datasource +
+                  "')."
                 )
               );
             } catch (final IOException ex) {
@@ -240,8 +240,8 @@ public final class RealmCommand implements TerminableModule {
                 sender.sendMessage(
                   Components.deserialize(
                     "&cFailed to create world " +
-                      worldName +
-                      ". Take a look at the server console for more information."
+                    worldName +
+                    ". Take a look at the server console for more information."
                   )
                 );
               }

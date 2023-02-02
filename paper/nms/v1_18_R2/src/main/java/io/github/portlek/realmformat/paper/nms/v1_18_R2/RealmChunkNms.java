@@ -1,8 +1,8 @@
 package io.github.portlek.realmformat.paper.nms.v1_18_R2;
 
-import io.github.portlek.realmformat.format.realm.RealmChunk;
-import io.github.portlek.realmformat.format.realm.RealmChunkSection;
-import io.github.portlek.realmformat.format.realm.impl.RealmChunkSectionImpl;
+import io.github.portlek.realmformat.format.old.realm.RealmChunk;
+import io.github.portlek.realmformat.format.old.realm.RealmChunkSection;
+import io.github.portlek.realmformat.format.old.realm.impl.RealmChunkSectionImpl;
 import io.github.shiruka.nbt.CompoundTag;
 import io.github.shiruka.nbt.ListTag;
 import lombok.Getter;

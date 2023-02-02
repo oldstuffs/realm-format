@@ -1,4 +1,4 @@
-package io.github.portlek.realmformat.format.realm;
+package io.github.portlek.realmformat.format.old.realm;
 
 import io.github.portlek.realmformat.format.misc.NibbleArray;
 import io.github.shiruka.nbt.CompoundTag;

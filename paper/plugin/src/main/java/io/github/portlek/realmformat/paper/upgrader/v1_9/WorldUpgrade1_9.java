@@ -44,7 +44,9 @@ public class WorldUpgrade1_9 implements Upgrade {
               id,
               new StringTag(
                 id,
-                WorldUpgrade1_9.fixJson(entityTag.getAsStringTag(id).map(StringTag::getValue).orElse(null))
+                WorldUpgrade1_9.fixJson(
+                  entityTag.getAsStringTag(id).map(StringTag::getValue).orElse(null)
+                )
               )
             );
           }

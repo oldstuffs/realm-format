@@ -1,6 +1,6 @@
 package io.github.portlek.realmformat.paper.api.event;
 
-import io.github.portlek.realmformat.format.realm.RealmWorld;
+import io.github.portlek.realmformat.format.old.realm.RealmWorld;
 import java.util.concurrent.atomic.AtomicBoolean;
 import lombok.Getter;
 import org.bukkit.event.HandlerList;

@@ -1,6 +1,6 @@
 package io.github.portlek.realmformat.paper.api.event;
 
-import io.github.portlek.realmformat.format.realm.RealmWorld;
+import io.github.portlek.realmformat.format.old.realm.RealmWorld;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 

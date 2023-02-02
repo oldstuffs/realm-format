@@ -4,9 +4,9 @@ import io.github.portlek.realmformat.format.exception.CorruptedWorldException;
 import io.github.portlek.realmformat.format.exception.NewerFormatException;
 import io.github.portlek.realmformat.format.loader.RealmLoader;
 import io.github.portlek.realmformat.format.misc.RealmConstants;
+import io.github.portlek.realmformat.format.old.realm.RealmWorld;
+import io.github.portlek.realmformat.format.old.realm.RealmWorldReader;
 import io.github.portlek.realmformat.format.property.RealmPropertyMap;
-import io.github.portlek.realmformat.format.realm.RealmWorld;
-import io.github.portlek.realmformat.format.realm.RealmWorldReader;
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
@@ -30,11 +30,12 @@ public class RealmWorldReaderRegistry {
   public RealmWorld read(
     @NotNull final RealmLoader loader,
     @NotNull final String worldName,
-    final byte @NotNull [] serializedWorld,
+    final byte@NotNull[] serializedWorld,
     @NotNull final RealmPropertyMap propertyMap,
     final boolean readOnly
   ) throws IOException, CorruptedWorldException, NewerFormatException {
-    @Cleanup final var dataStream = new DataInputStream(new ByteArrayInputStream(serializedWorld));
+    @Cleanup
+    final var dataStream = new DataInputStream(new ByteArrayInputStream(serializedWorld));
     final var fileHeader = new byte[RealmConstants.HEADER.length];
     dataStream.read(fileHeader);
     CorruptedWorldException.check(Arrays.equals(RealmConstants.HEADER, fileHeader), worldName);

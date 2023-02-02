@@ -1,6 +1,6 @@
 package io.github.portlek.realmformat.paper.nms;
 
-import io.github.portlek.realmformat.format.realm.RealmWorld;
+import io.github.portlek.realmformat.format.old.realm.RealmWorld;
 import java.io.IOException;
 import org.bukkit.World;
 import org.jetbrains.annotations.NotNull;

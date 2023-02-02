@@ -1,7 +1,7 @@
 package io.github.portlek.realmformat.paper.upgrader.v1_14;
 
-import io.github.portlek.realmformat.format.realm.RealmChunk;
-import io.github.portlek.realmformat.format.realm.RealmWorld;
+import io.github.portlek.realmformat.format.old.realm.RealmChunk;
+import io.github.portlek.realmformat.format.old.realm.RealmWorld;
 import io.github.portlek.realmformat.paper.upgrader.Upgrade;
 import io.github.shiruka.nbt.ContainerTag;
 import io.github.shiruka.nbt.Tag;
@@ -16,7 +16,7 @@ public final class WorldUpgrade1_14 implements Upgrade {
 
   private static final Map<String, String> OLD_TO_NEW_MAP = new HashMap<>();
 
-  private static final int[] VILLAGER_XP = {0, 10, 50, 100, 150};
+  private static final int[] VILLAGER_XP = { 0, 10, 50, 100, 150 };
 
   static {
     WorldUpgrade1_14.rename("minecraft:tube_coral_fan", "minecraft:tube_coral_wall_fan");
@@ -74,7 +74,7 @@ public final class WorldUpgrade1_14 implements Upgrade {
                 (
                   blockData[startIndex] >>> startBitSubIndex | blockData[endIndex] << endBitSubIndex
                 ) &
-                  maxEntryValue
+                maxEntryValue
               );
           }
           if (val == paletteIndex) {
@@ -107,39 +107,39 @@ public final class WorldUpgrade1_14 implements Upgrade {
   private static String villagerProfession(final int profession, final int career) {
     return profession == 0
       ? career == 2
-      ? "minecraft:fisherman"
-      : career == 3
-      ? "minecraft:shepherd"
-      : career == 4 ? "minecraft:fletcher" : "minecraft:farmer"
+        ? "minecraft:fisherman"
+        : career == 3
+          ? "minecraft:shepherd"
+          : career == 4 ? "minecraft:fletcher" : "minecraft:farmer"
       : profession == 1
-      ? career == 2 ? "minecraft:cartographer" : "minecraft:librarian"
-      : profession == 2
-      ? "minecraft:cleric"
-      : profession == 3
-      ? career == 2
-      ? "minecraft:weaponsmith"
-      : career == 3 ? "minecraft:toolsmith" : "minecraft:armorer"
-      : profession == 4
-      ? career == 2 ? "minecraft:leatherworker" : "minecraft:butcher"
-      : profession == 5 ? "minecraft:nitwit" : "minecraft:none";
+        ? career == 2 ? "minecraft:cartographer" : "minecraft:librarian"
+        : profession == 2
+          ? "minecraft:cleric"
+          : profession == 3
+            ? career == 2
+              ? "minecraft:weaponsmith"
+              : career == 3 ? "minecraft:toolsmith" : "minecraft:armorer"
+            : profession == 4
+              ? career == 2 ? "minecraft:leatherworker" : "minecraft:butcher"
+              : profession == 5 ? "minecraft:nitwit" : "minecraft:none";
   }
 
-  private static int @NotNull [] villagerProfession(@NotNull final String profession) {
+  private static int@NotNull[] villagerProfession(@NotNull final String profession) {
     return switch (profession) {
-      case "minecraft:farmer" -> new int[]{0, 1};
-      case "minecraft:fisherman" -> new int[]{0, 2};
-      case "minecraft:shepherd" -> new int[]{0, 3};
-      case "minecraft:fletcher" -> new int[]{0, 4};
-      case "minecraft:librarian" -> new int[]{1, 1};
-      case "minecraft:cartographer" -> new int[]{1, 2};
-      case "minecraft:cleric" -> new int[]{2, 1};
-      case "minecraft:armorer" -> new int[]{3, 1};
-      case "minecraft:weaponsmith" -> new int[]{3, 2};
-      case "minecraft:toolsmith" -> new int[]{3, 3};
-      case "minecraft:butcher" -> new int[]{4, 1};
-      case "minecraft:leatherworker" -> new int[]{4, 2};
-      case "minecraft:nitwit" -> new int[]{5, 1};
-      default -> new int[]{0, 0};
+      case "minecraft:farmer" -> new int[] { 0, 1 };
+      case "minecraft:fisherman" -> new int[] { 0, 2 };
+      case "minecraft:shepherd" -> new int[] { 0, 3 };
+      case "minecraft:fletcher" -> new int[] { 0, 4 };
+      case "minecraft:librarian" -> new int[] { 1, 1 };
+      case "minecraft:cartographer" -> new int[] { 1, 2 };
+      case "minecraft:cleric" -> new int[] { 2, 1 };
+      case "minecraft:armorer" -> new int[] { 3, 1 };
+      case "minecraft:weaponsmith" -> new int[] { 3, 2 };
+      case "minecraft:toolsmith" -> new int[] { 3, 3 };
+      case "minecraft:butcher" -> new int[] { 4, 1 };
+      case "minecraft:leatherworker" -> new int[] { 4, 2 };
+      case "minecraft:nitwit" -> new int[] { 5, 1 };
+      default -> new int[] { 0, 0 };
     };
   }
 
@@ -209,10 +209,10 @@ public final class WorldUpgrade1_14 implements Upgrade {
                 compoundTag.setInteger(
                   "Xp",
                   WorldUpgrade1_14.VILLAGER_XP[WorldUpgrade1_14.clamp(
-                    careerLevel - 1,
-                    0,
-                    WorldUpgrade1_14.VILLAGER_XP.length - 1
-                  )]
+                      careerLevel - 1,
+                      0,
+                      WorldUpgrade1_14.VILLAGER_XP.length - 1
+                    )]
                 );
               }
               compoundTag.remove("Profession");

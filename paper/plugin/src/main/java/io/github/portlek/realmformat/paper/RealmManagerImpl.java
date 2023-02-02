@@ -10,8 +10,8 @@ import io.github.portlek.realmformat.format.exception.WorldInUseException;
 import io.github.portlek.realmformat.format.exception.WorldLoadedException;
 import io.github.portlek.realmformat.format.exception.WorldTooBigException;
 import io.github.portlek.realmformat.format.loader.RealmLoader;
+import io.github.portlek.realmformat.format.old.realm.RealmWorld;
 import io.github.portlek.realmformat.format.property.RealmPropertyMap;
-import io.github.portlek.realmformat.format.realm.RealmWorld;
 import io.github.portlek.realmformat.paper.api.RealmManager;
 import io.github.portlek.realmformat.paper.api.event.PostGenerateRealmWorldEvent;
 import io.github.portlek.realmformat.paper.api.event.PreGenerateRealmWorldEvent;
@@ -125,17 +125,17 @@ final class RealmManagerImpl implements RealmManager, TerminableModule {
     final var start = System.currentTimeMillis();
     final var world =
       this.nms.createRealmWorld(
-        loader,
-        worldName,
-        new Long2ObjectOpenHashMap<>(),
-        Tag.createCompound(),
-        Tag.createList(),
-        this.nms.worldVersion(),
-        propertyMap,
-        readOnly,
-        !readOnly,
-        new Long2ObjectOpenHashMap<>()
-      );
+          loader,
+          worldName,
+          new Long2ObjectOpenHashMap<>(),
+          Tag.createCompound(),
+          Tag.createList(),
+          this.nms.worldVersion(),
+          propertyMap,
+          readOnly,
+          !readOnly,
+          new Long2ObjectOpenHashMap<>()
+        );
     loader.saveWorld(worldName, world.serialize().join(), !readOnly);
     RealmManagerImpl.log.info(
       "World " + worldName + " created in " + (System.currentTimeMillis() - start) + "ms."
@@ -171,8 +171,7 @@ final class RealmManagerImpl implements RealmManager, TerminableModule {
     @NotNull final String worldName,
     @NotNull final RealmLoader loader
   )
-    throws WorldAlreadyExistsException, InvalidWorldException, WorldLoadedException, WorldTooBigException, IOException {
-  }
+    throws WorldAlreadyExistsException, InvalidWorldException, WorldLoadedException, WorldTooBigException, IOException {}
 
   @NotNull
   @Override
@@ -224,8 +223,7 @@ final class RealmManagerImpl implements RealmManager, TerminableModule {
     @NotNull final String worldName,
     @NotNull final RealmLoader currentLoader,
     @NotNull final RealmLoader newLoader
-  ) throws IOException, WorldInUseException, WorldAlreadyExistsException, UnknownWorldException {
-  }
+  ) throws IOException, WorldInUseException, WorldAlreadyExistsException, UnknownWorldException {}
 
   @Override
   public void registerLoader(@NotNull final String dataSource, @NotNull final RealmLoader loader) {
@@ -240,13 +238,13 @@ final class RealmManagerImpl implements RealmManager, TerminableModule {
       } catch (final UpdatableLoader.NewerDatabaseException e) {
         RealmManagerImpl.log.error(
           "Data source " +
-            dataSource +
-            " version is " +
-            e.databaseVersion() +
-            ", while" +
-            " this SWM version only supports up to version " +
-            e.currentVersion() +
-            "."
+          dataSource +
+          " version is " +
+          e.databaseVersion() +
+          ", while" +
+          " this SWM version only supports up to version " +
+          e.currentVersion() +
+          "."
         );
         return;
       } catch (final IOException ex) {
@@ -300,11 +298,11 @@ final class RealmManagerImpl implements RealmManager, TerminableModule {
           this.loadedWorlds.put(worldName, world);
         } catch (
           final IllegalArgumentException
-                | UnknownWorldException
-                | NewerFormatException
-                | WorldInUseException
-                | CorruptedWorldException
-                | IOException ex
+          | UnknownWorldException
+          | NewerFormatException
+          | WorldInUseException
+          | CorruptedWorldException
+          | IOException ex
         ) {
           final String message;
           if (ex instanceof IllegalArgumentException) {
@@ -315,8 +313,8 @@ final class RealmManagerImpl implements RealmManager, TerminableModule {
           } else if (ex instanceof NewerFormatException) {
             message =
               "world is serialized in a newer Slime Format version (" +
-                ex.getMessage() +
-                ") that SWM does not understand.";
+              ex.getMessage() +
+              ") that SWM does not understand.";
           } else if (ex instanceof WorldInUseException) {
             message =
               "world is in use! If you think this is a mistake, please wait some time and try again.";
@@ -349,7 +347,6 @@ final class RealmManagerImpl implements RealmManager, TerminableModule {
       );
       ex.printStackTrace();
       Schedulers.sync().runLater(() -> this.unlockWorld(world), Duration.ofSeconds(5L));
-    } catch (final UnknownWorldException ignored) {
-    }
+    } catch (final UnknownWorldException ignored) {}
   }
 }

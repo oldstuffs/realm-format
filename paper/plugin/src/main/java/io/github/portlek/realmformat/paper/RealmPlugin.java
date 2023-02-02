@@ -1,7 +1,7 @@
 package io.github.portlek.realmformat.paper;
 
 import io.github.portlek.realmformat.format.exception.UnknownWorldException;
-import io.github.portlek.realmformat.format.realm.RealmWorld;
+import io.github.portlek.realmformat.format.old.realm.RealmWorld;
 import io.github.portlek.realmformat.paper.api.RealmManager;
 import io.github.portlek.realmformat.paper.cloud.Cloud;
 import io.github.portlek.realmformat.paper.command.RealmCommand;
@@ -42,7 +42,7 @@ final class RealmPlugin implements TerminableConsumer, Terminable {
   @NotNull
   private final RealmBoostrap boostrap;
 
-  @Delegate(types = {TerminableConsumer.class, Terminable.class})
+  @Delegate(types = { TerminableConsumer.class, Terminable.class })
   private final CompositeTerminable terminable = CompositeTerminable.simple();
 
   private RealmPlugin(@NotNull final RealmBoostrap boostrap) {
@@ -83,26 +83,26 @@ final class RealmPlugin implements TerminableConsumer, Terminable {
     Services.provide(RealmManager.class, this.bindModule(new RealmManagerImpl()));
     new RealmCommand().bindModuleWith(this);
     this.bind(
-      (Terminable) () ->
-        Bukkit
-          .getWorlds()
-          .stream()
-          .map(nms::realmWorld)
-          .filter(Objects::nonNull)
-          .filter(Predicate.not(RealmWorld::readOnly))
-          .forEach(world -> {
-            try {
-              final var loader = world.loader();
-              final var name = world.name();
-              loader.saveWorld(name, world.serialize().join(), world.locked());
-              if (loader.isWorldLocked(name)) {
-                loader.unlockWorld(name);
+        (Terminable) () ->
+          Bukkit
+            .getWorlds()
+            .stream()
+            .map(nms::realmWorld)
+            .filter(Objects::nonNull)
+            .filter(Predicate.not(RealmWorld::readOnly))
+            .forEach(world -> {
+              try {
+                final var loader = world.loader();
+                final var name = world.name();
+                loader.saveWorld(name, world.serialize().join(), world.locked());
+                if (loader.isWorldLocked(name)) {
+                  loader.unlockWorld(name);
+                }
+              } catch (final IOException | UnknownWorldException e) {
+                e.printStackTrace();
               }
-            } catch (final IOException | UnknownWorldException e) {
-              e.printStackTrace();
-            }
-          })
-    );
+            })
+      );
   }
 
   private void onLoad() {

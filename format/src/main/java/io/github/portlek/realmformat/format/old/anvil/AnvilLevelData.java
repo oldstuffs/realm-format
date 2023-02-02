@@ -1,4 +1,4 @@
-package io.github.portlek.realmformat.format.anvil;
+package io.github.portlek.realmformat.format.old.anvil;
 
 import java.util.Map;
 import org.jetbrains.annotations.NotNull;

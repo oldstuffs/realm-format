@@ -162,9 +162,11 @@ public class WorldUpgrade1_18 implements Upgrade {
       paletteId.putIfAbsent(biome, paletteId.size());
     }
     final List<StringTag> paletteString = new ArrayList<>();
-    for (final IntIterator iterator = paletteId.keySet().iterator(); iterator.hasNext(); ) {
+    for (final IntIterator iterator = paletteId.keySet().iterator(); iterator.hasNext();) {
       final int biomeId = iterator.nextInt();
-      String biome = biomeId >= 0 && biomeId < WorldUpgrade1_18.BIOMES_BY_ID.length ? WorldUpgrade1_18.BIOMES_BY_ID[biomeId] : null;
+      String biome = biomeId >= 0 && biomeId < WorldUpgrade1_18.BIOMES_BY_ID.length
+        ? WorldUpgrade1_18.BIOMES_BY_ID[biomeId]
+        : null;
       final String update = WorldUpgrade1_18.BIOME_UPDATE.get(biome);
       if (update != null) {
         biome = update;
@@ -173,7 +175,10 @@ public class WorldUpgrade1_18 implements Upgrade {
     }
     final int bitsPerObject = WorldUpgrade1_18.ceilLog2(paletteString.size());
     if (bitsPerObject == 0) {
-      return WorldUpgrade1_18.wrapPalette(new ListTag<>("", TagType.TAG_STRING, paletteString), null);
+      return WorldUpgrade1_18.wrapPalette(
+        new ListTag<>("", TagType.TAG_STRING, paletteString),
+        null
+      );
     }
     // manually create packed integer data
     final int objectsPerValue = 64 / bitsPerObject;
@@ -196,7 +201,10 @@ public class WorldUpgrade1_18 implements Upgrade {
     if (shift != 0) {
       packed[idx] = curr;
     }
-    return WorldUpgrade1_18.wrapPalette(new ListTag<>("", TagType.TAG_STRING, paletteString), packed);
+    return WorldUpgrade1_18.wrapPalette(
+      new ListTag<>("", TagType.TAG_STRING, paletteString),
+      packed
+    );
   }
 
   private static CompoundTag[] createBiomeSections(
@@ -231,7 +239,11 @@ public class WorldUpgrade1_18 implements Upgrade {
       final ArrayList<StringTag> palette = new ArrayList<>();
       palette.add(new StringTag("", "minecraft:plains"));
       for (int i = 0; i < ret.length; ++i) {
-        ret[i] = WorldUpgrade1_18.wrapPalette(new ListTag<>("", TagType.TAG_STRING, palette).clone(), null); // copy palette so that later possible modifications don't trash all sections
+        ret[i] =
+          WorldUpgrade1_18.wrapPalette(
+            new ListTag<>("", TagType.TAG_STRING, palette).clone(),
+            null
+          ); // copy palette so that later possible modifications don't trash all sections
       }
     }
     return ret;
@@ -314,8 +326,8 @@ public class WorldUpgrade1_18 implements Upgrade {
           continue;
         }
         ((CraftSlimeChunkSection) section).setBlockStatesTag(
-          WorldUpgrade1_18.wrapPalette(section.getPalette(), section.getBlockStates())
-        );
+            WorldUpgrade1_18.wrapPalette(section.getPalette(), section.getBlockStates())
+          );
         ((CraftSlimeChunkSection) section).setBiomeTag(tags[i]);
       }
       final SlimeChunkSection[] shiftedSections = new SlimeChunkSection[sections.length + 4];

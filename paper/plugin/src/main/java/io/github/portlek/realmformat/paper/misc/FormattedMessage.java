@@ -39,7 +39,7 @@ public final class FormattedMessage {
   public Component replaceCb(
     @NotNull final Object match1,
     @NotNull final Object replace1,
-    @NotNull final Object @NotNull ... matchAndReplaces
+    @NotNull final Object @NotNull... matchAndReplaces
   ) {
     return this.replace(Replaces.cb(match1, replace1, matchAndReplaces));
   }
@@ -48,7 +48,7 @@ public final class FormattedMessage {
   public Component replaceP(
     @NotNull final Object match1,
     @NotNull final Object replace1,
-    @NotNull final Object @NotNull ... matchAndReplaces
+    @NotNull final Object @NotNull... matchAndReplaces
   ) {
     return this.replace(Replaces.p(match1, replace1, matchAndReplaces));
   }
@@ -65,7 +65,7 @@ public final class FormattedMessage {
     @NotNull final Audience audience,
     @NotNull final Object match1,
     @NotNull final Object replace1,
-    @NotNull final Object @NotNull ... matchAndReplaces
+    @NotNull final Object @NotNull... matchAndReplaces
   ) {
     this.send(audience, Replaces.cb(match1, replace1, matchAndReplaces));
   }
@@ -74,7 +74,7 @@ public final class FormattedMessage {
     @NotNull final Audience audience,
     @NotNull final Object match1,
     @NotNull final Object replace1,
-    @NotNull final Object @NotNull ... matchAndReplaces
+    @NotNull final Object @NotNull... matchAndReplaces
   ) {
     this.send(audience, Replaces.p(match1, replace1, matchAndReplaces));
   }

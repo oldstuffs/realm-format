@@ -2,10 +2,10 @@ package io.github.portlek.realmformat.paper.nms.v1_18_R2;
 
 import io.github.portlek.realmformat.format.loader.RealmLoader;
 import io.github.portlek.realmformat.format.misc.ChunkSerialization;
+import io.github.portlek.realmformat.format.old.realm.RealmChunk;
+import io.github.portlek.realmformat.format.old.realm.RealmWorld;
+import io.github.portlek.realmformat.format.old.realm.impl.RealmWorldBase;
 import io.github.portlek.realmformat.format.property.RealmPropertyMap;
-import io.github.portlek.realmformat.format.realm.RealmChunk;
-import io.github.portlek.realmformat.format.realm.RealmWorld;
-import io.github.portlek.realmformat.format.realm.impl.RealmWorldBase;
 import io.github.shiruka.nbt.CompoundTag;
 import io.github.shiruka.nbt.ListTag;
 import io.github.shiruka.nbt.Tag;

@@ -96,7 +96,9 @@ public final class MongoLoader extends UpdatableLoader {
       if (worldDoc == null) {
         throw new UnknownWorldException(worldName);
       }
-      return System.currentTimeMillis() - worldDoc.getLong("locked") <= RealmConstants.MAX_LOCK_TIME;
+      return (
+        System.currentTimeMillis() - worldDoc.getLong("locked") <= RealmConstants.MAX_LOCK_TIME
+      );
     } catch (final MongoException ex) {
       throw new IOException(ex);
     }
@@ -120,7 +122,7 @@ public final class MongoLoader extends UpdatableLoader {
   }
 
   @Override
-  public byte @NotNull [] loadWorld(@NotNull final String worldName, final boolean readOnly)
+  public byte@NotNull[] loadWorld(@NotNull final String worldName, final boolean readOnly)
     throws UnknownWorldException, IOException, WorldInUseException {
     try {
       final var mongoDatabase = this.client.getDatabase(this.database);
@@ -148,7 +150,7 @@ public final class MongoLoader extends UpdatableLoader {
   @Override
   public void saveWorld(
     @NotNull final String worldName,
-    final byte @NotNull [] serializedWorld,
+    final byte@NotNull[] serializedWorld,
     final boolean lock
   ) throws IOException {
     try {
@@ -168,7 +170,7 @@ public final class MongoLoader extends UpdatableLoader {
         );
       } else if (
         System.currentTimeMillis() - worldDoc.getLong("locked") > RealmConstants.MAX_LOCK_TIME &&
-          lock
+        lock
       ) {
         this.updateLock(worldName, true);
       }
@@ -217,7 +219,7 @@ public final class MongoLoader extends UpdatableLoader {
     for (final var collectionName : mongoDatabase.listCollectionNames()) {
       if (
         collectionName.equals(this.collection + "_files.files") ||
-          collectionName.equals(this.collection + "_files.chunks")
+        collectionName.equals(this.collection + "_files.chunks")
       ) {
         MongoLoader.log.info("Updating MongoDB database...");
         mongoDatabase
@@ -231,7 +233,8 @@ public final class MongoLoader extends UpdatableLoader {
       }
     }
     final var mongoCollection = mongoDatabase.getCollection(this.collection);
-    @Cleanup final var documents = mongoCollection
+    @Cleanup
+    final var documents = mongoCollection
       .find(Filters.or(Filters.eq("locked", true), Filters.eq("locked", false)))
       .cursor();
     if (documents.hasNext()) {
@@ -273,13 +276,13 @@ public final class MongoLoader extends UpdatableLoader {
     }
     if (forceSchedule || this.lockedWorlds.containsKey(worldName)) {
       this.lockedWorlds.put(
-        worldName,
-        MongoLoader.SERVICE.schedule(
-          () -> this.updateLock(worldName, false),
-          RealmConstants.LOCK_INTERVAL,
-          TimeUnit.MILLISECONDS
-        )
-      );
+          worldName,
+          MongoLoader.SERVICE.schedule(
+            () -> this.updateLock(worldName, false),
+            RealmConstants.LOCK_INTERVAL,
+            TimeUnit.MILLISECONDS
+          )
+        );
     }
   }
 }

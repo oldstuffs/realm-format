@@ -6,7 +6,6 @@ import java.nio.file.Path;
 import org.jetbrains.annotations.NotNull;
 
 public interface Dependencies {
-
   static void load(@NotNull final Path downloadDirectory) {
     try {
       ApplicationBuilder.appending("RealmFormat").downloadDirectoryPath(downloadDirectory).build();

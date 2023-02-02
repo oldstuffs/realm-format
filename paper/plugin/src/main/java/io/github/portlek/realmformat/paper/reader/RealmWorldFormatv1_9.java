@@ -5,13 +5,13 @@ import io.github.portlek.realmformat.format.exception.CorruptedWorldException;
 import io.github.portlek.realmformat.format.loader.RealmLoader;
 import io.github.portlek.realmformat.format.misc.Misc;
 import io.github.portlek.realmformat.format.misc.NibbleArray;
+import io.github.portlek.realmformat.format.old.realm.RealmChunk;
+import io.github.portlek.realmformat.format.old.realm.RealmChunkSection;
+import io.github.portlek.realmformat.format.old.realm.RealmWorld;
+import io.github.portlek.realmformat.format.old.realm.RealmWorldReader;
+import io.github.portlek.realmformat.format.old.realm.impl.RealmChunkImpl;
+import io.github.portlek.realmformat.format.old.realm.impl.RealmChunkSectionImpl;
 import io.github.portlek.realmformat.format.property.RealmPropertyMap;
-import io.github.portlek.realmformat.format.realm.RealmChunk;
-import io.github.portlek.realmformat.format.realm.RealmChunkSection;
-import io.github.portlek.realmformat.format.realm.RealmWorld;
-import io.github.portlek.realmformat.format.realm.RealmWorldReader;
-import io.github.portlek.realmformat.format.realm.impl.RealmChunkImpl;
-import io.github.portlek.realmformat.format.realm.impl.RealmChunkSectionImpl;
 import io.github.portlek.realmformat.paper.misc.Services;
 import io.github.portlek.realmformat.paper.nms.RealmNmsBackend;
 import io.github.shiruka.nbt.CompoundTag;
@@ -169,9 +169,10 @@ public final class RealmWorldFormatv1_9 implements RealmWorldReader {
     final int width,
     final int depth,
     @NotNull final BitSet chunkBitset,
-    final byte @NotNull [] chunkData
+    final byte@NotNull[] chunkData
   ) throws IOException {
-    @Cleanup final var dataStream = new DataInputStream(new ByteArrayInputStream(chunkData));
+    @Cleanup
+    final var dataStream = new DataInputStream(new ByteArrayInputStream(chunkData));
     final var chunkMap = new Long2ObjectOpenHashMap<RealmChunk>();
     for (var z = 0; z < depth; z++) {
       for (var x = 0; x < width; x++) {
@@ -236,16 +237,17 @@ public final class RealmWorldFormatv1_9 implements RealmWorldReader {
   }
 
   @Nullable
-  private static CompoundTag readCompoundTag(final byte @NotNull [] serializedCompound)
+  private static CompoundTag readCompoundTag(final byte@NotNull[] serializedCompound)
     throws IOException {
     if (serializedCompound.length == 0) {
       return null;
     }
-    @Cleanup final var stream = Tag.createReader(new ByteArrayInputStream(serializedCompound));
+    @Cleanup
+    final var stream = Tag.createReader(new ByteArrayInputStream(serializedCompound));
     return stream.readCompoundTag();
   }
 
-  private static int @NotNull [] toIntArray(final byte @NotNull [] buf) {
+  private static int@NotNull[] toIntArray(final byte@NotNull[] buf) {
     final var buffer = ByteBuffer.wrap(buf).order(ByteOrder.BIG_ENDIAN);
     final var ret = new int[buf.length / 4];
     buffer.asIntBuffer().get(ret);
@@ -400,17 +402,17 @@ public final class RealmWorldFormatv1_9 implements RealmWorldReader {
         worldPropertyMap.merge(propertyMap);
       }
       return this.nms.createRealmWorld(
-        loader,
-        worldName,
-        chunks,
-        extraCompound,
-        mapList,
-        worldVersion,
-        worldPropertyMap,
-        readOnly,
-        !readOnly,
-        entityStorage
-      );
+          loader,
+          worldName,
+          chunks,
+          extraCompound,
+          mapList,
+          worldVersion,
+          worldPropertyMap,
+          readOnly,
+          !readOnly,
+          entityStorage
+        );
     } catch (final EOFException ex) {
       throw new CorruptedWorldException(worldName, ex);
     }

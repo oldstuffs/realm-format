@@ -1,6 +1,6 @@
 package io.github.portlek.realmformat.paper.upgrader;
 
-import io.github.portlek.realmformat.format.realm.RealmWorld;
+import io.github.portlek.realmformat.format.old.realm.RealmWorld;
 import io.github.portlek.realmformat.paper.misc.Services;
 import io.github.portlek.realmformat.paper.nms.RealmNmsBackend;
 import io.github.portlek.realmformat.paper.upgrader.v1_11.WorldUpgrade1_11;

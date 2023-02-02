@@ -12,8 +12,11 @@ import java.util.Map;
 public class DowngradeDataDeserializer implements JsonDeserializer<DowngradeData> {
 
   @Override
-  public DowngradeData deserialize(final JsonElement el, final Type type, final JsonDeserializationContext context)
-    throws JsonParseException {
+  public DowngradeData deserialize(
+    final JsonElement el,
+    final Type type,
+    final JsonDeserializationContext context
+  ) throws JsonParseException {
     final JsonObject obj = el.getAsJsonObject();
     final Map<String, DowngradeData.BlockEntry> blocks = new HashMap<>();
     for (final Map.Entry<String, JsonElement> entry : obj.entrySet()) {

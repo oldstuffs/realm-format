@@ -38,7 +38,7 @@ public final class Replace {
   public Replace mergeCb(
     @NotNull final Object match1,
     @NotNull final Object replace1,
-    @NotNull final Object @NotNull ... matchAndReplaces
+    @NotNull final Object @NotNull... matchAndReplaces
   ) {
     return this.merge(Replaces.cb(match1, replace1, matchAndReplaces));
   }
@@ -52,7 +52,7 @@ public final class Replace {
   public Replace mergeP(
     @NotNull final Object match1,
     @NotNull final Object replace1,
-    @NotNull final Object @NotNull ... matchAndReplaces
+    @NotNull final Object @NotNull... matchAndReplaces
   ) {
     return this.merge(Replaces.p(match1, replace1, matchAndReplaces));
   }
@@ -66,7 +66,7 @@ public final class Replace {
   public Replace mergePattern(
     @NotNull final Object match1,
     @NotNull final Object replace1,
-    @NotNull final Object @NotNull ... matchAndReplaces
+    @NotNull final Object @NotNull... matchAndReplaces
   ) {
     return this.merge(Replaces.pattern(match1, replace1, matchAndReplaces));
   }
@@ -80,7 +80,7 @@ public final class Replace {
   public Replace patternCaseInsensitive(
     @NotNull final Object match1,
     @NotNull final Object replace1,
-    @NotNull final Object @NotNull ... matchAndReplaces
+    @NotNull final Object @NotNull... matchAndReplaces
   ) {
     return this.merge(Replaces.patternCaseInsensitive(match1, replace1, matchAndReplaces));
   }
@@ -94,7 +94,7 @@ public final class Replace {
   public Replace patternLiteral(
     @NotNull final Object match1,
     @NotNull final Object replace1,
-    @NotNull final Object @NotNull ... matchAndReplaces
+    @NotNull final Object @NotNull... matchAndReplaces
   ) {
     return this.merge(Replaces.patternLiteral(match1, replace1, matchAndReplaces));
   }
@@ -108,10 +108,10 @@ public final class Replace {
   public Component replace(@NotNull final Component component) {
     final var result = new AtomicReference<>(component);
     this.replacements.forEach((pattern, replace) ->
-      result.updateAndGet(old ->
-        old.replaceText(builder -> this.replace(builder.match(pattern.compiled()), replace))
-      )
-    );
+        result.updateAndGet(old ->
+          old.replaceText(builder -> this.replace(builder.match(pattern.compiled()), replace))
+        )
+      );
     return result.get();
   }
 
@@ -119,8 +119,8 @@ public final class Replace {
   public String replace(@NotNull final String text) {
     final var result = new AtomicReference<>(text);
     this.replacements.forEach((pattern, value) ->
-      result.updateAndGet(old -> pattern.compiled().matcher(old).replaceAll(value.toString()))
-    );
+        result.updateAndGet(old -> pattern.compiled().matcher(old).replaceAll(value.toString()))
+      );
     return result.get();
   }
 

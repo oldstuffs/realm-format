@@ -1,4 +1,4 @@
-package io.github.portlek.realmformat.format.realm.impl;
+package io.github.portlek.realmformat.format.old.realm.impl;
 
 import com.github.luben.zstd.Zstd;
 import com.google.common.base.Preconditions;
@@ -7,10 +7,10 @@ import io.github.portlek.realmformat.format.loader.RealmLoader;
 import io.github.portlek.realmformat.format.misc.ChunkSerialization;
 import io.github.portlek.realmformat.format.misc.Misc;
 import io.github.portlek.realmformat.format.misc.RealmConstants;
+import io.github.portlek.realmformat.format.old.realm.RealmChunk;
+import io.github.portlek.realmformat.format.old.realm.RealmWorld;
 import io.github.portlek.realmformat.format.property.RealmProperties;
 import io.github.portlek.realmformat.format.property.RealmPropertyMap;
-import io.github.portlek.realmformat.format.realm.RealmChunk;
-import io.github.portlek.realmformat.format.realm.RealmWorld;
 import io.github.shiruka.nbt.CompoundTag;
 import io.github.shiruka.nbt.ListTag;
 import io.github.shiruka.nbt.Tag;

@@ -1,4 +1,4 @@
-package io.github.portlek.realmformat.format.realm;
+package io.github.portlek.realmformat.format.old.realm;
 
 import io.github.portlek.realmformat.format.exception.WorldAlreadyExistsException;
 import io.github.portlek.realmformat.format.loader.RealmLoader;

@@ -1,4 +1,4 @@
-package io.github.portlek.realmformat.format.realm;
+package io.github.portlek.realmformat.format.old.realm;
 
 import io.github.shiruka.nbt.CompoundTag;
 import io.github.shiruka.nbt.ListTag;

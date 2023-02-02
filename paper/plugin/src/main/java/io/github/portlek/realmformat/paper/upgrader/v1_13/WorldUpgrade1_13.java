@@ -76,21 +76,24 @@ public class WorldUpgrade1_13 implements Upgrade {
                     (int) (
                       (
                         blockData[startIndex] >>> startBitSubIndex |
-                          blockData[endIndex] << endBitSubIndex
+                        blockData[endIndex] << endBitSubIndex
                       ) &
-                        maxEntryValue
+                      maxEntryValue
                     );
                 }
                 int id = 0;
                 byte data = 0;
                 final CompoundTag blockTag = palette.get(val);
                 final String name = blockTag.getStringValue("Name").get().substring(10); // Remove the namespace (minecraft: prefix)
-                final DowngradeData.BlockEntry blockEntry = this.downgradeData.getBlocks().get(name);
+                final DowngradeData.BlockEntry blockEntry =
+                  this.downgradeData.getBlocks().get(name);
                 if (blockEntry != null) {
                   id = blockEntry.getId();
                   data = (byte) blockEntry.getData();
                   // Block properties
-                  final Optional<CompoundTag> propertiesTag = blockTag.getAsCompoundTag("Properties");
+                  final Optional<CompoundTag> propertiesTag = blockTag.getAsCompoundTag(
+                    "Properties"
+                  );
                   Map<String, String> properties = null;
                   if (propertiesTag.isPresent()) {
                     properties =
@@ -104,8 +107,7 @@ public class WorldUpgrade1_13 implements Upgrade {
                         .map(Optional::get)
                         .collect(Collectors.toMap(Tag::getName, StringTag::getValue));
                     if (blockEntry.getProperties() != null) {
-                      mainLoop:
-                      for (final DowngradeData.BlockProperty property : blockEntry.getProperties()) {
+                      mainLoop:for (final DowngradeData.BlockProperty property : blockEntry.getProperties()) {
                         for (final Map.Entry<String, String> conditionEntry : property
                           .getConditions()
                           .entrySet()) {
@@ -114,8 +116,9 @@ public class WorldUpgrade1_13 implements Upgrade {
                           final boolean inverted = propertyName.startsWith("!");
                           if (
                             inverted &&
-                              propertyValue.equals(properties.get(propertyName.substring(1))) ||
-                              !inverted && !propertyValue.equals(properties.get(propertyName))
+                            propertyValue.equals(properties.get(propertyName.substring(1))) ||
+                            !inverted &&
+                            !propertyValue.equals(properties.get(propertyName))
                           ) {
                             continue mainLoop;
                           }
@@ -157,8 +160,8 @@ public class WorldUpgrade1_13 implements Upgrade {
                       if (createAction == null) {
                         throw new IllegalStateException(
                           "No create action was specified for block " +
-                            name +
-                            " but no tile entity was found"
+                          name +
+                          " but no tile entity was found"
                         );
                       }
                       Objects.requireNonNull(
@@ -304,8 +307,12 @@ public class WorldUpgrade1_13 implements Upgrade {
           .getAsListTag("Palette")
           .get();
         final long[] blockStates = sectionTag.getLongArrayValue("BlockStates").get();
-        final NibbleArray blockLight = new NibbleArray(sectionTag.getByteArrayValue("BlockLight").get());
-        final NibbleArray skyLight = new NibbleArray(sectionTag.getByteArrayValue("SkyLight").get());
+        final NibbleArray blockLight = new NibbleArray(
+          sectionTag.getByteArrayValue("BlockLight").get()
+        );
+        final NibbleArray skyLight = new NibbleArray(
+          sectionTag.getByteArrayValue("SkyLight").get()
+        );
         final int index = sectionTag.getIntValue("Y").get();
         final SlimeChunkSection section = new CraftSlimeChunkSection(
           null,

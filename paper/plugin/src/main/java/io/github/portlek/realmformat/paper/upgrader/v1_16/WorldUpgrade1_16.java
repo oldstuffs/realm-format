@@ -9,7 +9,7 @@ import org.bukkit.Tag;
 
 public class WorldUpgrade1_16 implements Upgrade {
 
-  private static final int[] MULTIPLY_DE_BRUIJN_BIT_POSITION = new int[]{
+  private static final int[] MULTIPLY_DE_BRUIJN_BIT_POSITION = new int[] {
     0,
     1,
     28,
@@ -45,7 +45,11 @@ public class WorldUpgrade1_16 implements Upgrade {
   };
 
   // Taken from DataConverterBitStorageAlign.java
-  private static long[] addPadding(final int indices, final int bitsPerIndex, final long[] originalArray) {
+  private static long[] addPadding(
+    final int indices,
+    final int bitsPerIndex,
+    final long[] originalArray
+  ) {
     final int k = originalArray.length;
     if (k == 0) {
       return originalArray;
@@ -95,8 +99,14 @@ public class WorldUpgrade1_16 implements Upgrade {
   }
 
   private static int ceillog2(int input) {
-    input = WorldUpgrade1_16.isPowerOfTwo(input) ? input : WorldUpgrade1_16.smallestEncompassingPowerOfTwo(input);
-    return WorldUpgrade1_16.MULTIPLY_DE_BRUIJN_BIT_POSITION[(int) ((long) input * 125613361L >> 27) & 31];
+    input =
+      WorldUpgrade1_16.isPowerOfTwo(input)
+        ? input
+        : WorldUpgrade1_16.smallestEncompassingPowerOfTwo(input);
+    return WorldUpgrade1_16.MULTIPLY_DE_BRUIJN_BIT_POSITION[(int) (
+        (long) input * 125613361L >> 27
+      ) &
+      31];
   }
 
   private static boolean isPowerOfTwo(final int input) {
@@ -126,7 +136,10 @@ public class WorldUpgrade1_16 implements Upgrade {
       for (int sectionIndex = 0; sectionIndex < chunk.getSections().length; sectionIndex++) {
         SlimeChunkSection section = chunk.getSections()[sectionIndex];
         if (section != null) {
-          final int bitsPerBlock = Math.max(4, WorldUpgrade1_16.ceillog2(section.getPalette().getValue().size()));
+          final int bitsPerBlock = Math.max(
+            4,
+            WorldUpgrade1_16.ceillog2(section.getPalette().getValue().size())
+          );
           if (!WorldUpgrade1_16.isPowerOfTwo(bitsPerBlock)) {
             section =
               new CraftSlimeChunkSection(

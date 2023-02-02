@@ -1,9 +1,9 @@
 package io.github.portlek.realmformat.paper.nms;
 
 import io.github.portlek.realmformat.format.loader.RealmLoader;
+import io.github.portlek.realmformat.format.old.realm.RealmChunk;
+import io.github.portlek.realmformat.format.old.realm.RealmWorld;
 import io.github.portlek.realmformat.format.property.RealmPropertyMap;
-import io.github.portlek.realmformat.format.realm.RealmChunk;
-import io.github.portlek.realmformat.format.realm.RealmWorld;
 import io.github.shiruka.nbt.CompoundTag;
 import io.github.shiruka.nbt.ListTag;
 import java.util.Map;
