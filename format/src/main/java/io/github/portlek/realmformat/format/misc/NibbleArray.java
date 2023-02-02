@@ -12,9 +12,9 @@ import org.jetbrains.annotations.NotNull;
 public final class NibbleArray {
 
   @Getter
-  private final byte@NotNull[] backing;
+  private final byte @NotNull [] backing;
 
-  public NibbleArray(final byte@NotNull[] backing) {
+  public NibbleArray(final byte @NotNull [] backing) {
     this.backing = backing;
   }
 

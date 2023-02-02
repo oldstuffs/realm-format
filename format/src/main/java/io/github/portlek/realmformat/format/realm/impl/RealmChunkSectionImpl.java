@@ -10,7 +10,7 @@ import org.jetbrains.annotations.Nullable;
 
 @Getter
 @ToString
-public abstract class RealmChunkSectionBase implements RealmChunkSection {
+public final class RealmChunkSectionImpl implements RealmChunkSection {
 
   @Nullable
   private final CompoundTag biomeTag;
@@ -34,7 +34,7 @@ public abstract class RealmChunkSectionBase implements RealmChunkSection {
   @Nullable
   private final NibbleArray skyLight;
 
-  protected RealmChunkSectionBase(
+  public RealmChunkSectionImpl(
     final byte@Nullable[] blocks,
     @Nullable final NibbleArray data,
     @Nullable final ListTag palette,

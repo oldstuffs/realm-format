@@ -19,6 +19,7 @@ import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.world.level.chunk.DataLayer;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 @Log4j2
 @UtilityClass
@@ -29,8 +30,11 @@ class Converter {
     return new DataLayer(array.backing());
   }
 
-  @NotNull
-  static NibbleArray convertArray(@NotNull final DataLayer array) {
+  @Nullable
+  static NibbleArray convertArray(@Nullable final DataLayer array) {
+    if (array == null) {
+      return null;
+    }
     return new NibbleArray(array.getData());
   }
 

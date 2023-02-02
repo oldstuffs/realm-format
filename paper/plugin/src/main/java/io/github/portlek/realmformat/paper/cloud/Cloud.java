@@ -13,7 +13,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public interface Cloud {
-  TypeToken<PaperCommandManager<CommandSender>> KEY = new TypeToken<>() {};
+
+  TypeToken<PaperCommandManager<CommandSender>> KEY = new TypeToken<>() {
+  };
 
   @NotNull
   @SneakyThrows

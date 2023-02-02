@@ -419,7 +419,7 @@ public final class RealmWorldServer extends ServerLevel {
       try {
         Bukkit.getLogger().log(Level.INFO, "Saving world " + this.realmWorld.name() + "...");
         final var start = System.currentTimeMillis();
-        final var serializedWorld = this.realmWorld.serialize();
+        final var serializedWorld = this.realmWorld.serialize().join();
         final var saveStart = System.currentTimeMillis();
         this.realmWorld.loader().saveWorld(this.realmWorld.name(), serializedWorld, false);
         Bukkit

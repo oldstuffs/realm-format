@@ -37,8 +37,8 @@ public final class FileLoader implements RealmLoader {
     if (worldDirectory.exists() && !worldDirectory.isDirectory()) {
       FileLoader.log.error(
         "A file named '" +
-        worldDirectory.getName() +
-        "' has been deleted, as this is the name used for the worlds directory."
+          worldDirectory.getName() +
+          "' has been deleted, as this is the name used for the worlds directory."
       );
       worldDirectory.delete();
     }
@@ -96,13 +96,12 @@ public final class FileLoader implements RealmLoader {
   }
 
   @Override
-  public byte@NotNull[] loadWorld(@NotNull final String worldName, final boolean readOnly)
+  public byte @NotNull [] loadWorld(@NotNull final String worldName, final boolean readOnly)
     throws UnknownWorldException, IOException, WorldInUseException {
     if (!this.worldExists(worldName)) {
       throw new UnknownWorldException(worldName);
     }
-    @Cleanup
-    final RandomAccessFile file = new RandomAccessFile(
+    @Cleanup final RandomAccessFile file = new RandomAccessFile(
       new File(this.worldDir, worldName + ".realm"),
       "rw"
     );
@@ -123,7 +122,7 @@ public final class FileLoader implements RealmLoader {
   @Override
   public void saveWorld(
     @NotNull final String worldName,
-    final byte@NotNull[] serializedWorld,
+    final byte @NotNull [] serializedWorld,
     final boolean lock
   ) throws IOException {
     RandomAccessFile worldFile = this.worldFiles.get(worldName);
@@ -138,7 +137,8 @@ public final class FileLoader implements RealmLoader {
       final FileChannel channel = worldFile.getChannel();
       try {
         channel.tryLock();
-      } catch (final OverlappingFileLockException ignored) {}
+      } catch (final OverlappingFileLockException ignored) {
+      }
     }
     worldFile.close();
   }

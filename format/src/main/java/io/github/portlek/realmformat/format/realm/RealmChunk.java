@@ -3,11 +3,12 @@ package io.github.portlek.realmformat.format.realm;
 import io.github.shiruka.nbt.CompoundTag;
 import io.github.shiruka.nbt.ListTag;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public interface RealmChunk {
-  int@NotNull[] biomes();
+  int@Nullable [] biomes();
 
-  @NotNull
+  @Nullable
   ListTag entities();
 
   @NotNull
@@ -20,7 +21,7 @@ public interface RealmChunk {
   @NotNull
   RealmChunkSection@NotNull[] sections();
 
-  @NotNull
+  @Nullable
   ListTag tileEntities();
 
   int x();

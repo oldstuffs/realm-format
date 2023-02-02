@@ -13,9 +13,9 @@ import org.jetbrains.annotations.Nullable;
 @ToString
 public final class RealmChunkImpl implements RealmChunk {
 
-  private final int@NotNull[] biomes;
+  private final int@Nullable[] biomes;
 
-  @NotNull
+  @Nullable
   private final ListTag entities;
 
   @NotNull
@@ -28,7 +28,7 @@ public final class RealmChunkImpl implements RealmChunk {
   @NotNull
   private final RealmChunkSection@NotNull[] sections;
 
-  @NotNull
+  @Nullable
   private final ListTag tileEntities;
 
   @Nullable
@@ -43,9 +43,9 @@ public final class RealmChunkImpl implements RealmChunk {
     final int z,
     @NotNull final RealmChunkSection@NotNull[] sections,
     @NotNull final CompoundTag heightMaps,
-    final int@NotNull[] biomes,
-    @NotNull final ListTag tileEntities,
-    @NotNull final ListTag entities,
+    final int@Nullable[] biomes,
+    @Nullable final ListTag tileEntities,
+    @Nullable final ListTag entities,
     final int minSection,
     final int maxSection,
     @Nullable final CompoundTag upgradeData

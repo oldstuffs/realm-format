@@ -2,9 +2,9 @@ package io.github.portlek.realmformat.paper.nms.v1_18_R2;
 
 import io.github.portlek.realmformat.format.realm.RealmChunk;
 import io.github.portlek.realmformat.format.realm.RealmChunkSection;
+import io.github.portlek.realmformat.format.realm.impl.RealmChunkSectionImpl;
 import io.github.shiruka.nbt.CompoundTag;
 import io.github.shiruka.nbt.ListTag;
-import java.util.Objects;
 import lombok.Getter;
 import lombok.Setter;
 import net.minecraft.core.Registry;
@@ -59,6 +59,7 @@ public final class RealmChunkNms implements RealmChunk {
   @Override
   public CompoundTag heightMaps() {
     final var heightMaps = io.github.shiruka.nbt.Tag.createCompound();
+    final var test = io.github.shiruka.nbt.Tag.createLongArray(1L, 2L, 3L);
     for (final var entry : this.chunk.heightmaps.entrySet()) {
       if (!entry.getKey().keepAfterWorldgen()) {
         continue;
@@ -98,20 +99,14 @@ public final class RealmChunkNms implements RealmChunk {
     for (var sectionId = 0; sectionId < this.chunk.getSections().length; sectionId++) {
       final var section = this.chunk.getSections()[sectionId];
       final var blockLightArray = Converter.convertArray(
-        Objects.requireNonNull(
-          lightEngine
-            .getLayerListener(LightLayer.BLOCK)
-            .getDataLayerData(SectionPos.of(this.chunk.getPos(), sectionId)),
-          "Something went wrong!"
-        )
+        lightEngine
+          .getLayerListener(LightLayer.BLOCK)
+          .getDataLayerData(SectionPos.of(this.chunk.getPos(), sectionId))
       );
       final var skyLightArray = Converter.convertArray(
-        Objects.requireNonNull(
-          lightEngine
-            .getLayerListener(LightLayer.SKY)
-            .getDataLayerData(SectionPos.of(this.chunk.getPos(), sectionId)),
-          "Something went wrong!"
-        )
+        lightEngine
+          .getLayerListener(LightLayer.SKY)
+          .getDataLayerData(SectionPos.of(this.chunk.getPos(), sectionId))
       );
       final var blockStateData = ChunkSerializer.BLOCK_STATE_CODEC
         .encodeStart(NbtOps.INSTANCE, section.getStates())
@@ -122,7 +117,7 @@ public final class RealmChunkNms implements RealmChunk {
       final var blockStateTag = Converter.convertTag(blockStateData).asCompound();
       final var biomeTag = Converter.convertTag(biomeData).asCompound();
       sections[sectionId] =
-        new RealmChunkSectionNms(
+        new RealmChunkSectionImpl(
           null,
           null,
           null,
@@ -136,7 +131,7 @@ public final class RealmChunkNms implements RealmChunk {
     return sections;
   }
 
-  @NotNull
+  @Nullable
   @Override
   public ListTag tileEntities() {
     if (this.shouldDefaultBackToRealmChunk()) {

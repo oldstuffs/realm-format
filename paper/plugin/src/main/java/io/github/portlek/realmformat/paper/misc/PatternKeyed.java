@@ -34,6 +34,7 @@ public final class PatternKeyed {
   }
 
   private record PatternKey(@NotNull String pattern, int flag) {
+
     @NotNull
     private PatternKeyed compile() {
       return new PatternKeyed(this.pattern, Pattern.compile(this.pattern, this.flag));

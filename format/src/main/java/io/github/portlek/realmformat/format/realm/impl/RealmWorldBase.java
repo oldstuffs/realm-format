@@ -30,6 +30,7 @@ import lombok.Setter;
 import lombok.SneakyThrows;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import tr.com.infumia.task.Promise;
 
 public abstract class RealmWorldBase implements RealmWorld {
 
@@ -169,14 +170,15 @@ public abstract class RealmWorldBase implements RealmWorld {
     WorldAlreadyExistsException.check(loader == null || loader.worldExists(worldName), worldName);
     final var world = this.deepClone(worldName, loader, lock);
     if (loader != null) {
-      loader.saveWorld(worldName, world.serialize(), lock);
+      loader.saveWorld(worldName, world.serialize().join(), lock);
     }
     return world;
   }
 
+  @NotNull
   @Override
   @SneakyThrows
-  public final byte@NotNull[] serialize() {
+  public final Promise<byte@NotNull[]> serialize() {
     final var sortedChunks = new ArrayList<>(this.chunks().values());
     sortedChunks.sort(Comparator.comparingLong(chunk -> Misc.asLong(chunk.x(), chunk.z())));
     sortedChunks.removeIf(Objects::isNull);
@@ -199,7 +201,9 @@ public abstract class RealmWorldBase implements RealmWorld {
     } else {
       this.extraData.set("properties", Tag.createCompound());
     }
+    @Cleanup
     final var outByteStream = new ByteArrayOutputStream();
+    @Cleanup
     final var outStream = new DataOutputStream(outByteStream);
     outStream.write(RealmConstants.HEADER);
     outStream.write(RealmConstants.VERSION);
@@ -221,42 +225,48 @@ public abstract class RealmWorldBase implements RealmWorld {
     }
     final var chunkMaskSize = (int) Math.ceil((width * depth) / 8.0D);
     RealmWorldBase.writeBitSetAsBytes(outStream, chunkBitset, chunkMaskSize);
-    final var serializedChunk = this.serializeChunks(sortedChunks, this.version);
-    final var chunkData = serializedChunk.chunks();
-    final var compressedChunkData = Zstd.compress(chunkData);
-    outStream.writeInt(compressedChunkData.length);
-    outStream.writeInt(chunkData.length);
-    outStream.write(compressedChunkData);
-    final var tileEntitiesList = serializedChunk.tileEntities();
-    final var tileEntitiesCompound = Tag.createCompound().set("tiles", tileEntitiesList);
-    final var tileEntitiesData = RealmWorldBase.serializeCompoundTag(tileEntitiesCompound);
-    final var compressedTileEntitiesData = Zstd.compress(tileEntitiesData);
-    outStream.writeInt(compressedTileEntitiesData.length);
-    outStream.writeInt(tileEntitiesData.length);
-    outStream.write(compressedTileEntitiesData);
-    final var entitiesList = serializedChunk.entities();
-    outStream.writeBoolean(!entitiesList.isEmpty());
-    if (!entitiesList.isEmpty()) {
-      final var entitiesCompound = Tag.createCompound().set("entities", entitiesList);
-      final var entitiesData = RealmWorldBase.serializeCompoundTag(entitiesCompound);
-      final var compressedEntitiesData = Zstd.compress(entitiesData);
-      outStream.writeInt(compressedEntitiesData.length);
-      outStream.writeInt(entitiesData.length);
-      outStream.write(compressedEntitiesData);
-    }
-    final var extra = RealmWorldBase.serializeCompoundTag(this.extraData);
-    final var compressedExtra = Zstd.compress(extra);
-    outStream.writeInt(compressedExtra.length);
-    outStream.writeInt(extra.length);
-    outStream.write(compressedExtra);
-    final var worldMaps = Tag.createCompound();
-    worldMaps.setList("maps", Collections.emptyList());
-    final var mapArray = RealmWorldBase.serializeCompoundTag(worldMaps);
-    final var compressedMapArray = Zstd.compress(mapArray);
-    outStream.writeInt(compressedMapArray.length);
-    outStream.writeInt(mapArray.length);
-    outStream.write(compressedMapArray);
-    return outByteStream.toByteArray();
+    return this.serializeChunks(sortedChunks, this.version)
+      .thenApplyAsync(serializedChunk -> {
+        try {
+          final var chunkData = serializedChunk.chunks();
+          final var compressedChunkData = Zstd.compress(chunkData);
+          outStream.writeInt(compressedChunkData.length);
+          outStream.writeInt(chunkData.length);
+          outStream.write(compressedChunkData);
+          final var tileEntitiesList = serializedChunk.tileEntities();
+          final var tileEntitiesCompound = Tag.createCompound().set("tiles", tileEntitiesList);
+          final var tileEntitiesData = RealmWorldBase.serializeCompoundTag(tileEntitiesCompound);
+          final var compressedTileEntitiesData = Zstd.compress(tileEntitiesData);
+          outStream.writeInt(compressedTileEntitiesData.length);
+          outStream.writeInt(tileEntitiesData.length);
+          outStream.write(compressedTileEntitiesData);
+          final var entitiesList = serializedChunk.entities();
+          outStream.writeBoolean(!entitiesList.isEmpty());
+          if (!entitiesList.isEmpty()) {
+            final var entitiesCompound = Tag.createCompound().set("entities", entitiesList);
+            final var entitiesData = RealmWorldBase.serializeCompoundTag(entitiesCompound);
+            final var compressedEntitiesData = Zstd.compress(entitiesData);
+            outStream.writeInt(compressedEntitiesData.length);
+            outStream.writeInt(entitiesData.length);
+            outStream.write(compressedEntitiesData);
+          }
+          final var extra = RealmWorldBase.serializeCompoundTag(this.extraData);
+          final var compressedExtra = Zstd.compress(extra);
+          outStream.writeInt(compressedExtra.length);
+          outStream.writeInt(extra.length);
+          outStream.write(compressedExtra);
+          final var worldMaps = Tag.createCompound();
+          worldMaps.setList("maps", Collections.emptyList());
+          final var mapArray = RealmWorldBase.serializeCompoundTag(worldMaps);
+          final var compressedMapArray = Zstd.compress(mapArray);
+          outStream.writeInt(compressedMapArray.length);
+          outStream.writeInt(mapArray.length);
+          outStream.write(compressedMapArray);
+          return outByteStream.toByteArray();
+        } catch (final Exception e) {
+          throw new RuntimeException(e);
+        }
+      });
   }
 
   @Override
@@ -274,7 +284,7 @@ public abstract class RealmWorldBase implements RealmWorld {
   );
 
   @NotNull
-  protected abstract ChunkSerialization serializeChunks(
+  protected abstract Promise<@NotNull ChunkSerialization> serializeChunks(
     @NotNull List<RealmChunk> chunks,
     byte worldVersion
   ) throws IOException;

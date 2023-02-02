@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.Map;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import tr.com.infumia.task.Promise;
 
 public interface RealmWorld {
   @Nullable
@@ -49,7 +50,8 @@ public interface RealmWorld {
 
   boolean readOnly();
 
-  byte@NotNull[] serialize();
+  @NotNull
+  Promise<byte@NotNull[]> serialize();
 
   void updateChunk(@NotNull RealmChunk chunk);
 

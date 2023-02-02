@@ -21,7 +21,7 @@ public class Replaces {
   public Replace cb(
     @NotNull final Object match1,
     @NotNull final Object replace1,
-    @NotNull final Object @NotNull... matchAndReplaces
+    @NotNull final Object @NotNull ... matchAndReplaces
   ) {
     return Replaces.cb(Replaces.combine(match1, replace1, matchAndReplaces));
   }
@@ -59,7 +59,7 @@ public class Replaces {
   public Replace p(
     @NotNull final Object match1,
     @NotNull final Object replace1,
-    @NotNull final Object @NotNull... matchAndReplaces
+    @NotNull final Object @NotNull ... matchAndReplaces
   ) {
     return Replaces.p(Replaces.combine(match1, replace1, matchAndReplaces));
   }
@@ -78,7 +78,7 @@ public class Replaces {
   public Replace pattern(
     @NotNull final Object match1,
     @NotNull final Object replace1,
-    @NotNull final Object @NotNull... matchAndReplaces
+    @NotNull final Object @NotNull ... matchAndReplaces
   ) {
     return Replaces.pattern(Replaces.combine(match1, replace1, matchAndReplaces));
   }
@@ -92,7 +92,7 @@ public class Replaces {
   public Replace patternCaseInsensitive(
     @NotNull final Object match1,
     @NotNull final Object replace1,
-    @NotNull final Object @NotNull... matchAndReplaces
+    @NotNull final Object @NotNull ... matchAndReplaces
   ) {
     return Replaces.patternCaseInsensitive(Replaces.combine(match1, replace1, matchAndReplaces));
   }
@@ -106,7 +106,7 @@ public class Replaces {
   public Replace patternLiteral(
     @NotNull final Object match1,
     @NotNull final Object replace1,
-    @NotNull final Object @NotNull... matchAndReplaces
+    @NotNull final Object @NotNull ... matchAndReplaces
   ) {
     return Replaces.patternLiteral(Replaces.combine(match1, replace1, matchAndReplaces));
   }
@@ -115,7 +115,7 @@ public class Replaces {
   private Map<?, ?> combine(
     @NotNull final Object match1,
     @NotNull final Object replace1,
-    @NotNull final Object @NotNull... matchAndReplaces
+    @NotNull final Object @NotNull ... matchAndReplaces
   ) {
     Preconditions.checkArgument(
       matchAndReplaces.length % 2 == 0,

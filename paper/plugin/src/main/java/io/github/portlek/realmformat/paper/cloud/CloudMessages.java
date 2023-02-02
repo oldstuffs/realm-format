@@ -10,6 +10,7 @@ import org.jetbrains.annotations.NotNull;
 public class CloudMessages {
 
   public static void register(@NotNull final PaperCommandManager<CommandSender> manager) {
-    if (manager.captionRegistry() instanceof FactoryDelegatingCaptionRegistry<?> registry) {}
+    if (manager.captionRegistry() instanceof FactoryDelegatingCaptionRegistry<?> registry) {
+    }
   }
 }
