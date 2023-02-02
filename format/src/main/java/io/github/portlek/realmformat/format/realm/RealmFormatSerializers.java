@@ -1,7 +1,8 @@
-package io.github.portlek.realmformat.format.format.realm;
+package io.github.portlek.realmformat.format.realm;
 
 import com.google.common.base.Preconditions;
-import io.github.portlek.realmformat.format.format.realm.v1.RealmFormatSerializerV1;
+import io.github.portlek.realmformat.format.property.RealmPropertyMap;
+import io.github.portlek.realmformat.format.realm.v1.RealmFormatSerializerV1;
 import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
 import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 import java.io.ByteArrayInputStream;
@@ -35,13 +36,17 @@ public class RealmFormatSerializers {
    * Deserializes the given bytes into {@link RealmFormatWorld}.
    *
    * @param serialized The serialized bytes to deserialize into {@link RealmFormatWorld}.
+   * @param properties The properties to change deserialization behavior.
    *
    * @return Deserialized {@link RealmFormatWorld}.
    *
    * @throws IOException If something goes wrong when reading the bytes.
    */
   @NotNull
-  public RealmFormatWorld deserialize(final byte@NotNull[] serialized) throws IOException {
+  public RealmFormatWorld deserialize(
+    final byte@NotNull[] serialized,
+    @NotNull final RealmPropertyMap properties
+  ) throws IOException {
     @Cleanup
     final var input = new DataInputStream(new ByteArrayInputStream(serialized));
     final var header = new byte[RealmFormat.HEADER.length];
@@ -57,7 +62,7 @@ public class RealmFormatSerializers {
       realmFormatVersion
     );
     try {
-      return serializer.deserialize(input);
+      return serializer.deserialize(input, properties);
     } catch (final Exception e) {
       throw new RuntimeException("Something went wrong when deserializing a world!", e);
     }

@@ -1,5 +1,6 @@
-package io.github.portlek.realmformat.format.format.realm;
+package io.github.portlek.realmformat.format.realm;
 
+import io.github.portlek.realmformat.format.property.RealmPropertyMap;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -13,13 +14,17 @@ public interface RealmFormatSerializer {
    * Deserializes the given input into {@link RealmFormatWorld}.
    *
    * @param input The input to deserialize into an object.
+   * @param properties The properties to change deserialization behavior.
    *
    * @return Deserialized {@link RealmFormatWorld}.
    *
    * @throws IOException If something goes wrong when reading from input.
    */
   @NotNull
-  RealmFormatWorld deserialize(@NotNull DataInputStream input) throws IOException;
+  RealmFormatWorld deserialize(
+    @NotNull DataInputStream input,
+    @NotNull RealmPropertyMap properties
+  ) throws IOException;
 
   /**
    * Serializes the given world into output.

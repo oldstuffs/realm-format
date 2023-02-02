@@ -1,4 +1,4 @@
-package io.github.portlek.realmformat.format.format.realm;
+package io.github.portlek.realmformat.format.realm;
 
 /**
  * An interface that contains common constants for Realm format.

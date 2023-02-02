@@ -29,8 +29,12 @@ public final class RealmPropertyMap {
       .orElse(property.defaultValue());
   }
 
+  public void merge(@NotNull final CompoundTag tag) {
+    tag.all().forEach(this.tag::set);
+  }
+
   public void merge(@NotNull final RealmPropertyMap map) {
-    map.tag.all().forEach(this.tag::set);
+    this.merge(map.tag);
   }
 
   public <T> void setValue(@NotNull final RealmProperty<T> property, @NotNull final T value) {

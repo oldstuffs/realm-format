@@ -3,28 +3,29 @@ package io.github.portlek.realmformat.format.property;
 import io.github.portlek.realmformat.format.property.type.RealmPropertyBoolean;
 import io.github.portlek.realmformat.format.property.type.RealmPropertyInt;
 import io.github.portlek.realmformat.format.property.type.RealmPropertyString;
-import lombok.experimental.UtilityClass;
 import org.jetbrains.annotations.ApiStatus;
 
-@UtilityClass
-public class RealmProperties {
+public interface RealmProperties {
+  RealmProperty<Boolean> ALLOW_ANIMALS = new RealmPropertyBoolean("allowAnimals", true);
 
-  public final RealmProperty<Boolean> ALLOW_ANIMALS = new RealmPropertyBoolean(
-    "allowAnimals",
-    true
+  RealmProperty<Boolean> ALLOW_MONSTERS = new RealmPropertyBoolean("allowMonsters", true);
+
+  @ApiStatus.Experimental
+  RealmProperty<String> CHUNK_PRUNING = new RealmPropertyString(
+    "pruning",
+    "aggressive",
+    value -> value.equalsIgnoreCase("aggressive") || value.equalsIgnoreCase("never")
   );
 
-  public final RealmProperty<Boolean> ALLOW_MONSTERS = new RealmPropertyBoolean(
-    "allowMonsters",
-    true
-  );
+  @ApiStatus.Experimental
+  RealmProperty<Integer> CHUNK_SECTION_MAX = new RealmPropertyInt("chunkSectionMin", 19);
 
-  public static final RealmProperty<String> DEFAULT_BIOME = new RealmPropertyString(
-    "defaultBiome",
-    "minecraft:plains"
-  );
+  @ApiStatus.Experimental
+  RealmProperty<Integer> CHUNK_SECTION_MIN = new RealmPropertyInt("chunkSectionMin", -4);
 
-  public final RealmProperty<String> DIFFICULTY = new RealmPropertyString(
+  RealmProperty<String> DEFAULT_BIOME = new RealmPropertyString("defaultBiome", "minecraft:plains");
+
+  RealmProperty<String> DIFFICULTY = new RealmPropertyString(
     "difficulty",
     "peaceful",
     value ->
@@ -34,12 +35,9 @@ public class RealmProperties {
       value.equalsIgnoreCase("hard")
   );
 
-  public final RealmProperty<Boolean> DRAGON_BATTLE = new RealmPropertyBoolean(
-    "dragonBattle",
-    false
-  );
+  RealmProperty<Boolean> DRAGON_BATTLE = new RealmPropertyBoolean("dragonBattle", false);
 
-  public final RealmProperty<String> ENVIRONMENT = new RealmPropertyString(
+  RealmProperty<String> ENVIRONMENT = new RealmPropertyString(
     "environment",
     "normal",
     value ->
@@ -48,33 +46,30 @@ public class RealmProperties {
       value.equalsIgnoreCase("the_end")
   );
 
-  public final RealmProperty<Boolean> PVP = new RealmPropertyBoolean("pvp", true);
+  RealmProperty<Boolean> PVP = new RealmPropertyBoolean("pvp", true);
 
   @ApiStatus.Experimental
-  public final RealmProperty<Integer> SAVE_MAX_X = new RealmPropertyInt("saveMaxX", 0);
+  RealmProperty<Integer> SAVE_MAX_X = new RealmPropertyInt("saveMaxX", 0);
 
   @ApiStatus.Experimental
-  public final RealmProperty<Integer> SAVE_MAX_Z = new RealmPropertyInt("saveMaxZ", 0);
+  RealmProperty<Integer> SAVE_MAX_Z = new RealmPropertyInt("saveMaxZ", 0);
 
   @ApiStatus.Experimental
-  public final RealmProperty<Integer> SAVE_MIN_X = new RealmPropertyInt("saveMinX", 0);
+  RealmProperty<Integer> SAVE_MIN_X = new RealmPropertyInt("saveMinX", 0);
 
   @ApiStatus.Experimental
-  public final RealmProperty<Integer> SAVE_MIN_Z = new RealmPropertyInt("saveMinZ", 0);
+  RealmProperty<Integer> SAVE_MIN_Z = new RealmPropertyInt("saveMinZ", 0);
 
   @ApiStatus.Experimental
-  public final RealmProperty<Boolean> SHOULD_LIMIT_SAVE = new RealmPropertyBoolean(
-    "hasSaveBounds",
-    false
-  );
+  RealmProperty<Boolean> SHOULD_LIMIT_SAVE = new RealmPropertyBoolean("hasSaveBounds", false);
 
-  public final RealmProperty<Integer> SPAWN_X = new RealmPropertyInt("spawnX", 0);
+  RealmProperty<Integer> SPAWN_X = new RealmPropertyInt("spawnX", 0);
 
-  public final RealmProperty<Integer> SPAWN_Y = new RealmPropertyInt("spawnY", 255);
+  RealmProperty<Integer> SPAWN_Y = new RealmPropertyInt("spawnY", 255);
 
-  public final RealmProperty<Integer> SPAWN_Z = new RealmPropertyInt("spawnZ", 0);
+  RealmProperty<Integer> SPAWN_Z = new RealmPropertyInt("spawnZ", 0);
 
-  public final RealmProperty<String> WORLD_TYPE = new RealmPropertyString(
+  RealmProperty<String> WORLD_TYPE = new RealmPropertyString(
     "worldtype",
     "default",
     value ->
