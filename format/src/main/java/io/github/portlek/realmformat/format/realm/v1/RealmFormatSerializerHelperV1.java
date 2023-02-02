@@ -11,9 +11,7 @@ import io.github.shiruka.nbt.CompoundTag;
 import io.github.shiruka.nbt.Tag;
 import io.github.shiruka.nbt.TagTypes;
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -104,18 +102,6 @@ class RealmFormatSerializerHelperV1 {
     );
   }
 
-  void writeChunks(
-    @NotNull final DataOutputStream output,
-    @NotNull final Map<RealmFormatChunkPosition, RealmFormatChunk> chunks,
-    @NotNull final RealmFormatPropertyMap properties
-  ) throws IOException {}
-
-  void writeExtra(@NotNull final DataOutputStream output, @NotNull final CompoundTag extra)
-    throws IOException {
-    final var serializedExtra = RealmFormatSerializerHelperV1.serializeCompound(extra);
-    RealmFormatSerializerHelperV1.writeCompresses(output, serializedExtra);
-  }
-
   @NotNull
   private CompoundTag readCompound(final byte@NotNull[] bytes) throws IOException {
     if (bytes.length == 0) {
@@ -173,6 +159,7 @@ class RealmFormatSerializerHelperV1 {
       }
     }
   }
+  /*
 
   private byte@NotNull[] serializeCompound(@NotNull final CompoundTag tag) throws IOException {
     if (tag.isEmpty()) {
@@ -184,6 +171,18 @@ class RealmFormatSerializerHelperV1 {
     return output.toByteArray();
   }
 
+  void writeChunks(
+    @NotNull final DataOutputStream output,
+    @NotNull final Map<RealmFormatChunkPosition, RealmFormatChunk> chunks,
+    @NotNull final RealmFormatPropertyMap properties
+  ) throws IOException {}
+
+  void writeExtra(@NotNull final DataOutputStream output, @NotNull final CompoundTag extra)
+    throws IOException {
+    final var serializedExtra = RealmFormatSerializerHelperV1.serializeCompound(extra);
+    RealmFormatSerializerHelperV1.writeCompresses(output, serializedExtra);
+  }
+
   private void writeCompresses(@NotNull final DataOutputStream output, final byte@NotNull[] bytes)
     throws IOException {
     final var compressedExtra = Zstd.compress(bytes);
@@ -191,4 +190,5 @@ class RealmFormatSerializerHelperV1 {
     output.writeInt(bytes.length);
     output.write(compressedExtra);
   }
+   */
 }
