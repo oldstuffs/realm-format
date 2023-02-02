@@ -41,10 +41,9 @@ public final class RealmFormatSerializerV1 implements RealmFormatSerializer {
   public void serialize(
     @NotNull final DataOutputStream output,
     @NotNull final RealmFormatWorld world
-  ) throws IOException {}
-  /*
+  ) throws IOException {
     output.writeByte(world.worldVersion());
-    RealmFormatSerializerHelperV1.writeChunks(output, world.chunks(), world.properties());
+    RealmFormatSerializerHelperV1.writeChunks(output, world);
     final var extra = world.extra();
     final var properties = new RealmFormatPropertyMap(
       extra.getCompoundTag("properties").orElse(Tag.createCompound())
@@ -52,5 +51,5 @@ public final class RealmFormatSerializerV1 implements RealmFormatSerializer {
     properties.merge(world.properties());
     extra.set("properties", properties.tag());
     RealmFormatSerializerHelperV1.writeExtra(output, extra);
-   */
+  }
 }
