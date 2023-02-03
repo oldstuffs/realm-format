@@ -9,7 +9,6 @@ import org.jetbrains.annotations.Nullable;
  * An interface that represents {@link RealmFormatChunk}'s sections.
  */
 public interface RealmFormatChunkSection {
-
   /**
    * Gets the biomes of the chunk section.
    *

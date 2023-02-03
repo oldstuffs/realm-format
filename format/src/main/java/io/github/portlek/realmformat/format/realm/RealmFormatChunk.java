@@ -8,7 +8,6 @@ import org.jetbrains.annotations.NotNull;
  * An interface that represents {@link RealmFormatWorld}'s chunks.
  */
 public interface RealmFormatChunk {
-
   /**
    * Gets the entities of the chunk.
    *
@@ -36,7 +35,7 @@ public interface RealmFormatChunk {
    *
    * @since 1
    */
-  RealmFormatChunkSection @NotNull [] sections();
+  RealmFormatChunkSection@NotNull[] sections();
 
   /**
    * Gets the tile entities of the chunk.

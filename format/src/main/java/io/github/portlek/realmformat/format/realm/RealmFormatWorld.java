@@ -9,7 +9,6 @@ import org.jetbrains.annotations.NotNull;
  * An interface that represents Realm format's worlds.
  */
 public interface RealmFormatWorld {
-
   /**
    * Gets world's chunks.
    *

@@ -5,7 +5,6 @@ import io.github.portlek.realmformat.format.realm.v1.RealmFormatWorldV1;
 import io.github.shiruka.nbt.Tag;
 import java.io.IOException;
 import java.util.Collections;
-import java.util.Map;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -13,14 +12,18 @@ final class RealmFormatSerializersTest {
 
   @Test
   void test() throws IOException {
-    final var original = RealmFormatWorldV1.builder()
+    final var original = RealmFormatWorldV1
+      .builder()
       .extra(Tag.createCompound())
       .chunks(Collections.emptyMap())
       .properties(new RealmFormatPropertyMap())
-      .worldVersion((byte) 1)
+      .worldVersion((byte) 8)
       .build();
     final var serialized = RealmFormatSerializers.serialize(original);
-    final var deserialized = RealmFormatSerializers.deserialize(serialized, new RealmFormatPropertyMap());
+    final var deserialized = RealmFormatSerializers.deserialize(
+      serialized,
+      new RealmFormatPropertyMap()
+    );
     Assertions.assertEquals(original, deserialized);
   }
 }
