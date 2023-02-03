@@ -20,9 +20,6 @@ public final class MongoCredential {
   private String address;
 
   @Setting
-  private boolean enabled;
-
-  @Setting
   private String authSource;
 
   @Setting
@@ -30,6 +27,9 @@ public final class MongoCredential {
 
   @Setting
   private String database;
+
+  @Setting
+  private boolean enabled;
 
   @Setting
   private String password;

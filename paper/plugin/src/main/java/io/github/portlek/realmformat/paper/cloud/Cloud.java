@@ -24,7 +24,6 @@ public interface Cloud {
     );
     manager.registerBrigadier();
     manager.registerAsynchronousCompletions();
-    CloudMessages.register(manager);
     return manager;
   }
 
