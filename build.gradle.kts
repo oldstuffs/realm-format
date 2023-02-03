@@ -84,6 +84,10 @@ subprojects {
   java { toolchain { languageVersion.set(JavaLanguageVersion.of(17)) } }
 
   tasks {
+    test {
+      useJUnitPlatform()
+    }
+
     compileJava { options.encoding = Charsets.UTF_8.name() }
 
     jar { archiveBaseName.set(projectName) }
@@ -214,6 +218,9 @@ subprojects {
 
     annotationProcessor(dep("lombok"))
     annotationProcessor(dep("annotations"))
+
+    testImplementation(dep("junit.api"))
+    testRuntimeOnly(dep("junit.engine"))
 
     testAnnotationProcessor(dep("lombok"))
     testAnnotationProcessor(dep("annotations"))
