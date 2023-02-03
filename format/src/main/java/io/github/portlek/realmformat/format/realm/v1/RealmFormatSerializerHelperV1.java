@@ -61,8 +61,8 @@ class RealmFormatSerializerHelperV1 {
           .build()
       );
     }
-    RealmFormatSerializerHelperV1.readEntities(input, result);
-    RealmFormatSerializerHelperV1.readTileEntities(input, result);
+    RealmFormatSerializerHelperV1.readEntities(compressedInput, result);
+    RealmFormatSerializerHelperV1.readTileEntities(compressedInput, result);
     return result;
   }
 
