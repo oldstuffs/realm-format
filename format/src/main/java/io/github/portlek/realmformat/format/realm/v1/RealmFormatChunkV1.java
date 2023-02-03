@@ -7,10 +7,14 @@ import io.github.shiruka.nbt.ListTag;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.ToString;
 
 @Getter
 @Builder
+@ToString
+@EqualsAndHashCode
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 final class RealmFormatChunkV1 implements RealmFormatChunk {
 

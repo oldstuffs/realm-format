@@ -1,6 +1,8 @@
 package io.github.portlek.realmformat.format.misc;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.ToString;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -9,12 +11,14 @@ import org.jetbrains.annotations.NotNull;
  * <a
  * href="https://github.com/Minikloon/CraftyWorld/blob/master/crafty-common/src/main/kotlin/world/crafty/common/utils/NibbleArray.kt">Source</a>
  */
+@Getter
+@ToString
+@EqualsAndHashCode
 public final class NibbleArray {
 
-  @Getter
-  private final byte@NotNull[] backing;
+  private final byte @NotNull [] backing;
 
-  public NibbleArray(final byte@NotNull[] backing) {
+  public NibbleArray(final byte @NotNull [] backing) {
     this.backing = backing;
   }
 

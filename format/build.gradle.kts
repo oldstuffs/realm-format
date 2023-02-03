@@ -3,5 +3,9 @@ dependencies {
 
   compileOnly(dep("nbt"))
   compileOnly(dep("zstd"))
-  compileOnly(dep("fastutil"))
+
+  testImplementation(dep("nbt"))
+  testImplementation(dep("zstd"))
+  testImplementation(dep("fastutil"))
+  testImplementation(dep("guava"))
 }

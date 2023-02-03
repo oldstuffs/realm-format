@@ -3,12 +3,14 @@ package io.github.portlek.realmformat.format.property;
 import com.google.common.base.Preconditions;
 import io.github.shiruka.nbt.CompoundTag;
 import io.github.shiruka.nbt.Tag;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 import org.jetbrains.annotations.NotNull;
 
 @Getter
 @ToString
+@EqualsAndHashCode
 public final class RealmFormatPropertyMap {
 
   @NotNull

@@ -6,10 +6,14 @@ import io.github.shiruka.nbt.CompoundTag;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.ToString;
 
 @Getter
 @Builder
+@ToString
+@EqualsAndHashCode
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 final class RealmFormatChunkSectionV1 implements RealmFormatChunkSection {
 

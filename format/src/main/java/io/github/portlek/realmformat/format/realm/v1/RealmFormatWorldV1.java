@@ -9,12 +9,16 @@ import java.util.Map;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.ToString;
 
 @Getter
 @Builder
+@ToString
+@EqualsAndHashCode
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-final class RealmFormatWorldV1 implements RealmFormatWorld {
+public final class RealmFormatWorldV1 implements RealmFormatWorld {
 
   private Map<RealmFormatChunkPosition, RealmFormatChunk> chunks;
 
