@@ -5,7 +5,11 @@ import io.github.shiruka.nbt.CompoundTag;
 import java.util.Map;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * An interface that represents Realm format's worlds.
+ */
 public interface RealmFormatWorld {
+
   /**
    * Gets world's chunks.
    *
@@ -20,6 +24,8 @@ public interface RealmFormatWorld {
    * Gets extra data of the world.
    *
    * @return Extra data of the world.
+   *
+   * @since 1
    */
   @NotNull
   CompoundTag extra();
@@ -28,6 +34,8 @@ public interface RealmFormatWorld {
    * Gets properties of the world.
    *
    * @return Properties of the world.
+   *
+   * @since 1
    */
   @NotNull
   RealmFormatPropertyMap properties();
