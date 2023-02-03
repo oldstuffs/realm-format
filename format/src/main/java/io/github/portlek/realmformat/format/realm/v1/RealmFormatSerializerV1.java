@@ -24,7 +24,7 @@ public final class RealmFormatSerializerV1 implements RealmFormatSerializer {
   ) throws IOException {
     final var worldVersion = input.readByte();
     final var chunks = RealmFormatSerializerHelperV1.readChunks(input, properties);
-    final var extraCompound = RealmFormatSerializerHelperV1.readExtra(input);
+    final var extraCompound = RealmFormatSerializerHelperV1.readCompressedCompound(input);
     final var newProperties = new RealmFormatPropertyMap();
     newProperties.merge(extraCompound.getCompoundTag("properties").orElse(Tag.createCompound()));
     newProperties.merge(properties);
@@ -50,6 +50,6 @@ public final class RealmFormatSerializerV1 implements RealmFormatSerializer {
     );
     properties.merge(world.properties());
     extra.set("properties", properties.tag());
-    RealmFormatSerializerHelperV1.writeExtra(output, extra);
+    RealmFormatSerializerHelperV1.writeCompressedCompound(output, extra);
   }
 }
