@@ -16,11 +16,11 @@ final class RealmFormatSerializersTest {
     final var original = RealmFormatWorldV1.builder()
       .extra(Tag.createCompound())
       .chunks(Collections.emptyMap())
-      .properties(new RealmFormatPropertyMap(Tag.createCompound().setString("test", "test")))
+      .properties(new RealmFormatPropertyMap())
       .worldVersion((byte) 1)
       .build();
     final var serialized = RealmFormatSerializers.serialize(original);
-    final var deserialized = RealmFormatSerializers.deserialize(serialized, new RealmFormatPropertyMap(Tag.createCompound().setString("test", "test")));
+    final var deserialized = RealmFormatSerializers.deserialize(serialized, new RealmFormatPropertyMap());
     Assertions.assertEquals(original, deserialized);
   }
 }
