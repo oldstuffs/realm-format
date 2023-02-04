@@ -10,7 +10,6 @@ import org.jetbrains.annotations.NotNull;
  * An interface that represents serializers for {@link RealmFormatWorld}.
  */
 public interface RealmFormatSerializer {
-
   /**
    * Deserializes the given input into {@link RealmFormatWorld}.
    *

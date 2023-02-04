@@ -8,7 +8,6 @@ import java.util.Map;
  * An interface that represents Realm format's worlds.
  */
 public interface RealmFormatWorld {
-
   /**
    * Gets world's chunks.
    *

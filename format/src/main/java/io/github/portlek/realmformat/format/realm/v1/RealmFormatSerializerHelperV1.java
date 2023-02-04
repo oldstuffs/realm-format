@@ -41,8 +41,8 @@ class RealmFormatSerializerHelperV1 {
     final var result = new Object2ObjectOpenHashMap<RealmFormatChunkPosition, RealmFormatChunk>();
     final var sectionAmount =
       properties.getValue(RealmFormatProperties.CHUNK_SECTION_MAX) -
-        properties.getValue(RealmFormatProperties.CHUNK_SECTION_MIN) +
-        1;
+      properties.getValue(RealmFormatProperties.CHUNK_SECTION_MIN) +
+      1;
     final var data = RealmFormatSerializerHelperV1.readCompressed(compressedInput);
     final var input = new DataInputStream(new ByteArrayInputStream(data));
     final var chunks = input.readInt();
@@ -50,7 +50,11 @@ class RealmFormatSerializerHelperV1 {
       final var x = input.readInt();
       final var z = input.readInt();
       final var heightMap = RealmFormatSerializerHelperV1.readCompound(input);
-      final var sections = RealmFormatSerializerHelperV1.readChunkSections(input, sectionAmount, worldVersion);
+      final var sections = RealmFormatSerializerHelperV1.readChunkSections(
+        input,
+        sectionAmount,
+        worldVersion
+      );
       result.put(
         new RealmFormatChunkPosition(x, z),
         RealmFormatChunkV1
@@ -100,7 +104,7 @@ class RealmFormatSerializerHelperV1 {
     RealmFormatSerializerHelperV1.writeCompressed(output, compound);
   }
 
-  private boolean areSectionsEmpty(final RealmFormatChunkSection @NotNull [] sections) {
+  private boolean areSectionsEmpty(final RealmFormatChunkSection@NotNull[] sections) {
     for (final var section : sections) {
       try {
         final var compoundTag = section
@@ -140,23 +144,26 @@ class RealmFormatSerializerHelperV1 {
     }
     final var pruning = properties.getValue(RealmFormatProperties.CHUNK_PRUNING);
     if (pruning.equals("aggressive")) {
-      return chunk.tileEntities().isEmpty() &&
+      return (
+        chunk.tileEntities().isEmpty() &&
         chunk.entities().isEmpty() &&
-        RealmFormatSerializerHelperV1.areSectionsEmpty(chunk.sections());
+        RealmFormatSerializerHelperV1.areSectionsEmpty(chunk.sections())
+      );
     }
     return false;
   }
 
   @NotNull
-  private CompoundTag deserializeCompound(final byte @NotNull [] bytes) throws IOException {
+  private CompoundTag deserializeCompound(final byte@NotNull[] bytes) throws IOException {
     if (bytes.length == 0) {
       return Tag.createCompound();
     }
-    @Cleanup final var reader = Tag.createReader(new ByteArrayInputStream(bytes));
+    @Cleanup
+    final var reader = Tag.createReader(new ByteArrayInputStream(bytes));
     return reader.readCompoundTag();
   }
 
-  private RealmFormatChunkSection @NotNull [] readChunkSections(
+  private RealmFormatChunkSection@NotNull[] readChunkSections(
     @NotNull final DataInputStream input,
     final int amount,
     final byte worldVersion
@@ -205,7 +212,7 @@ class RealmFormatSerializerHelperV1 {
     return RealmFormatSerializerHelperV1.deserializeCompound(bytes);
   }
 
-  private byte @NotNull [] readCompressed(@NotNull final DataInputStream input) throws IOException {
+  private byte@NotNull[] readCompressed(@NotNull final DataInputStream input) throws IOException {
     final var compressedLength = input.readInt();
     final var resultLength = input.readInt();
     final var compressed = new byte[compressedLength];
@@ -262,13 +269,15 @@ class RealmFormatSerializerHelperV1 {
     }
   }
 
-  private byte @NotNull [] serializeChunks(
+  private byte@NotNull[] serializeChunks(
     @NotNull final RealmFormatPropertyMap properties,
     @NotNull final Collection<RealmFormatChunk> chunks,
     final byte worldVersion
   ) throws IOException {
-    @Cleanup final var outputStream = new ByteArrayOutputStream(16384);
-    @Cleanup final var output = new DataOutputStream(outputStream);
+    @Cleanup
+    final var outputStream = new ByteArrayOutputStream(16384);
+    @Cleanup
+    final var output = new DataOutputStream(outputStream);
     final var realChunks = new ArrayList<>(chunks);
     realChunks.removeIf(chunk -> RealmFormatSerializerHelperV1.canBePruned(properties, chunk));
     output.writeInt(chunks.size());
@@ -281,12 +290,14 @@ class RealmFormatSerializerHelperV1 {
     return outputStream.toByteArray();
   }
 
-  private byte @NotNull [] serializeCompound(@NotNull final CompoundTag tag) throws IOException {
+  private byte@NotNull[] serializeCompound(@NotNull final CompoundTag tag) throws IOException {
     if (tag.isEmpty()) {
       return new byte[0];
     }
-    @Cleanup final var output = new ByteArrayOutputStream();
-    @Cleanup final var writer = Tag.createWriter(output);
+    @Cleanup
+    final var output = new ByteArrayOutputStream();
+    @Cleanup
+    final var writer = Tag.createWriter(output);
     writer.write(tag);
     return output.toByteArray();
   }
@@ -327,7 +338,7 @@ class RealmFormatSerializerHelperV1 {
     output.write(bytes);
   }
 
-  private void writeCompressed(@NotNull final DataOutputStream output, final byte @NotNull [] bytes)
+  private void writeCompressed(@NotNull final DataOutputStream output, final byte@NotNull[] bytes)
     throws IOException {
     final var compressedExtra = Zstd.compress(bytes);
     output.writeInt(compressedExtra.length);

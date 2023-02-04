@@ -43,7 +43,12 @@ public final class RealmFormatSerializerV1 implements RealmFormatSerializer {
     @NotNull final RealmFormatWorld world
   ) throws IOException {
     output.writeByte(world.worldVersion());
-    RealmFormatSerializerHelperV1.writeChunks(output, world.properties(), world.chunks().values(), world.worldVersion());
+    RealmFormatSerializerHelperV1.writeChunks(
+      output,
+      world.properties(),
+      world.chunks().values(),
+      world.worldVersion()
+    );
     final var extra = world.extra();
     final var properties = new RealmFormatPropertyMap(
       extra.getCompoundTag("properties").orElse(Tag.createCompound())

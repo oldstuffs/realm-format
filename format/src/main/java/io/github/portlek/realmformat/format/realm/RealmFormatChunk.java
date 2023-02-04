@@ -7,7 +7,6 @@ import io.github.shiruka.nbt.ListTag;
  * An interface that represents {@link RealmFormatWorld}'s chunks.
  */
 public interface RealmFormatChunk {
-
   /**
    * Gets the biomes of the chunk.
    *

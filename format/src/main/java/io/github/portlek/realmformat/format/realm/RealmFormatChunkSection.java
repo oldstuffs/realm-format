@@ -7,16 +7,6 @@ import org.jetbrains.annotations.Nullable;
  * An interface that represents {@link RealmFormatChunk}'s sections.
  */
 public interface RealmFormatChunkSection {
-
-  /**
-   * Gets the block data of the chunk section.
-   *
-   * @return block data of the chunk section.
-   *
-   * @since 1
-   */
-  BlockDataV1_8 blockDataV1_8();
-
   /**
    * Gets the block data of the chunk section.
    *
@@ -34,6 +24,15 @@ public interface RealmFormatChunkSection {
    * @since 1
    */
   BlockDataV1_17 blockDataV1_17();
+
+  /**
+   * Gets the block data of the chunk section.
+   *
+   * @return block data of the chunk section.
+   *
+   * @since 1
+   */
+  BlockDataV1_8 blockDataV1_8();
 
   /**
    * Gets the block light of the chunk section.

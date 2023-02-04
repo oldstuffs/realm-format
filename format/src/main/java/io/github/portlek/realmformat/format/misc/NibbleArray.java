@@ -16,9 +16,9 @@ import org.jetbrains.annotations.NotNull;
 @EqualsAndHashCode
 public final class NibbleArray {
 
-  private final byte @NotNull [] backing;
+  private final byte@NotNull[] backing;
 
-  public NibbleArray(final byte @NotNull [] backing) {
+  public NibbleArray(final byte@NotNull[] backing) {
     this.backing = backing;
   }
 

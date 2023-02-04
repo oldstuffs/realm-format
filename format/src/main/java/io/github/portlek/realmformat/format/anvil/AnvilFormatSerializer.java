@@ -102,11 +102,11 @@ public class AnvilFormatSerializer {
     throw new UnsupportedOperationException("Unsupported world version: " + dataVersion);
   }
 
-  private boolean isEmpty(final long @NotNull [] array) {
+  private boolean isEmpty(final long@NotNull[] array) {
     return Arrays.stream(array).noneMatch(b -> b != 0L);
   }
 
-  private boolean isEmpty(final byte @NotNull [] array) {
+  private boolean isEmpty(final byte@NotNull[] array) {
     for (final var b : array) {
       if (b != 0) {
         return false;
@@ -116,10 +116,13 @@ public class AnvilFormatSerializer {
   }
 
   @NotNull
-  private Map<RealmFormatChunkPosition, RealmFormatChunk> loadChunks(@NotNull final File file, final int version)
-    throws IOException {
+  private Map<RealmFormatChunkPosition, RealmFormatChunk> loadChunks(
+    @NotNull final File file,
+    final int version
+  ) throws IOException {
     final var regionByteArray = Files.readAllBytes(file.toPath());
-    @Cleanup final var inputStream = new DataInputStream(new ByteArrayInputStream(regionByteArray));
+    @Cleanup
+    final var inputStream = new DataInputStream(new ByteArrayInputStream(regionByteArray));
     final var chunkEntries = new ArrayList<AnvilFormatChunkEntry>(1024);
     for (var i = 0; i < 1024; i++) {
       final var entry = inputStream.readInt();
@@ -135,7 +138,8 @@ public class AnvilFormatSerializer {
     }
     final var chunks = new HashMap<RealmFormatChunkPosition, RealmFormatChunk>();
     for (final var entry : chunkEntries) {
-      @Cleanup final var headerStream = new DataInputStream(
+      @Cleanup
+      final var headerStream = new DataInputStream(
         new ByteArrayInputStream(regionByteArray, entry.offset(), entry.paddedSize())
       );
       final var chunkSize = headerStream.readInt() - 1;
@@ -146,7 +150,8 @@ public class AnvilFormatSerializer {
       final var decompressorStream = compressionScheme == 1
         ? new GZIPInputStream(chunkStream)
         : new InflaterInputStream(chunkStream);
-      @Cleanup final var reader = Tag.createReader(decompressorStream);
+      @Cleanup
+      final var reader = Tag.createReader(decompressorStream);
       var global = reader.readCompoundTag().getCompoundTag("").orElseThrow();
       final var innerLevel = global.getCompoundTag("Level");
       if (innerLevel.isPresent()) {
@@ -166,23 +171,37 @@ public class AnvilFormatSerializer {
     @NotNull final Map<RealmFormatChunkPosition, RealmFormatChunk> chunks
   ) throws IOException {
     final var regionByteArray = Files.readAllBytes(file.toPath());
-    @Cleanup final var input = new DataInputStream(new ByteArrayInputStream(regionByteArray));
+    @Cleanup
+    final var input = new DataInputStream(new ByteArrayInputStream(regionByteArray));
     final var chunkEntries = new ArrayList<AnvilFormatChunkEntry>(1024);
     for (var i = 0; i < 1024; i++) {
       final var entry = input.readInt();
       if (entry != 0) {
         final var chunkOffset = entry >>> 8;
         final var chunkSize = entry & 15;
-        chunkEntries.add(new AnvilFormatChunkEntry(chunkOffset * AnvilFormatSerializer.SECTOR_SIZE, chunkSize * AnvilFormatSerializer.SECTOR_SIZE));
+        chunkEntries.add(
+          new AnvilFormatChunkEntry(
+            chunkOffset * AnvilFormatSerializer.SECTOR_SIZE,
+            chunkSize * AnvilFormatSerializer.SECTOR_SIZE
+          )
+        );
       }
     }
     for (final var entry : chunkEntries) {
-      @Cleanup final var headerStream = new DataInputStream(new ByteArrayInputStream(regionByteArray, entry.offset(), entry.paddedSize()));
+      @Cleanup
+      final var headerStream = new DataInputStream(
+        new ByteArrayInputStream(regionByteArray, entry.offset(), entry.paddedSize())
+      );
       final var chunkSize = headerStream.readInt() - 1;
       final int compressionScheme = headerStream.readByte();
-      final var chunkStream = new DataInputStream(new ByteArrayInputStream(regionByteArray, entry.offset() + 5, chunkSize));
-      final var decompressorStream = compressionScheme == 1 ? new GZIPInputStream(chunkStream) : new InflaterInputStream(chunkStream);
-      @Cleanup final var nbtStream = Tag.createReader(decompressorStream);
+      final var chunkStream = new DataInputStream(
+        new ByteArrayInputStream(regionByteArray, entry.offset() + 5, chunkSize)
+      );
+      final var decompressorStream = compressionScheme == 1
+        ? new GZIPInputStream(chunkStream)
+        : new InflaterInputStream(chunkStream);
+      @Cleanup
+      final var nbtStream = Tag.createReader(decompressorStream);
       final var globalCompound = nbtStream.readCompoundTag().getCompoundTag("").orElseThrow();
       AnvilFormatSerializer.readEntityChunk(globalCompound, version, chunks);
     }
@@ -193,15 +212,26 @@ public class AnvilFormatSerializer {
     final var chunkX = compound.getInteger("xPos").orElseThrow();
     final var chunkZ = compound.getInteger("zPos").orElseThrow();
     if (worldVersion >= 8) {
-      final var dataVersion = AnvilFormatSerializer.dataVersionToWorldVersion(compound.getInteger("DataVersion").orElse(-1));
+      final var dataVersion = AnvilFormatSerializer.dataVersionToWorldVersion(
+        compound.getInteger("DataVersion").orElse(-1)
+      );
       if (dataVersion != worldVersion) {
-        System.err.printf("Cannot load chunk at %s,%s: data version %s does not match world version %s%n",
-          chunkX, chunkZ, dataVersion, worldVersion);
+        System.err.printf(
+          "Cannot load chunk at %s,%s: data version %s does not match world version %s%n",
+          chunkX,
+          chunkZ,
+          dataVersion,
+          worldVersion
+        );
         return null;
       }
     }
     final var status = compound.getString("Status");
-    if (status.isPresent() && !status.get().equals("postprocessed") && !status.get().startsWith("full")) {
+    if (
+      status.isPresent() &&
+      !status.get().equals("postprocessed") &&
+      !status.get().startsWith("full")
+    ) {
       return null;
     }
     final int[] biomes;
@@ -240,7 +270,13 @@ public class AnvilFormatSerializer {
       } else {
         minSection = yPos.asInt().intValue();
       }
-      maxSection = sections.stream().map(c -> c.asCompound().getByte("Y").orElseThrow()).max(Byte::compareTo).orElse((byte) 0) + 1;
+      maxSection =
+        sections
+          .stream()
+          .map(c -> c.asCompound().getByte("Y").orElseThrow())
+          .max(Byte::compareTo)
+          .orElse((byte) 0) +
+        1;
     }
     final var sectionArray = new RealmFormatChunkSection[maxSection - minSection];
     for (final var section : sections) {
@@ -259,7 +295,11 @@ public class AnvilFormatSerializer {
       } else if (worldVersion < 8) {
         paletteTag = compoundTag.getListTag("Palette").orElse(null);
         blockStatesArray = compoundTag.getLongArray("BlockStates").orElse(null);
-        if (paletteTag == null || blockStatesArray == null || AnvilFormatSerializer.isEmpty(blockStatesArray)) {
+        if (
+          paletteTag == null ||
+          blockStatesArray == null ||
+          AnvilFormatSerializer.isEmpty(blockStatesArray)
+        ) {
           continue;
         }
       } else {
@@ -271,19 +311,28 @@ public class AnvilFormatSerializer {
         blockStatesTag = blockStatesOptional.orElseThrow();
         biomeTag = biomesOptional.orElseThrow();
       }
-      final var blockLightArray = compoundTag.getByteArray("BlockLight").map(NibbleArray::new).orElse(null);
-      final var skyLightArray = compoundTag.getByteArray("SkyLight").map(NibbleArray::new).orElse(null);
-      sectionArray[index - minSection] = RealmFormatChunkSectionV1.builder()
-        .blockDataV1_8(new BlockDataV1_8(dataArray))
-        .blockDataV1_13(new BlockDataV1_13(paletteTag, blockStatesArray))
-        .blockDataV1_17(new BlockDataV1_17(biomeTag, blockStatesTag))
-        .blockLight(blockLightArray)
-        .skyLight(skyLightArray)
-        .build();
+      final var blockLightArray = compoundTag
+        .getByteArray("BlockLight")
+        .map(NibbleArray::new)
+        .orElse(null);
+      final var skyLightArray = compoundTag
+        .getByteArray("SkyLight")
+        .map(NibbleArray::new)
+        .orElse(null);
+      sectionArray[index - minSection] =
+        RealmFormatChunkSectionV1
+          .builder()
+          .blockDataV1_8(new BlockDataV1_8(dataArray))
+          .blockDataV1_13(new BlockDataV1_13(paletteTag, blockStatesArray))
+          .blockDataV1_17(new BlockDataV1_17(biomeTag, blockStatesTag))
+          .blockLight(blockLightArray)
+          .skyLight(skyLightArray)
+          .build();
     }
     for (final var section : sectionArray) {
       if (section != null) {
-        return RealmFormatChunkV1.builder()
+        return RealmFormatChunkV1
+          .builder()
           .x(chunkX)
           .z(chunkZ)
           .sections(sectionArray)
@@ -299,15 +348,25 @@ public class AnvilFormatSerializer {
     return null;
   }
 
-  private void readEntityChunk(@NotNull final CompoundTag compound, final int version,
-                               @NotNull final Map<RealmFormatChunkPosition, RealmFormatChunk> chunks) {
+  private void readEntityChunk(
+    @NotNull final CompoundTag compound,
+    final int version,
+    @NotNull final Map<RealmFormatChunkPosition, RealmFormatChunk> chunks
+  ) {
     final var position = compound.getIntArray("Position").orElseThrow();
     final var chunkX = position[0];
     final var chunkZ = position[1];
-    final var dataVersion = AnvilFormatSerializer.dataVersionToWorldVersion(compound.getInteger("DataVersion").orElse(-1));
+    final var dataVersion = AnvilFormatSerializer.dataVersionToWorldVersion(
+      compound.getInteger("DataVersion").orElse(-1)
+    );
     if (dataVersion != version) {
-      System.err.printf("Cannot load entity chunk at %s,%s: data version %s does not match world version %s%n",
-        chunkX, chunkZ, dataVersion, version);
+      System.err.printf(
+        "Cannot load entity chunk at %s,%s: data version %s does not match world version %s%n",
+        chunkX,
+        chunkZ,
+        dataVersion,
+        version
+      );
       return;
     }
     final var chunk = chunks.get(new RealmFormatChunkPosition(chunkX, chunkZ));
@@ -330,7 +389,9 @@ public class AnvilFormatSerializer {
       .getCompoundTag("Data")
       .orElseThrow(() -> new IllegalStateException("This file is not a proper level.dat file!"));
     final var worldVersionOptional = dataTag.getInteger("DataVersion");
-    final var worldVersion = AnvilFormatSerializer.dataVersionToWorldVersion(worldVersionOptional.orElse(-1));
+    final var worldVersion = AnvilFormatSerializer.dataVersionToWorldVersion(
+      worldVersionOptional.orElse(-1)
+    );
     final var spawnX = dataTag.getInteger("SpawnX").orElse(0);
     final var spawnY = dataTag.getInteger("SpawnY").orElse(255);
     final var spawnZ = dataTag.getInteger("SpawnZ").orElse(0);
@@ -340,7 +401,7 @@ public class AnvilFormatSerializer {
     return new AnvilFormatLevelData(worldVersion, gameRules, spawnX, spawnY, spawnZ);
   }
 
-  private int @NotNull [] toIntArray(final byte @NotNull [] buf) {
+  private int@NotNull[] toIntArray(final byte@NotNull[] buf) {
     final var buffer = ByteBuffer.wrap(buf).order(ByteOrder.BIG_ENDIAN);
     final var ret = new int[buf.length / 4];
     buffer.asIntBuffer().get(ret);
