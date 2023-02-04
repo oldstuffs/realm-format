@@ -106,15 +106,6 @@ public class AnvilFormatSerializer {
     return Arrays.stream(array).noneMatch(b -> b != 0L);
   }
 
-  private boolean isEmpty(final byte@NotNull[] array) {
-    for (final var b : array) {
-      if (b != 0) {
-        return false;
-      }
-    }
-    return true;
-  }
-
   @NotNull
   private Map<RealmFormatChunkPosition, RealmFormatChunk> loadChunks(
     @NotNull final File file,

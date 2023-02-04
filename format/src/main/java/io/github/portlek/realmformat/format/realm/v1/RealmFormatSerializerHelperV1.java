@@ -6,6 +6,7 @@ import io.github.portlek.realmformat.format.property.RealmFormatProperties;
 import io.github.portlek.realmformat.format.property.RealmFormatPropertyMap;
 import io.github.portlek.realmformat.format.realm.BlockDataV1_13;
 import io.github.portlek.realmformat.format.realm.BlockDataV1_17;
+import io.github.portlek.realmformat.format.realm.BlockDataV1_8;
 import io.github.portlek.realmformat.format.realm.RealmFormatChunk;
 import io.github.portlek.realmformat.format.realm.RealmFormatChunkPosition;
 import io.github.portlek.realmformat.format.realm.RealmFormatChunkSection;
@@ -173,11 +174,16 @@ class RealmFormatSerializerHelperV1 {
     for (var sectionId = 0; sectionId < sectionCount; sectionId++) {
       final var blockLight = RealmFormatSerializerHelperV1.readOptionalNibbleArray(input);
       final var skyLight = RealmFormatSerializerHelperV1.readOptionalNibbleArray(input);
+      NibbleArray data = null;
       CompoundTag blockStateTag = null;
       CompoundTag biomeTag = null;
       ListTag palette = null;
       long[] blockStates = null;
-      if (worldVersion < 8) {
+      if (worldVersion < 4) {
+        final var bytes = new byte[RealmFormatSerializerHelperV1.ARRAY_SIZE];
+        input.read(bytes);
+        data = new NibbleArray(bytes);
+      } else if (worldVersion < 8) {
         final var paletteLength = input.readInt();
         palette = Tag.createList();
         for (var index = 0; index < paletteLength; index++) {
@@ -196,6 +202,7 @@ class RealmFormatSerializerHelperV1 {
       sections[sectionId] =
         RealmFormatChunkSectionV1
           .builder()
+          .blockDataV1_8(new BlockDataV1_8(data))
           .blockDataV1_17(new BlockDataV1_17(biomeTag, blockStateTag))
           .blockDataV1_13(new BlockDataV1_13(palette, blockStates))
           .blockLight(blockLight)
@@ -294,7 +301,6 @@ class RealmFormatSerializerHelperV1 {
     if (tag.isEmpty()) {
       return new byte[0];
     }
-    @Cleanup
     final var output = new ByteArrayOutputStream();
     @Cleanup
     final var writer = Tag.createWriter(output);
@@ -304,14 +310,19 @@ class RealmFormatSerializerHelperV1 {
 
   private void writeChunkSections(
     @NotNull final DataOutputStream output,
-    @NotNull final RealmFormatChunkSection[] sections,
+    @Nullable final RealmFormatChunkSection@NotNull[] sections,
     final byte worldVersion
   ) throws IOException {
     output.writeInt(sections.length);
     for (final var section : sections) {
+      if (section == null) {
+        continue;
+      }
       RealmFormatSerializerHelperV1.writeOptionalNibbleArray(output, section.blockLight());
       RealmFormatSerializerHelperV1.writeOptionalNibbleArray(output, section.skyLight());
-      if (worldVersion < 8) {
+      if (worldVersion < 4) {
+        output.write(section.blockDataV1_8().data().backing());
+      } else if (worldVersion < 8) {
         final var palette = section.blockDataV1_13().palette();
         final var blockStates = section.blockDataV1_13().blockStates();
         output.writeInt(palette.size());
