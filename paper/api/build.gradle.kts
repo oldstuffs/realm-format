@@ -5,6 +5,4 @@ dependencies {
   api(project(":format"))
 
   compileOnly(dep("paper"))
-  compileOnly(dep("task-common"))
-  compileOnly(dep("task-bukkit"))
 }
