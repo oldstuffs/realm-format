@@ -2,9 +2,6 @@ package io.github.portlek.realmformat.format.realm;
 
 import io.github.portlek.realmformat.format.anvil.AnvilFormatSerializer;
 import java.io.File;
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.nio.file.Path;
 import org.junit.jupiter.api.Test;
 
 final class RealmFormatSerializersTest {
