@@ -2,23 +2,30 @@ package io.github.portlek.realmformat.format.realm;
 
 import io.github.portlek.realmformat.format.anvil.AnvilFormatSerializer;
 import java.io.File;
+import java.util.List;
 import org.junit.jupiter.api.Test;
 
 final class RealmFormatSerializersTest {
 
+  private static final List<String> WORLD_FOLDERS = List.of(
+    "worldv1_8",
+    "worldv1_9",
+    "worldv1_10",
+    "worldv1_11",
+    "worldv1_12",
+    "worldv1_13",
+    "worldv1_14",
+    "worldv1_15",
+    "worldv1_16",
+    "worldv1_17",
+    "worldv1_18",
+    "worldv1_19"
+  );
+
   @Test
   void test() throws Exception {
-    AnvilFormatSerializer.deserialize(new File("src/test/resources/worldv1_8"));
-    AnvilFormatSerializer.deserialize(new File("src/test/resources/worldv1_9"));
-    AnvilFormatSerializer.deserialize(new File("src/test/resources/worldv1_10"));
-    AnvilFormatSerializer.deserialize(new File("src/test/resources/worldv1_11"));
-    AnvilFormatSerializer.deserialize(new File("src/test/resources/worldv1_12"));
-    AnvilFormatSerializer.deserialize(new File("src/test/resources/worldv1_13"));
-    AnvilFormatSerializer.deserialize(new File("src/test/resources/worldv1_14"));
-    AnvilFormatSerializer.deserialize(new File("src/test/resources/worldv1_15"));
-    AnvilFormatSerializer.deserialize(new File("src/test/resources/worldv1_16"));
-    AnvilFormatSerializer.deserialize(new File("src/test/resources/worldv1_17"));
-    AnvilFormatSerializer.deserialize(new File("src/test/resources/worldv1_18"));
-    AnvilFormatSerializer.deserialize(new File("src/test/resources/worldv1_19"));
+    for (final var worldFolder : RealmFormatSerializersTest.WORLD_FOLDERS) {
+      AnvilFormatSerializer.deserialize(new File("src/test/resources/" + worldFolder));
+    }
   }
 }
