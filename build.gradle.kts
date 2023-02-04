@@ -84,7 +84,10 @@ subprojects {
   java { toolchain { languageVersion.set(JavaLanguageVersion.of(17)) } }
 
   tasks {
-    test { useJUnitPlatform() }
+    test {
+      useJUnitPlatform()
+      testLogging { showStandardStreams = true }
+    }
 
     compileJava { options.encoding = Charsets.UTF_8.name() }
 

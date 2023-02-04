@@ -8,4 +8,5 @@ dependencies {
   testImplementation(dep("zstd"))
   testImplementation(dep("fastutil"))
   testImplementation(dep("guava"))
+  testImplementation(dep("commonslang"))
 }

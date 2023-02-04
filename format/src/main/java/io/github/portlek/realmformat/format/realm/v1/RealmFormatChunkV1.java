@@ -16,11 +16,17 @@ import lombok.ToString;
 @ToString
 @EqualsAndHashCode
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-final class RealmFormatChunkV1 implements RealmFormatChunk {
+public final class RealmFormatChunkV1 implements RealmFormatChunk {
+
+  private int[] biomes;
 
   private ListTag entities;
 
   private CompoundTag heightMaps;
+
+  private int maxSection;
+
+  private int minSection;
 
   private RealmFormatChunkSection[] sections;
 
