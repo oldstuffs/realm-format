@@ -1,11 +1,11 @@
 package io.github.portlek.realmformat.paper.file;
 
-import static io.github.portlek.realmformat.paper.misc.FormattedMessage.of;
+import static io.github.portlek.realmformat.paper.internal.misc.FormattedMessage.of;
 import static net.kyori.adventure.text.Component.text;
 import static net.kyori.adventure.text.format.NamedTextColor.GREEN;
 
-import io.github.portlek.realmformat.paper.configurate.Config;
-import io.github.portlek.realmformat.paper.misc.FormattedMessage;
+import io.github.portlek.realmformat.paper.internal.configurate.Config;
+import io.github.portlek.realmformat.paper.internal.misc.FormattedMessage;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.configurate.loader.ConfigurationLoader;

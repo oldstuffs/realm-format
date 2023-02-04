@@ -1,6 +1,6 @@
-package io.github.portlek.realmformat.paper;
+package io.github.portlek.realmformat.paper.internal;
 
-import io.github.portlek.realmformat.paper.exception.LibrariesCouldNotDownloadedException;
+import io.github.portlek.realmformat.paper.internal.exception.LibrariesCouldNotDownloadedException;
 import io.github.portlek.smol.app.builder.ApplicationBuilder;
 import java.nio.file.Path;
 import org.jetbrains.annotations.NotNull;

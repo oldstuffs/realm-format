@@ -1,6 +1,6 @@
-package io.github.portlek.realmformat.paper.configurate;
+package io.github.portlek.realmformat.paper.internal.configurate;
 
-import io.github.portlek.realmformat.paper.configurate.serializer.NonItalicFallbackComponentSerializer;
+import io.github.portlek.realmformat.paper.internal.configurate.serializer.NonItalicFallbackComponentSerializer;
 import java.nio.file.Path;
 import java.util.Objects;
 import lombok.SneakyThrows;

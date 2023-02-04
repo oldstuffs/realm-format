@@ -1,4 +1,4 @@
-package io.github.portlek.realmformat.paper.misc;
+package io.github.portlek.realmformat.paper.internal.misc;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;

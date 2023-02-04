@@ -1,4 +1,4 @@
-package io.github.portlek.realmformat.paper.cloud;
+package io.github.portlek.realmformat.paper.internal.cloud;
 
 import cloud.commandframework.Command;
 import cloud.commandframework.arguments.standard.StringArgument;

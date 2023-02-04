@@ -1,4 +1,4 @@
-package io.github.portlek.realmformat.paper.exception;
+package io.github.portlek.realmformat.paper.internal.exception;
 
 import lombok.experimental.StandardException;
 
