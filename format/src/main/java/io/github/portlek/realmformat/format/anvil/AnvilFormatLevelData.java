@@ -9,4 +9,6 @@ record AnvilFormatLevelData(
   int spawnX,
   int spawnY,
   int spawnZ
-) {}
+) {
+
+}

@@ -84,7 +84,12 @@ subprojects {
   java { toolchain { languageVersion.set(JavaLanguageVersion.of(17)) } }
 
   tasks {
-    test { useJUnitPlatform() }
+    test {
+      useJUnitPlatform()
+      testLogging {
+        showStandardStreams = true
+      }
+    }
 
     compileJava { options.encoding = Charsets.UTF_8.name() }
 
@@ -206,6 +211,7 @@ subprojects {
     maven("https://oss.sonatype.org/content/repositories/snapshots/")
     maven("https://repo.spongepowered.org/maven/")
     maven("https://papermc.io/repo/repository/maven-public/")
+    mavenLocal()
   }
 
   dependencies {

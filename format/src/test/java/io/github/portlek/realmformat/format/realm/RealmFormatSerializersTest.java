@@ -1,29 +1,27 @@
 package io.github.portlek.realmformat.format.realm;
 
-import io.github.portlek.realmformat.format.property.RealmFormatPropertyMap;
-import io.github.portlek.realmformat.format.realm.v1.RealmFormatWorldV1;
-import io.github.shiruka.nbt.Tag;
+import io.github.portlek.realmformat.format.anvil.AnvilFormatSerializer;
+import java.io.File;
 import java.io.IOException;
-import java.util.Collections;
-import org.junit.jupiter.api.Assertions;
+import java.net.URISyntaxException;
+import java.nio.file.Path;
 import org.junit.jupiter.api.Test;
 
 final class RealmFormatSerializersTest {
 
   @Test
-  void test() throws IOException {
-    final var original = RealmFormatWorldV1
-      .builder()
-      .extra(Tag.createCompound())
-      .chunks(Collections.emptyMap())
-      .properties(new RealmFormatPropertyMap())
-      .worldVersion((byte) 8)
-      .build();
-    final var serialized = RealmFormatSerializers.serialize(original);
-    final var deserialized = RealmFormatSerializers.deserialize(
-      serialized,
-      new RealmFormatPropertyMap()
-    );
-    Assertions.assertEquals(original, deserialized);
+  void test() throws Exception {
+    AnvilFormatSerializer.deserialize(new File("src/test/resources/worldv1_8"));
+    AnvilFormatSerializer.deserialize(new File("src/test/resources/worldv1_9"));
+    AnvilFormatSerializer.deserialize(new File("src/test/resources/worldv1_10"));
+    AnvilFormatSerializer.deserialize(new File("src/test/resources/worldv1_11"));
+    AnvilFormatSerializer.deserialize(new File("src/test/resources/worldv1_12"));
+    AnvilFormatSerializer.deserialize(new File("src/test/resources/worldv1_13"));
+    AnvilFormatSerializer.deserialize(new File("src/test/resources/worldv1_14"));
+    AnvilFormatSerializer.deserialize(new File("src/test/resources/worldv1_15"));
+    AnvilFormatSerializer.deserialize(new File("src/test/resources/worldv1_16"));
+    AnvilFormatSerializer.deserialize(new File("src/test/resources/worldv1_17"));
+    AnvilFormatSerializer.deserialize(new File("src/test/resources/worldv1_18"));
+    AnvilFormatSerializer.deserialize(new File("src/test/resources/worldv1_19"));
   }
 }

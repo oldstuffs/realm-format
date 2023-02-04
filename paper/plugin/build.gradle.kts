@@ -27,6 +27,7 @@ dependencies {
   smol(dep("mariadb"))
   smol(dep("mongodb"))
   smol(dep("commonsio"))
+  smol(dep("commonslang"))
   smol(dep("nbt"))
   smol(dep("zstd"))
 }

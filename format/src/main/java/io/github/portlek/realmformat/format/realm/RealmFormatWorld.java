@@ -3,12 +3,12 @@ package io.github.portlek.realmformat.format.realm;
 import io.github.portlek.realmformat.format.property.RealmFormatPropertyMap;
 import io.github.shiruka.nbt.CompoundTag;
 import java.util.Map;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * An interface that represents Realm format's worlds.
  */
 public interface RealmFormatWorld {
+
   /**
    * Gets world's chunks.
    *
@@ -16,7 +16,6 @@ public interface RealmFormatWorld {
    *
    * @since 1
    */
-  @NotNull
   Map<RealmFormatChunkPosition, RealmFormatChunk> chunks();
 
   /**
@@ -26,7 +25,6 @@ public interface RealmFormatWorld {
    *
    * @since 1
    */
-  @NotNull
   CompoundTag extra();
 
   /**
@@ -36,7 +34,6 @@ public interface RealmFormatWorld {
    *
    * @since 1
    */
-  @NotNull
   RealmFormatPropertyMap properties();
 
   /**
