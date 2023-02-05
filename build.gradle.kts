@@ -10,7 +10,7 @@ plugins {
   `java-library`
   `maven-publish`
   signing
-  id("com.diffplug.spotless") version "6.14.0"
+  id("com.diffplug.spotless") version "6.14.1"
   id("io.github.gradle-nexus.publish-plugin") version "1.1.0"
   id("com.github.johnrengelman.shadow") version "7.1.2" apply false
   id("io.github.portlek.smol-plugin-gradle") version "0.2.2-SNAPSHOT" apply false
