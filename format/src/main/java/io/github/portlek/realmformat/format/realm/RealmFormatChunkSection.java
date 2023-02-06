@@ -14,7 +14,7 @@ public interface RealmFormatChunkSection {
    *
    * @since 1
    */
-  BlockDataV1_13 blockDataV1_13();
+  BlockDataV1_14 blockDataV1_14();
 
   /**
    * Gets the block data of the chunk section.
@@ -23,7 +23,7 @@ public interface RealmFormatChunkSection {
    *
    * @since 1
    */
-  BlockDataV1_17 blockDataV1_17();
+  BlockDataV1_18 blockDataV1_18();
 
   /**
    * Gets the block data of the chunk section.

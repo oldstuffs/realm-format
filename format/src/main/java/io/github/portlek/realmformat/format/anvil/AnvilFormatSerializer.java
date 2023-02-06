@@ -4,8 +4,8 @@ import com.google.common.base.Preconditions;
 import io.github.portlek.realmformat.format.misc.NibbleArray;
 import io.github.portlek.realmformat.format.property.RealmFormatProperties;
 import io.github.portlek.realmformat.format.property.RealmFormatPropertyMap;
-import io.github.portlek.realmformat.format.realm.BlockDataV1_13;
-import io.github.portlek.realmformat.format.realm.BlockDataV1_17;
+import io.github.portlek.realmformat.format.realm.BlockDataV1_14;
+import io.github.portlek.realmformat.format.realm.BlockDataV1_18;
 import io.github.portlek.realmformat.format.realm.BlockDataV1_8;
 import io.github.portlek.realmformat.format.realm.RealmFormatChunk;
 import io.github.portlek.realmformat.format.realm.RealmFormatChunkPosition;
@@ -314,8 +314,8 @@ public class AnvilFormatSerializer {
         RealmFormatChunkSectionV1
           .builder()
           .blockDataV1_8(new BlockDataV1_8(dataArray))
-          .blockDataV1_13(new BlockDataV1_13(paletteTag, blockStatesArray))
-          .blockDataV1_17(new BlockDataV1_17(biomeTag, blockStatesTag))
+          .blockDataV1_14(new BlockDataV1_14(paletteTag, blockStatesArray))
+          .blockDataV1_18(new BlockDataV1_18(biomeTag, blockStatesTag))
           .blockLight(blockLightArray)
           .skyLight(skyLightArray)
           .build();
