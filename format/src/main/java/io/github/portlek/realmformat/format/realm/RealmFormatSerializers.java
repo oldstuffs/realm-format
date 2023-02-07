@@ -1,8 +1,6 @@
 package io.github.portlek.realmformat.format.realm;
 
 import com.google.common.base.Preconditions;
-import io.github.portlek.realmformat.format.misc.InputStreamExtension;
-import io.github.portlek.realmformat.format.misc.OutputStreamExtension;
 import io.github.portlek.realmformat.format.property.RealmFormatPropertyMap;
 import io.github.portlek.realmformat.format.realm.v1.RealmFormatSerializerV1;
 import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
@@ -50,9 +48,7 @@ public class RealmFormatSerializers {
     @NotNull final RealmFormatPropertyMap properties
   ) throws IOException {
     @Cleanup
-    final var input = new InputStreamExtension(
-      new DataInputStream(new ByteArrayInputStream(serialized))
-    );
+    final var input = new DataInputStream(new ByteArrayInputStream(serialized));
     final var header = new byte[RealmFormat.HEADER.length];
     input.read(header);
     Preconditions.checkArgument(
@@ -92,7 +88,7 @@ public class RealmFormatSerializers {
     @Cleanup
     final var stream = new ByteArrayOutputStream();
     @Cleanup
-    final var output = new OutputStreamExtension(new DataOutputStream(stream));
+    final var output = new DataOutputStream(stream);
     final var serializer = Preconditions.checkNotNull(
       RealmFormatSerializers.SERIALIZERS.get(world.version()),
       "This version '%s' is NOT supported!",

@@ -8,12 +8,14 @@ import java.io.ByteArrayInputStream;
 import java.io.Closeable;
 import java.io.DataInputStream;
 import java.io.IOException;
+import java.util.function.IntFunction;
 import lombok.Cleanup;
 import lombok.experimental.Delegate;
+import org.apache.commons.lang3.function.FailableSupplier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public final class InputStreamExtension implements Closeable {
+public abstract class InputStreamExtension implements Closeable {
 
   private static final int ARRAY_SIZE = 16 * 16 * 16 / (8 / 4);
 
@@ -21,18 +23,51 @@ public final class InputStreamExtension implements Closeable {
   @Delegate
   private final DataInputStream input;
 
-  public InputStreamExtension(@NotNull final DataInputStream input) {
+  protected InputStreamExtension(@NotNull final DataInputStream input) {
     this.input = input;
   }
 
   @NotNull
-  public CompoundTag readCompoundTag() throws IOException {
-    final var bytes = new byte[this.readInt()];
-    this.read(bytes);
-    return this.deserializeCompoundTag(bytes);
+  protected static CompoundTag deserializeCompoundTag(final byte@NotNull[] bytes)
+    throws IOException {
+    if (bytes.length == 0) {
+      return Tag.createCompound();
+    }
+    @Cleanup
+    final var reader = Tag.createReader(new ByteArrayInputStream(bytes));
+    return reader.readCompoundTag();
   }
 
-  public byte@NotNull[] readCompressed() throws IOException {
+  @NotNull
+  protected static ListTag deserializeListTag(final byte@NotNull[] bytes) throws IOException {
+    if (bytes.length == 0) {
+      return Tag.createList();
+    }
+    @Cleanup
+    final var reader = Tag.createReader(new ByteArrayInputStream(bytes));
+    return reader.readListTag();
+  }
+
+  public final <T> T[] readArray(
+    @NotNull final IntFunction<T[]> arrayCreator,
+    @NotNull final FailableSupplier<T, IOException> reader
+  ) throws IOException {
+    final var arrayLength = this.readInt();
+    final var arrays = arrayCreator.apply(arrayLength);
+    for (var index = 0; index < arrayLength; index++) {
+      arrays[index] = reader.get();
+    }
+    return arrays;
+  }
+
+  @NotNull
+  public final CompoundTag readCompoundTag() throws IOException {
+    final var bytes = new byte[this.readInt()];
+    this.read(bytes);
+    return InputStreamExtension.deserializeCompoundTag(bytes);
+  }
+
+  public final byte@NotNull[] readCompressed() throws IOException {
     final var compressedLength = this.readInt();
     final var resultLength = this.readInt();
     final var compressed = new byte[compressedLength];
@@ -43,58 +78,38 @@ public final class InputStreamExtension implements Closeable {
   }
 
   @NotNull
-  public CompoundTag readCompressedCompound() throws IOException {
-    return this.deserializeCompoundTag(this.readCompressed());
+  public final CompoundTag readCompressedCompound() throws IOException {
+    return InputStreamExtension.deserializeCompoundTag(this.readCompressed());
   }
 
   @NotNull
-  public ListTag readListTag() throws IOException {
+  public final ListTag readListTag() throws IOException {
     final var bytes = new byte[this.readInt()];
     this.read(bytes);
-    return this.deserializeListTag(bytes);
+    return InputStreamExtension.deserializeListTag(bytes);
   }
 
-  public long@NotNull[] readLongArray() throws IOException {
-    final var blockStatesArrayLength = this.readInt();
-    final var longs = new long[blockStatesArrayLength];
-    for (var index = 0; index < blockStatesArrayLength; index++) {
+  public final long@NotNull[] readLongArray() throws IOException {
+    final var arrayLength = this.readInt();
+    final var longs = new long[arrayLength];
+    for (var index = 0; index < arrayLength; index++) {
       longs[index] = this.readLong();
     }
     return longs;
   }
 
   @NotNull
-  public NibbleArray readNibbleArray() throws IOException {
+  public final NibbleArray readNibbleArray() throws IOException {
     final var bytes = new byte[InputStreamExtension.ARRAY_SIZE];
     this.read(bytes);
     return new NibbleArray(bytes);
   }
 
   @Nullable
-  public NibbleArray readOptionalNibbleArray() throws IOException {
+  public final NibbleArray readOptionalNibbleArray() throws IOException {
     if (!this.readBoolean()) {
       return null;
     }
     return this.readNibbleArray();
-  }
-
-  @NotNull
-  private CompoundTag deserializeCompoundTag(final byte@NotNull[] bytes) throws IOException {
-    if (bytes.length == 0) {
-      return Tag.createCompound();
-    }
-    @Cleanup
-    final var reader = Tag.createReader(new ByteArrayInputStream(bytes));
-    return reader.readCompoundTag();
-  }
-
-  @NotNull
-  private ListTag deserializeListTag(final byte@NotNull[] bytes) throws IOException {
-    if (bytes.length == 0) {
-      return Tag.createList();
-    }
-    @Cleanup
-    final var reader = Tag.createReader(new ByteArrayInputStream(bytes));
-    return reader.readListTag();
   }
 }

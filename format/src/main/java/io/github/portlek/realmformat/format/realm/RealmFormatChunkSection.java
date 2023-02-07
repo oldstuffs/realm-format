@@ -14,6 +14,7 @@ public interface RealmFormatChunkSection {
    *
    * @since 1
    */
+  @Nullable
   BlockDataV1_14 blockDataV1_14();
 
   /**
@@ -23,6 +24,7 @@ public interface RealmFormatChunkSection {
    *
    * @since 1
    */
+  @Nullable
   BlockDataV1_18 blockDataV1_18();
 
   /**
@@ -32,6 +34,7 @@ public interface RealmFormatChunkSection {
    *
    * @since 1
    */
+  @Nullable
   BlockDataV1_8 blockDataV1_8();
 
   /**
