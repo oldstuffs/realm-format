@@ -55,11 +55,11 @@ public class RealmFormatSerializers {
       Arrays.equals(header, RealmFormat.HEADER),
       "Serialized data does NOT starts with the realm format's header!"
     );
-    final var realmFormatVersion = input.readByte();
+    final var version = input.readByte();
     final var serializer = Preconditions.checkNotNull(
-      RealmFormatSerializers.SERIALIZERS.get(realmFormatVersion),
+      RealmFormatSerializers.SERIALIZERS.get(version),
       "This version '%s' is NOT supported!",
-      realmFormatVersion
+      version
     );
     try {
       return serializer.deserialize(input, properties);

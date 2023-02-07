@@ -106,10 +106,19 @@ public class AnvilFormatSerializer {
     return Arrays.stream(array).noneMatch(b -> b != 0L);
   }
 
+  private boolean isEmpty(final byte[] array) {
+    for (final var b : array) {
+      if (b != 0) {
+        return false;
+      }
+    }
+    return true;
+  }
+
   @NotNull
   private Map<RealmFormatChunkPosition, RealmFormatChunk> loadChunks(
     @NotNull final File file,
-    final int version
+    final int worldVersion
   ) throws IOException {
     final var regionByteArray = Files.readAllBytes(file.toPath());
     @Cleanup
@@ -141,14 +150,16 @@ public class AnvilFormatSerializer {
       final var decompressorStream = compressionScheme == 1
         ? new GZIPInputStream(chunkStream)
         : new InflaterInputStream(chunkStream);
-      @Cleanup
-      final var reader = Tag.createReader(decompressorStream);
-      var global = reader.readCompoundTag().getCompoundTag("").orElseThrow();
+      final CompoundTag tag;
+      try (final var reader = Tag.createReader(decompressorStream)) {
+        tag = reader.readCompoundTag();
+      }
+      var global = tag.getCompoundTag("").orElseThrow();
       final var innerLevel = global.getCompoundTag("Level");
       if (innerLevel.isPresent()) {
         global = innerLevel.get();
       }
-      final var chunk = AnvilFormatSerializer.readChunk(global, version);
+      final var chunk = AnvilFormatSerializer.readChunk(global, worldVersion);
       if (chunk != null) {
         chunks.put(new RealmFormatChunkPosition(chunk.x(), chunk.z()), chunk);
       }
@@ -234,10 +245,9 @@ public class AnvilFormatSerializer {
     } else {
       biomes = null;
     }
-    final var optionalHeightMaps = compound.getCompoundTag("Heightmaps");
     final CompoundTag heightMapsCompound;
     if (worldVersion >= 4) {
-      heightMapsCompound = optionalHeightMaps.orElse(Tag.createCompound());
+      heightMapsCompound = compound.getCompoundTag("Heightmaps").orElse(Tag.createCompound());
     } else {
       final var heightMap = compound.getIntArray("HeightMap").orElseGet(() -> new int[256]);
       heightMapsCompound = Tag.createCompound().set("heightMap", Tag.createIntArray(heightMap));
@@ -276,31 +286,29 @@ public class AnvilFormatSerializer {
       if (worldVersion < 7 && index < 0) {
         continue;
       }
-      NibbleArray dataArray = null;
-      ListTag paletteTag = null;
-      long[] blockStatesArray = null;
-      CompoundTag blockStatesTag = null;
-      CompoundTag biomeTag = null;
+      final var builder = RealmFormatChunkSectionV1.builder();
       if (worldVersion < 4) {
-        dataArray = new NibbleArray(compoundTag.getByteArray("Data").orElseThrow());
-      } else if (worldVersion < 8) {
-        paletteTag = compoundTag.getListTag("Palette").orElse(null);
-        blockStatesArray = compoundTag.getLongArray("BlockStates").orElse(null);
-        if (
-          paletteTag == null ||
-          blockStatesArray == null ||
-          AnvilFormatSerializer.isEmpty(blockStatesArray)
-        ) {
+        final var data = compoundTag.getByteArray("Data").orElseThrow();
+        if (AnvilFormatSerializer.isEmpty(data)) {
           continue;
         }
+        builder.blockDataV1_8(new BlockDataV1_8(new NibbleArray(data)));
+      } else if (worldVersion < 8) {
+        final var palette = compoundTag.getListTag("Palette").orElse(null);
+        final var blockStates = compoundTag.getLongArray("BlockStates").orElse(null);
+        if (palette == null || blockStates == null || AnvilFormatSerializer.isEmpty(blockStates)) {
+          continue;
+        }
+        builder.blockDataV1_14(new BlockDataV1_14(palette, blockStates));
       } else {
         final var blockStatesOptional = compoundTag.getCompoundTag("block_states");
         final var biomesOptional = compoundTag.getCompoundTag("biomes");
-        if (blockStatesOptional.isEmpty() && biomesOptional.isEmpty()) {
+        if (blockStatesOptional.isEmpty() || biomesOptional.isEmpty()) {
           continue;
         }
-        blockStatesTag = blockStatesOptional.orElseThrow();
-        biomeTag = biomesOptional.orElseThrow();
+        builder.blockDataV1_18(
+          new BlockDataV1_18(blockStatesOptional.orElseThrow(), biomesOptional.orElseThrow())
+        );
       }
       final var blockLightArray = compoundTag
         .getByteArray("BlockLight")
@@ -311,14 +319,7 @@ public class AnvilFormatSerializer {
         .map(NibbleArray::new)
         .orElse(null);
       sectionArray[index - minSection] =
-        RealmFormatChunkSectionV1
-          .builder()
-          .blockDataV1_8(new BlockDataV1_8(dataArray))
-          .blockDataV1_14(new BlockDataV1_14(paletteTag, blockStatesArray))
-          .blockDataV1_18(new BlockDataV1_18(biomeTag, blockStatesTag))
-          .blockLight(blockLightArray)
-          .skyLight(skyLightArray)
-          .build();
+        builder.blockLight(blockLightArray).skyLight(skyLightArray).build();
     }
     for (final var section : sectionArray) {
       if (section != null) {
@@ -372,8 +373,10 @@ public class AnvilFormatSerializer {
 
   @NotNull
   private AnvilFormatLevelData readLevelData(@NotNull final File file) throws IOException {
-    final var reader = Tag.createGZIPReader(new FileInputStream(file));
-    final var tag = reader.readCompoundTag();
+    final CompoundTag tag;
+    try (final var reader = Tag.createGZIPReader(new FileInputStream(file))) {
+      tag = reader.readCompoundTag();
+    }
     final var dataTag = tag
       .getCompoundTag("")
       .orElseThrow(() -> new IllegalStateException("This file is not a proper level.dat file!"))

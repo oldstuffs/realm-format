@@ -10,7 +10,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import lombok.Cleanup;
 import lombok.experimental.Delegate;
-import org.apache.commons.lang3.function.FailableConsumer;
+import org.apache.commons.lang3.function.FailableBiConsumer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -49,11 +49,11 @@ public abstract class OutputStreamExtension implements Closeable {
 
   public final <T> void writeArray(
     @NotNull final T[] array,
-    @NotNull final FailableConsumer<T, IOException> writer
+    @NotNull final FailableBiConsumer<Integer, T, IOException> writer
   ) throws IOException {
     this.writeInt(array.length);
-    for (final var t : array) {
-      writer.accept(t);
+    for (var i = 0; i < array.length; i++) {
+      writer.accept(i, array[i]);
     }
   }
 
@@ -75,6 +75,13 @@ public abstract class OutputStreamExtension implements Closeable {
     this.writeCompressed(compound);
   }
 
+  public final void writeIntArray(final int@NotNull[] longs) throws IOException {
+    this.writeInt(longs.length);
+    for (final var l : longs) {
+      this.writeLong(l);
+    }
+  }
+
   public final void writeListTag(@NotNull final ListTag tag) throws IOException {
     final var bytes = OutputStreamExtension.serializeListTag(tag);
     this.writeInt(bytes.length);
@@ -90,6 +97,13 @@ public abstract class OutputStreamExtension implements Closeable {
 
   public final void writeNibbleArray(@NotNull final NibbleArray array) throws IOException {
     this.write(array.backing());
+  }
+
+  public final void writeOptionalIntArray(final int@Nullable[] ints) throws IOException {
+    this.writeBoolean(ints != null);
+    if (ints != null) {
+      this.writeIntArray(ints);
+    }
   }
 
   public final void writeOptionalNibbleArray(@Nullable final NibbleArray array) throws IOException {

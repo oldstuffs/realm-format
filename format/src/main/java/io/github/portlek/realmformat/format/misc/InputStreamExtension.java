@@ -82,6 +82,15 @@ public abstract class InputStreamExtension implements Closeable {
     return InputStreamExtension.deserializeCompoundTag(this.readCompressed());
   }
 
+  public final int@NotNull[] readIntArray() throws IOException {
+    final var arrayLength = this.readInt();
+    final var ints = new int[arrayLength];
+    for (var index = 0; index < arrayLength; index++) {
+      ints[index] = this.readInt();
+    }
+    return ints;
+  }
+
   @NotNull
   public final ListTag readListTag() throws IOException {
     final var bytes = new byte[this.readInt()];
@@ -103,6 +112,13 @@ public abstract class InputStreamExtension implements Closeable {
     final var bytes = new byte[InputStreamExtension.ARRAY_SIZE];
     this.read(bytes);
     return new NibbleArray(bytes);
+  }
+
+  public final int@Nullable[] readOptionalIntArray() throws IOException {
+    if (!this.readBoolean()) {
+      return null;
+    }
+    return this.readIntArray();
   }
 
   @Nullable

@@ -2,6 +2,7 @@ package io.github.portlek.realmformat.format.realm;
 
 import io.github.shiruka.nbt.CompoundTag;
 import io.github.shiruka.nbt.ListTag;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * An interface that represents {@link RealmFormatWorld}'s chunks.
@@ -14,7 +15,7 @@ public interface RealmFormatChunk {
    *
    * @since 1
    */
-  int[] biomes();
+  int@Nullable[] biomes();
 
   /**
    * Gets the entities of the chunk.

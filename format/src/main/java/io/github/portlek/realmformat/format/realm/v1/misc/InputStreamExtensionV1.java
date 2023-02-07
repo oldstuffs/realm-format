@@ -105,29 +105,33 @@ public class InputStreamExtensionV1 extends InputStreamExtension {
 
   @NotNull
   @ApiStatus.Internal
-  protected RealmFormatChunkSection@NotNull[] readChunkSections() throws IOException {
-    return this.readArray(
-        RealmFormatChunkSection[]::new,
-        () -> {
-          final var builder = RealmFormatChunkSectionV1.builder();
-          final var blockLight = this.readOptionalNibbleArray();
-          final var skyLight = this.readOptionalNibbleArray();
-          builder.blockLight(blockLight).skyLight(skyLight);
-          if (this.worldVersion < 4) {
-            final var data = this.readNibbleArray();
-            builder.blockDataV1_8(new BlockDataV1_8(data));
-          } else if (this.worldVersion < 8) {
-            final var palette = this.readListTag();
-            final var blockStates = this.readLongArray();
-            builder.blockDataV1_14(new BlockDataV1_14(palette, blockStates));
-          } else {
-            final var blockStates = this.readCompoundTag();
-            final var biomes = this.readCompoundTag();
-            builder.blockDataV1_18(new BlockDataV1_18(biomes, blockStates));
-          }
-          return builder.build();
-        }
-      );
+  protected RealmFormatChunkSection@NotNull[] readChunkSections(
+    final int minSection,
+    final int maxSection
+  ) throws IOException {
+    final var chunkSectionArray = new RealmFormatChunkSection[maxSection - minSection];
+    final var sectionCount = this.readInt();
+    for (var i = 0; i < sectionCount; i++) {
+      final var y = this.readInt();
+      final var builder = RealmFormatChunkSectionV1.builder();
+      final var blockLight = this.readOptionalNibbleArray();
+      final var skyLight = this.readOptionalNibbleArray();
+      builder.blockLight(blockLight).skyLight(skyLight);
+      if (this.worldVersion < 4) {
+        final var data = this.readNibbleArray();
+        builder.blockDataV1_8(new BlockDataV1_8(data));
+      } else if (this.worldVersion < 8) {
+        final var palette = this.readListTag();
+        final var blockStates = this.readLongArray();
+        builder.blockDataV1_14(new BlockDataV1_14(palette, blockStates));
+      } else {
+        final var blockStates = this.readCompoundTag();
+        final var biomes = this.readCompoundTag();
+        builder.blockDataV1_18(new BlockDataV1_18(biomes, blockStates));
+      }
+      chunkSectionArray[y] = builder.build();
+    }
+    return chunkSectionArray;
   }
 
   @NotNull
@@ -138,14 +142,20 @@ public class InputStreamExtensionV1 extends InputStreamExtension {
         () -> {
           final var x = this.readInt();
           final var z = this.readInt();
+          final var biomes = this.readOptionalIntArray();
           final var heightMap = this.readCompoundTag();
-          final var sections = this.readChunkSections();
+          final var minSection = this.readInt();
+          final var maxSection = this.readInt();
+          final var sections = this.readChunkSections(minSection, maxSection);
           return RealmFormatChunkV1
             .builder()
             .x(x)
             .z(z)
+            .biomes(biomes)
             .sections(sections)
             .heightMaps(heightMap)
+            .minSection(minSection)
+            .maxSection(maxSection)
             .entities(Tag.createList())
             .tileEntities(Tag.createList())
             .build();

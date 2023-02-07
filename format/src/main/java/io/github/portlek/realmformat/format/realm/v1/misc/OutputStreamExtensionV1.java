@@ -9,11 +9,13 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Objects;
 import lombok.Cleanup;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class OutputStreamExtensionV1 extends OutputStreamExtension {
 
@@ -36,7 +38,6 @@ public class OutputStreamExtensionV1 extends OutputStreamExtension {
     this.writeCompressed(this.serializeChunks(chunks));
   }
 
-  @ApiStatus.Internal
   public void writeEntities(@NotNull final Collection<RealmFormatChunk> chunks) throws IOException {
     final var entities = Tag.createList();
     for (final var chunk : chunks) {
@@ -47,7 +48,6 @@ public class OutputStreamExtensionV1 extends OutputStreamExtension {
     this.writeCompressedCompound(Tag.createCompound().set("entities", entities));
   }
 
-  @ApiStatus.Internal
   public void writeTileEntities(@NotNull final Collection<RealmFormatChunk> chunks)
     throws IOException {
     final var entities = Tag.createList();
@@ -67,10 +67,13 @@ public class OutputStreamExtensionV1 extends OutputStreamExtension {
     final var output = this.with(outputStream);
     output.writeArray(
       chunks.toArray(RealmFormatChunk[]::new),
-      chunk -> {
+      (__, chunk) -> {
         output.writeInt(chunk.x());
         output.writeInt(chunk.z());
+        output.writeOptionalIntArray(chunk.biomes());
         output.writeCompound(chunk.heightMaps());
+        this.writeInt(chunk.minSection());
+        this.writeInt(chunk.maxSection());
         output.writeChunkSections(chunk.sections());
       }
     );
@@ -87,38 +90,38 @@ public class OutputStreamExtensionV1 extends OutputStreamExtension {
   }
 
   @ApiStatus.Internal
-  protected void writeChunkSections(final RealmFormatChunkSection@NotNull[] sections)
+  protected void writeChunkSections(@Nullable final RealmFormatChunkSection@NotNull[] sections)
     throws IOException {
-    this.writeArray(
-        sections,
-        section -> {
-          if (section == null) {
-            return;
-          }
-          this.writeOptionalNibbleArray(section.blockLight());
-          this.writeOptionalNibbleArray(section.skyLight());
-          if (this.worldVersion < 4) {
-            final var blockDataV1_8 = Objects.requireNonNull(
-              section.blockDataV1_8(),
-              "Block data for 1.8 not found!"
-            );
-            this.write(blockDataV1_8.data().backing());
-          } else if (this.worldVersion < 8) {
-            final var blockDataV1_14 = Objects.requireNonNull(
-              section.blockDataV1_14(),
-              "Block data for 1.14 not found!"
-            );
-            this.writeListTag(blockDataV1_14.palette());
-            this.writeLongArray(blockDataV1_14.blockStates());
-          } else {
-            final var blockDataV1_18 = Objects.requireNonNull(
-              section.blockDataV1_18(),
-              "Block data for 1.18 not found!"
-            );
-            this.writeCompound(blockDataV1_18.blockStates());
-            this.writeCompound(blockDataV1_18.biomes());
-          }
-        }
-      );
+    this.writeInt(Math.toIntExact(Arrays.stream(sections).filter(Objects::nonNull).count()));
+    for (var i = 0; i < sections.length; i++) {
+      final var section = sections[i];
+      if (section == null) {
+        return;
+      }
+      this.writeInt(i);
+      this.writeOptionalNibbleArray(section.blockLight());
+      this.writeOptionalNibbleArray(section.skyLight());
+      if (this.worldVersion < 4) {
+        final var blockDataV1_8 = Objects.requireNonNull(
+          section.blockDataV1_8(),
+          "Block data for 1.8 not found!"
+        );
+        this.write(blockDataV1_8.data().backing());
+      } else if (this.worldVersion < 8) {
+        final var blockDataV1_14 = Objects.requireNonNull(
+          section.blockDataV1_14(),
+          "Block data for 1.14 not found!"
+        );
+        this.writeListTag(blockDataV1_14.palette());
+        this.writeLongArray(blockDataV1_14.blockStates());
+      } else {
+        final var blockDataV1_18 = Objects.requireNonNull(
+          section.blockDataV1_18(),
+          "Block data for 1.18 not found!"
+        );
+        this.writeCompound(blockDataV1_18.blockStates());
+        this.writeCompound(blockDataV1_18.biomes());
+      }
+    }
   }
 }
