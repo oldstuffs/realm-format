@@ -19,8 +19,8 @@ final class RealmFormatSerializersTest {
     "worldv1_15",
     "worldv1_16",
     "worldv1_17",
-    "worldv1_19",
-    "worldv1_18"
+    "worldv1_18",
+    "worldv1_19"
   );
 
   @Test

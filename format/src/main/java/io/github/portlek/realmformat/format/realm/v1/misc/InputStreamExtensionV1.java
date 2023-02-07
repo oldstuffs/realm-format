@@ -41,13 +41,12 @@ public class InputStreamExtensionV1 extends InputStreamExtension {
   }
 
   @NotNull
-  public Map<RealmFormatChunkPosition, RealmFormatChunk> readChunksWithPosition()
-    throws IOException {
+  public Map<RealmFormatChunkPosition, RealmFormatChunk> readCompressedChunks() throws IOException {
     final var data = this.readCompressed();
     @Cleanup
     final var chunkInput = this.withV1(data);
     return Arrays
-      .stream(chunkInput.readChunks0())
+      .stream(chunkInput.readChunks())
       .collect(
         Collectors.toMap(
           chunk -> new RealmFormatChunkPosition(chunk.x(), chunk.z()),
@@ -136,7 +135,7 @@ public class InputStreamExtensionV1 extends InputStreamExtension {
 
   @NotNull
   @ApiStatus.Internal
-  protected RealmFormatChunk[] readChunks0() throws IOException {
+  protected RealmFormatChunk[] readChunks() throws IOException {
     return this.readArray(
         RealmFormatChunk[]::new,
         () -> {

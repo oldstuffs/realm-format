@@ -85,7 +85,6 @@ public class RealmFormatSerializers {
    * @throws IOException If something goes wrong when writing bytes.
    */
   public byte@NotNull[] serialize(@NotNull final RealmFormatWorld world) throws IOException {
-    @Cleanup
     final var stream = new ByteArrayOutputStream();
     @Cleanup
     final var output = new DataOutputStream(stream);

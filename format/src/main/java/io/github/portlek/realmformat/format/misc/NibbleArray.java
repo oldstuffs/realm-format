@@ -22,10 +22,6 @@ public final class NibbleArray {
     this.backing = backing;
   }
 
-  public NibbleArray(final int size) {
-    this(new byte[size / 2]);
-  }
-
   public int get(final int index) {
     final var value = this.backing[index / 2];
     return index % 2 == 0 ? value & 0xF : (value & 0xF0) >> 4;

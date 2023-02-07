@@ -34,7 +34,8 @@ public class OutputStreamExtensionV1 extends OutputStreamExtension {
     this.worldVersion = worldVersion;
   }
 
-  public void writeChunks(@NotNull final Collection<RealmFormatChunk> chunks) throws IOException {
+  public void writeCompressedChunks(@NotNull final Collection<RealmFormatChunk> chunks)
+    throws IOException {
     this.writeCompressed(this.serializeChunks(chunks));
   }
 
@@ -65,18 +66,7 @@ public class OutputStreamExtensionV1 extends OutputStreamExtension {
     final var outputStream = new ByteArrayOutputStream(16384);
     @Cleanup
     final var output = this.with(outputStream);
-    output.writeArray(
-      chunks.toArray(RealmFormatChunk[]::new),
-      (__, chunk) -> {
-        output.writeInt(chunk.x());
-        output.writeInt(chunk.z());
-        output.writeOptionalIntArray(chunk.biomes());
-        output.writeCompound(chunk.heightMaps());
-        this.writeInt(chunk.minSection());
-        this.writeInt(chunk.maxSection());
-        output.writeChunkSections(chunk.sections());
-      }
-    );
+    output.writeChunks(chunks);
     return outputStream.toByteArray();
   }
 
@@ -92,11 +82,14 @@ public class OutputStreamExtensionV1 extends OutputStreamExtension {
   @ApiStatus.Internal
   protected void writeChunkSections(@Nullable final RealmFormatChunkSection@NotNull[] sections)
     throws IOException {
-    this.writeInt(Math.toIntExact(Arrays.stream(sections).filter(Objects::nonNull).count()));
+    final var sectionCount = Math.toIntExact(
+      Arrays.stream(sections).filter(Objects::nonNull).count()
+    );
+    this.writeInt(sectionCount);
     for (var i = 0; i < sections.length; i++) {
       final var section = sections[i];
       if (section == null) {
-        return;
+        continue;
       }
       this.writeInt(i);
       this.writeOptionalNibbleArray(section.blockLight());
@@ -106,7 +99,7 @@ public class OutputStreamExtensionV1 extends OutputStreamExtension {
           section.blockDataV1_8(),
           "Block data for 1.8 not found!"
         );
-        this.write(blockDataV1_8.data().backing());
+        this.writeNibbleArray(blockDataV1_8.data());
       } else if (this.worldVersion < 8) {
         final var blockDataV1_14 = Objects.requireNonNull(
           section.blockDataV1_14(),
@@ -123,5 +116,22 @@ public class OutputStreamExtensionV1 extends OutputStreamExtension {
         this.writeCompound(blockDataV1_18.biomes());
       }
     }
+  }
+
+  @ApiStatus.Internal
+  protected void writeChunks(@NotNull final Collection<RealmFormatChunk> chunks)
+    throws IOException {
+    this.writeArray(
+        chunks.toArray(RealmFormatChunk[]::new),
+        (__, chunk) -> {
+          this.writeInt(chunk.x());
+          this.writeInt(chunk.z());
+          this.writeOptionalIntArray(chunk.biomes());
+          this.writeCompound(chunk.heightMaps());
+          this.writeInt(chunk.minSection());
+          this.writeInt(chunk.maxSection());
+          this.writeChunkSections(chunk.sections());
+        }
+      );
   }
 }

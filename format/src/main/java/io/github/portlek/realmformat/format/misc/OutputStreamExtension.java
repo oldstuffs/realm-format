@@ -75,10 +75,10 @@ public abstract class OutputStreamExtension implements Closeable {
     this.writeCompressed(compound);
   }
 
-  public final void writeIntArray(final int@NotNull[] longs) throws IOException {
-    this.writeInt(longs.length);
-    for (final var l : longs) {
-      this.writeLong(l);
+  public final void writeIntArray(final int@NotNull[] ints) throws IOException {
+    this.writeInt(ints.length);
+    for (final var l : ints) {
+      this.writeInt(l);
     }
   }
 
@@ -100,8 +100,9 @@ public abstract class OutputStreamExtension implements Closeable {
   }
 
   public final void writeOptionalIntArray(final int@Nullable[] ints) throws IOException {
-    this.writeBoolean(ints != null);
-    if (ints != null) {
+    final var has = ints != null;
+    this.writeBoolean(has);
+    if (has) {
       this.writeIntArray(ints);
     }
   }
