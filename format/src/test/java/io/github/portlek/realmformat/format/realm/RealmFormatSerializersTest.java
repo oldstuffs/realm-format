@@ -9,18 +9,18 @@ import org.junit.jupiter.api.Test;
 final class RealmFormatSerializersTest {
 
   private static final List<String> WORLD_FOLDERS = List.of(
-    "worldv1_17",
-    "worldv1_19",
-    "worldv1_18",
-    "worldv1_16",
-    "worldv1_15",
-    "worldv1_14",
-    "worldv1_13",
-    "worldv1_12",
-    "worldv1_11",
-    "worldv1_10",
+    "worldv1_8",
     "worldv1_9",
-    "worldv1_8"
+    "worldv1_10",
+    "worldv1_11",
+    "worldv1_12",
+    "worldv1_13",
+    "worldv1_14",
+    "worldv1_15",
+    "worldv1_16",
+    "worldv1_17",
+    "worldv1_18",
+    "worldv1_19"
   );
 
   @Test
