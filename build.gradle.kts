@@ -45,7 +45,11 @@ if (spotlessApply) {
     }
 
     yaml {
-      target("**/src/main/resources/*.yaml", "**/src/main/resources/*.yml")
+      target(
+          "**/src/main/resources/*.yaml",
+          "**/src/main/resources/*.yml",
+          ".github/**/*.yml",
+          ".github/**/*.yaml")
       endWithNewline()
       trimTrailingWhitespace()
       jackson()
