@@ -1,8 +1,8 @@
 package io.github.portlek.realmformat.format.realm;
 
+import io.github.portlek.realmformat.format.misc.InputStreamExtension;
+import io.github.portlek.realmformat.format.misc.OutputStreamExtension;
 import io.github.portlek.realmformat.format.property.RealmFormatPropertyMap;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import org.jetbrains.annotations.NotNull;
 
@@ -22,7 +22,7 @@ public interface RealmFormatSerializer {
    */
   @NotNull
   RealmFormatWorld deserialize(
-    @NotNull DataInputStream input,
+    @NotNull InputStreamExtension input,
     @NotNull RealmFormatPropertyMap properties
   ) throws IOException;
 
@@ -34,6 +34,6 @@ public interface RealmFormatSerializer {
    *
    * @throws IOException If something goes wrong when writing the world into the output.
    */
-  void serialize(@NotNull DataOutputStream output, @NotNull RealmFormatWorld world)
+  void serialize(@NotNull OutputStreamExtension output, @NotNull RealmFormatWorld world)
     throws IOException;
 }

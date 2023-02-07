@@ -1,11 +1,11 @@
 package io.github.portlek.realmformat.format.realm.v1;
 
+import io.github.portlek.realmformat.format.misc.InputStreamExtension;
+import io.github.portlek.realmformat.format.misc.OutputStreamExtension;
 import io.github.portlek.realmformat.format.property.RealmFormatPropertyMap;
 import io.github.portlek.realmformat.format.realm.RealmFormatSerializer;
 import io.github.portlek.realmformat.format.realm.RealmFormatWorld;
 import io.github.shiruka.nbt.Tag;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -19,12 +19,12 @@ public final class RealmFormatSerializerV1 implements RealmFormatSerializer {
   @NotNull
   @Override
   public RealmFormatWorld deserialize(
-    @NotNull final DataInputStream input,
+    @NotNull final InputStreamExtension input,
     @NotNull final RealmFormatPropertyMap properties
   ) throws IOException {
     final var worldVersion = input.readByte();
     final var chunks = RealmFormatSerializerHelperV1.readChunks(input, properties, worldVersion);
-    final var extraCompound = RealmFormatSerializerHelperV1.readCompressedCompound(input);
+    final var extraCompound = input.readCompressedCompound();
     final var newProperties = new RealmFormatPropertyMap();
     newProperties.merge(extraCompound.getCompoundTag("properties").orElse(Tag.createCompound()));
     newProperties.merge(properties);
@@ -39,7 +39,7 @@ public final class RealmFormatSerializerV1 implements RealmFormatSerializer {
 
   @Override
   public void serialize(
-    @NotNull final DataOutputStream output,
+    @NotNull final OutputStreamExtension output,
     @NotNull final RealmFormatWorld world
   ) throws IOException {
     output.writeByte(world.worldVersion());
@@ -55,6 +55,6 @@ public final class RealmFormatSerializerV1 implements RealmFormatSerializer {
     );
     properties.merge(world.properties());
     extra.set("properties", properties.tag());
-    RealmFormatSerializerHelperV1.writeCompressedCompound(output, extra);
+    output.writeCompressedCompound(extra);
   }
 }
