@@ -3,11 +3,14 @@ package io.github.portlek.realmformat.format.realm.v1;
 import io.github.portlek.realmformat.format.property.RealmFormatPropertyMap;
 import io.github.portlek.realmformat.format.realm.RealmFormatSerializer;
 import io.github.portlek.realmformat.format.realm.RealmFormatWorld;
+import io.github.portlek.realmformat.format.realm.v1.misc.InputStreamExtensionV1;
+import io.github.portlek.realmformat.format.realm.v1.misc.OutputStreamExtensionV1;
 import io.github.shiruka.nbt.Tag;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import lombok.AccessLevel;
+import lombok.Cleanup;
 import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 
@@ -23,8 +26,12 @@ public final class RealmFormatSerializerV1 implements RealmFormatSerializer {
     @NotNull final RealmFormatPropertyMap properties
   ) throws IOException {
     final var worldVersion = input.readByte();
-    final var chunks = RealmFormatSerializerHelperV1.readChunks(input, properties, worldVersion);
-    final var extraCompound = RealmFormatSerializerHelperV1.readCompressedCompound(input);
+    @Cleanup
+    final var versionedInput = new InputStreamExtensionV1(input, properties, worldVersion);
+    final var chunks = versionedInput.readCompressedChunks();
+    versionedInput.readEntitiesInto(chunks);
+    versionedInput.readTileEntitiesInto(chunks);
+    final var extraCompound = versionedInput.readCompressedCompound();
     final var newProperties = new RealmFormatPropertyMap();
     newProperties.merge(extraCompound.getCompoundTag("properties").orElse(Tag.createCompound()));
     newProperties.merge(properties);
@@ -42,19 +49,21 @@ public final class RealmFormatSerializerV1 implements RealmFormatSerializer {
     @NotNull final DataOutputStream output,
     @NotNull final RealmFormatWorld world
   ) throws IOException {
-    output.writeByte(world.worldVersion());
-    RealmFormatSerializerHelperV1.writeChunks(
+    final var versionedOutput = new OutputStreamExtensionV1(
       output,
       world.properties(),
-      world.chunks().values(),
       world.worldVersion()
     );
+    versionedOutput.writeByte(world.worldVersion());
+    versionedOutput.writeCompressedChunks(world.chunks().values());
+    versionedOutput.writeEntities(world.chunks().values());
+    versionedOutput.writeTileEntities(world.chunks().values());
     final var extra = world.extra();
     final var properties = new RealmFormatPropertyMap(
       extra.getCompoundTag("properties").orElse(Tag.createCompound())
     );
     properties.merge(world.properties());
     extra.set("properties", properties.tag());
-    RealmFormatSerializerHelperV1.writeCompressedCompound(output, extra);
+    versionedOutput.writeCompressedCompound(extra);
   }
 }

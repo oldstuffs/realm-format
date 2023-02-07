@@ -1,7 +1,7 @@
 package io.github.portlek.realmformat.paper.file;
 
-import io.github.portlek.realmformat.paper.configurate.Config;
-import io.github.portlek.realmformat.paper.misc.MongoCredential;
+import io.github.portlek.realmformat.paper.internal.configurate.Config;
+import io.github.portlek.realmformat.paper.internal.misc.MongoCredential;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.configurate.loader.ConfigurationLoader;

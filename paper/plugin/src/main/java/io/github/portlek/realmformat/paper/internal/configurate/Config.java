@@ -1,4 +1,4 @@
-package io.github.portlek.realmformat.paper.configurate;
+package io.github.portlek.realmformat.paper.internal.configurate;
 
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.configurate.loader.ConfigurationLoader;

@@ -55,11 +55,11 @@ public class RealmFormatSerializers {
       Arrays.equals(header, RealmFormat.HEADER),
       "Serialized data does NOT starts with the realm format's header!"
     );
-    final var realmFormatVersion = input.readByte();
+    final var version = input.readByte();
     final var serializer = Preconditions.checkNotNull(
-      RealmFormatSerializers.SERIALIZERS.get(realmFormatVersion),
+      RealmFormatSerializers.SERIALIZERS.get(version),
       "This version '%s' is NOT supported!",
-      realmFormatVersion
+      version
     );
     try {
       return serializer.deserialize(input, properties);
@@ -85,7 +85,6 @@ public class RealmFormatSerializers {
    * @throws IOException If something goes wrong when writing bytes.
    */
   public byte@NotNull[] serialize(@NotNull final RealmFormatWorld world) throws IOException {
-    @Cleanup
     final var stream = new ByteArrayOutputStream();
     @Cleanup
     final var output = new DataOutputStream(stream);

@@ -1,7 +1,7 @@
 package io.github.portlek.realmformat.paper.file;
 
-import io.github.portlek.realmformat.paper.configurate.Config;
-import io.github.portlek.realmformat.paper.misc.WorldData;
+import io.github.portlek.realmformat.paper.internal.configurate.Config;
+import io.github.portlek.realmformat.paper.internal.misc.WorldData;
 import java.util.HashMap;
 import java.util.Map;
 import lombok.Getter;

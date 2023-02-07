@@ -1,4 +1,4 @@
-package io.github.portlek.realmformat.paper.configurate.serializer;
+package io.github.portlek.realmformat.paper.internal.configurate.serializer;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;

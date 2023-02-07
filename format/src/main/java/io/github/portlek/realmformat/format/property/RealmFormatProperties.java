@@ -12,22 +12,6 @@ public interface RealmFormatProperties {
     true
   );
 
-  RealmFormatProperty<String> CHUNK_PRUNING = new RealmFormatPropertyString(
-    "pruning",
-    "aggressive",
-    value -> value.equalsIgnoreCase("aggressive") || value.equalsIgnoreCase("never")
-  );
-
-  RealmFormatProperty<Integer> CHUNK_SECTION_MAX = new RealmFormatPropertyInt(
-    "chunkSectionMin",
-    19
-  );
-
-  RealmFormatProperty<Integer> CHUNK_SECTION_MIN = new RealmFormatPropertyInt(
-    "chunkSectionMin",
-    -4
-  );
-
   RealmFormatProperty<String> DEFAULT_BIOME = new RealmFormatPropertyString(
     "defaultBiome",
     "minecraft:plains"
@@ -58,19 +42,6 @@ public interface RealmFormatProperties {
   );
 
   RealmFormatProperty<Boolean> PVP = new RealmFormatPropertyBoolean("pvp", true);
-
-  RealmFormatProperty<Integer> SAVE_MAX_X = new RealmFormatPropertyInt("saveMaxX", 0);
-
-  RealmFormatProperty<Integer> SAVE_MAX_Z = new RealmFormatPropertyInt("saveMaxZ", 0);
-
-  RealmFormatProperty<Integer> SAVE_MIN_X = new RealmFormatPropertyInt("saveMinX", 0);
-
-  RealmFormatProperty<Integer> SAVE_MIN_Z = new RealmFormatPropertyInt("saveMinZ", 0);
-
-  RealmFormatProperty<Boolean> SHOULD_LIMIT_SAVE = new RealmFormatPropertyBoolean(
-    "hasSaveBounds",
-    false
-  );
 
   RealmFormatProperty<Integer> SPAWN_X = new RealmFormatPropertyInt("spawnX", 0);
 

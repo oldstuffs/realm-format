@@ -1,6 +1,7 @@
 package io.github.portlek.realmformat.format.realm;
 
 import io.github.portlek.realmformat.format.anvil.AnvilFormatSerializer;
+import io.github.portlek.realmformat.format.property.RealmFormatPropertyMap;
 import java.io.File;
 import java.util.List;
 import org.junit.jupiter.api.Test;
@@ -25,7 +26,11 @@ final class RealmFormatSerializersTest {
   @Test
   void test() throws Exception {
     for (final var worldFolder : RealmFormatSerializersTest.WORLD_FOLDERS) {
-      AnvilFormatSerializer.deserialize(new File("src/test/resources/" + worldFolder));
+      final var world = AnvilFormatSerializer.deserialize(
+        new File("src/test/resources/" + worldFolder)
+      );
+      final var serialized = RealmFormatSerializers.serialize(world);
+      RealmFormatSerializers.deserialize(serialized, new RealmFormatPropertyMap());
     }
   }
 }
