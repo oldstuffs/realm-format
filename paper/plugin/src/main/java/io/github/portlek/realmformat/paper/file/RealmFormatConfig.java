@@ -10,7 +10,7 @@ import org.spongepowered.configurate.objectmapping.meta.Setting;
 
 @Getter
 @ConfigSerializable
-public final class RealmConfig implements Config {
+public final class RealmFormatConfig implements Config {
 
   @NotNull
   private final ConfigurationLoader<?> loader;
@@ -29,7 +29,7 @@ public final class RealmConfig implements Config {
     .password("root123")
     .build();
 
-  public RealmConfig(@NotNull final ConfigurationLoader<?> loader) {
+  public RealmFormatConfig(@NotNull final ConfigurationLoader<?> loader) {
     this.loader = loader;
   }
 }

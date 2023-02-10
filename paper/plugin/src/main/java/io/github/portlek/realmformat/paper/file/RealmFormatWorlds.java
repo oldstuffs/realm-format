@@ -12,7 +12,7 @@ import org.spongepowered.configurate.objectmapping.meta.Setting;
 
 @Getter
 @ConfigSerializable
-public final class RealmWorlds implements Config {
+public final class RealmFormatWorlds implements Config {
 
   @NotNull
   private final ConfigurationLoader<?> loader;
@@ -20,7 +20,7 @@ public final class RealmWorlds implements Config {
   @Setting(nodeFromParent = true)
   private Map<String, WorldData> worlds = new HashMap<>();
 
-  public RealmWorlds(@NotNull final ConfigurationLoader<?> loader) {
+  public RealmFormatWorlds(@NotNull final ConfigurationLoader<?> loader) {
     this.loader = loader;
   }
 }
