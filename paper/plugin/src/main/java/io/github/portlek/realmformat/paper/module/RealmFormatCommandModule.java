@@ -20,19 +20,21 @@ public final class RealmFormatCommandModule implements TerminableModule {
     final var commandManager = Services.load(Cloud.KEY);
     final var builder = commandManager.commandBuilder("realmformat", "rf");
     Cloud.registerHelpCommand(commandManager, builder, "realmformat");
-    builder
-      .literal("reload")
-      .handler(context -> {
-        final var now = System.currentTimeMillis();
-        Schedulers
-          .async()
-          .run(() -> {
-            plugin.reload();
-            messages
-              .reloadComplete()
-              .sendP(context.getSender(), "took", System.currentTimeMillis() - now);
-          })
-          .bindWith(consumer);
-      });
+    commandManager.command(
+      builder
+        .literal("reload")
+        .handler(context -> {
+          final var now = System.currentTimeMillis();
+          Schedulers
+            .async()
+            .run(() -> {
+              plugin.reload();
+              messages
+                .reloadComplete()
+                .sendP(context.getSender(), "took", System.currentTimeMillis() - now);
+            })
+            .bindWith(consumer);
+        })
+    );
   }
 }

@@ -70,7 +70,7 @@ public final class WorldData {
   private String worldType = "DEFAULT";
 
   @NotNull
-  public RealmFormatPropertyMap toPropertyMap() {
+  public RealmFormatPropertyMap properties() {
     try {
       Enum.valueOf(Difficulty.class, this.difficulty.toUpperCase(Locale.ROOT));
     } catch (final IllegalArgumentException ex) {
@@ -87,7 +87,7 @@ public final class WorldData {
         }
         environment = World.Environment.getEnvironment(envId).name();
       } catch (final NumberFormatException ex2) {
-        throw new IllegalArgumentException("unknown environment '" + this.environment + "'");
+        throw new IllegalArgumentException("Unknown environment '" + this.environment + "'");
       }
     }
     final var propertyMap = new RealmFormatPropertyMap();

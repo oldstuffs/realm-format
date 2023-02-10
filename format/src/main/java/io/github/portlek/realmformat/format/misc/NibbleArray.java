@@ -1,8 +1,7 @@
 package io.github.portlek.realmformat.format.misc;
 
-import lombok.EqualsAndHashCode;
+import java.util.Arrays;
 import lombok.Getter;
-import lombok.ToString;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -12,8 +11,6 @@ import org.jetbrains.annotations.NotNull;
  * href="https://github.com/Minikloon/CraftyWorld/blob/master/crafty-common/src/main/kotlin/world/crafty/common/utils/NibbleArray.kt">Source</a>
  */
 @Getter
-@ToString
-@EqualsAndHashCode
 public final class NibbleArray {
 
   private final byte@NotNull[] backing;
@@ -25,6 +22,28 @@ public final class NibbleArray {
   public int get(final int index) {
     final var value = this.backing[index / 2];
     return index % 2 == 0 ? value & 0xF : (value & 0xF0) >> 4;
+  }
+
+  @Override
+  public int hashCode() {
+    return Arrays.hashCode(this.backing);
+  }
+
+  @Override
+  public boolean equals(final Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || this.getClass() != o.getClass()) {
+      return false;
+    }
+    final var that = (NibbleArray) o;
+    return Arrays.equals(this.backing, that.backing);
+  }
+
+  @Override
+  public String toString() {
+    return "NibbleArray{" + "primitiveOriginal=" + Arrays.toString(this.backing) + '}';
   }
 
   public void set(final int index, final int value) {
