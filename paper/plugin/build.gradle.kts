@@ -46,7 +46,8 @@ tasks {
 
   runServer {
     jvmArgs(
-        "-javaagent:" + project(":modifier:agent").tasks["shadowJar"].outputs.files.first().path)
+      "-javaagent:" + project(":modifier:agent").tasks["shadowJar"].outputs.files.first().path,
+    )
     minecraftVersion("1.19.3")
   }
 }

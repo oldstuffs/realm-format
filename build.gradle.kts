@@ -22,13 +22,13 @@ val spotlessApply = property("spotless.apply").toString().toBoolean()
 val shadePackage = property("shade.package")
 val signRequired = !property("dev").toString().toBoolean()
 val relocations =
-    property("relocations")
-        .toString()
-        .trim()
-        .replace(" ", "")
-        .split(",")
-        .filter { it.isNotEmpty() }
-        .filter { it.isNotBlank() }
+  property("relocations")
+    .toString()
+    .trim()
+    .replace(" ", "")
+    .split(",")
+    .filter { it.isNotEmpty() }
+    .filter { it.isNotBlank() }
 
 repositories { mavenCentral() }
 
@@ -38,13 +38,14 @@ if (spotlessApply) {
     isEnforceCheck = false
 
     val prettierConfig =
-        mapOf(
-            "prettier" to "latest",
-            "prettier-plugin-java" to "latest",
-            "@prettier/plugin-xml" to "latest")
+      mapOf(
+        "prettier" to "latest",
+        "prettier-plugin-java" to "latest",
+        "@prettier/plugin-xml" to "latest",
+      )
 
     format("encoding") {
-      target("modifier/agent/src/main/resources/**/*.*", ".run/*.*")
+      target("modifier/agent/src/main/resources/**/*.*", "/.editorconfig")
       targetExclude("modifier/agent/src/main/resources/realm-format-modifier-core.txt")
       encoding("UTF-8")
       endWithNewline()
@@ -57,19 +58,22 @@ if (spotlessApply) {
       endWithNewline()
       trimTrailingWhitespace()
       prettier(prettierConfig)
-          .config(
-              mapOf(
-                  "printWidth" to 100,
-                  "xmlSelfClosingSpace" to false,
-                  "xmlWhitespaceSensitivity" to "ignore"))
+        .config(
+          mapOf(
+            "printWidth" to 100,
+            "xmlSelfClosingSpace" to false,
+            "xmlWhitespaceSensitivity" to "ignore",
+          ),
+        )
     }
 
     yaml {
       target(
-          "**/src/main/resources/*.yaml",
-          "**/src/main/resources/*.yml",
-          ".github/**/*.yml",
-          ".github/**/*.yaml")
+        "**/src/main/resources/*.yaml",
+        "**/src/main/resources/*.yml",
+        ".github/**/*.yml",
+        ".github/**/*.yaml",
+      )
       endWithNewline()
       trimTrailingWhitespace()
       jackson()
@@ -80,7 +84,7 @@ if (spotlessApply) {
       indentWithSpaces(2)
       endWithNewline()
       trimTrailingWhitespace()
-      ktfmt()
+      ktlint()
     }
 
     java {
@@ -91,8 +95,9 @@ if (spotlessApply) {
       endWithNewline()
       trimTrailingWhitespace()
       prettier(prettierConfig)
-          .config(
-              mapOf("parser" to "java", "tabWidth" to 2, "useTabs" to false, "printWidth" to 100))
+        .config(
+          mapOf("parser" to "java", "tabWidth" to 2, "useTabs" to false, "printWidth" to 100),
+        )
     }
   }
 }
@@ -158,22 +163,22 @@ subprojects {
       }
 
       val javadocJar by
-          creating(Jar::class) {
-            dependsOn("javadoc")
-            archiveClassifier.set("javadoc")
-            archiveBaseName.set(projectName)
-            archiveVersion.set(project.version.toString())
-            from(javadoc)
-          }
+        creating(Jar::class) {
+          dependsOn("javadoc")
+          archiveClassifier.set("javadoc")
+          archiveBaseName.set(projectName)
+          archiveVersion.set(project.version.toString())
+          from(javadoc)
+        }
 
       val sourcesJar by
-          creating(Jar::class) {
-            dependsOn("classes")
-            archiveClassifier.set("sources")
-            archiveBaseName.set(projectName)
-            archiveVersion.set(project.version.toString())
-            from(sourceSets["main"].allSource)
-          }
+        creating(Jar::class) {
+          dependsOn("classes")
+          archiveClassifier.set("sources")
+          archiveBaseName.set(projectName)
+          archiveVersion.set(project.version.toString())
+          from(sourceSets["main"].allSource)
+        }
 
       build {
         dependsOn(javadocJar)
@@ -184,38 +189,38 @@ subprojects {
     publishing {
       publications {
         val publication =
-            create<MavenPublication>("mavenJava") {
-              groupId = project.group.toString()
-              artifactId = projectName
-              version = project.version.toString()
+          create<MavenPublication>("mavenJava") {
+            groupId = project.group.toString()
+            artifactId = projectName
+            version = project.version.toString()
 
-              from(components["java"])
-              artifact(tasks["sourcesJar"])
-              artifact(tasks["javadocJar"])
-              pom {
-                name.set("Event")
-                description.set("A builder-like event library for Paper/Velocity.")
-                url.set("https://infumia.com.tr/")
-                licenses {
-                  license {
-                    name.set("MIT License")
-                    url.set("https://mit-license.org/license.txt")
-                  }
-                }
-                developers {
-                  developer {
-                    id.set("portlek")
-                    name.set("Hasan Demirtaş")
-                    email.set("utsukushihito@outlook.com")
-                  }
-                }
-                scm {
-                  connection.set("scm:git:git://github.com/infumia/event.git")
-                  developerConnection.set("scm:git:ssh://github.com/infumia/event.git")
-                  url.set("https://github.com/infumia/event")
+            from(components["java"])
+            artifact(tasks["sourcesJar"])
+            artifact(tasks["javadocJar"])
+            pom {
+              name.set("Event")
+              description.set("A builder-like event library for Paper/Velocity.")
+              url.set("https://infumia.com.tr/")
+              licenses {
+                license {
+                  name.set("MIT License")
+                  url.set("https://mit-license.org/license.txt")
                 }
               }
+              developers {
+                developer {
+                  id.set("portlek")
+                  name.set("Hasan Demirtaş")
+                  email.set("utsukushihito@outlook.com")
+                }
+              }
+              scm {
+                connection.set("scm:git:git://github.com/infumia/event.git")
+                developerConnection.set("scm:git:ssh://github.com/infumia/event.git")
+                url.set("https://github.com/infumia/event")
+              }
             }
+          }
 
         signing {
           isRequired = signRequired
