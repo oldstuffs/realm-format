@@ -15,7 +15,7 @@ plugins {
   id("com.github.johnrengelman.shadow") version "7.1.2" apply false
   id("io.github.portlek.smol-plugin-gradle") version "0.2.2-SNAPSHOT" apply false
   id("io.papermc.paperweight.userdev") version "1.5.0" apply false
-  id("xyz.jpenilla.run-paper") version "2.0.0" apply false
+  id("xyz.jpenilla.run-paper") version "2.0.1" apply false
 }
 
 val spotlessApply = property("spotless.apply").toString().toBoolean()
