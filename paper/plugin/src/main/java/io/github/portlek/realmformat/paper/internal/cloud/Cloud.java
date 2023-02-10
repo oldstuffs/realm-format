@@ -10,7 +10,6 @@ import lombok.SneakyThrows;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public interface Cloud {
   TypeToken<PaperCommandManager<CommandSender>> KEY = new TypeToken<>() {};
@@ -22,8 +21,12 @@ public interface Cloud {
       plugin,
       CommandExecutionCoordinator.simpleCoordinator()
     );
-    manager.registerBrigadier();
-    manager.registerAsynchronousCompletions();
+    try {
+      manager.registerBrigadier();
+    } catch (final Exception ignored) {}
+    try {
+      manager.registerAsynchronousCompletions();
+    } catch (final Exception ignored) {}
     return manager;
   }
 
@@ -31,15 +34,6 @@ public interface Cloud {
     @NotNull final PaperCommandManager<CommandSender> commandManager,
     @NotNull final Command.Builder<CommandSender> builder,
     @NotNull final String command
-  ) {
-    Cloud.registerHelpCommand(commandManager, builder, command, null);
-  }
-
-  static void registerHelpCommand(
-    @NotNull final PaperCommandManager<CommandSender> commandManager,
-    @NotNull final Command.Builder<CommandSender> builder,
-    @NotNull final String command,
-    @Nullable final String permission
   ) {
     final var helpHandler = MinecraftHelp.createNative("/" + command + " help", commandManager);
     helpHandler.commandFilter(c ->
@@ -51,6 +45,6 @@ public interface Cloud {
       .handler(context ->
         helpHandler.queryCommands(context.getOrDefault("query", ""), context.getSender())
       );
-    commandManager.command(permission == null ? help : help.permission(permission));
+    commandManager.command(help);
   }
 }

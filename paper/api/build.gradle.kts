@@ -5,4 +5,5 @@ dependencies {
   api(project(":format"))
 
   compileOnly(dep("paper"))
+  compileOnly(dep("terminable"))
 }

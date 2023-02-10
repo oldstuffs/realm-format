@@ -3,33 +3,40 @@ package io.github.portlek.realmformat.paper;
 import io.github.portlek.realmformat.paper.file.RealmFormatConfig;
 import io.github.portlek.realmformat.paper.file.RealmFormatMessages;
 import io.github.portlek.realmformat.paper.file.RealmFormatWorlds;
+import io.github.portlek.realmformat.paper.internal.cloud.Cloud;
 import io.github.portlek.realmformat.paper.internal.configurate.Configs;
+import io.github.portlek.realmformat.paper.internal.misc.Reloadable;
 import io.github.portlek.realmformat.paper.internal.misc.Services;
 import io.github.portlek.realmformat.paper.module.RealmFormatCommandModule;
 import io.github.portlek.realmformat.paper.module.RealmFormatLoaderModule;
+import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
-import lombok.experimental.Delegate;
 import org.jetbrains.annotations.NotNull;
 import tr.com.infumia.event.common.Plugins;
 import tr.com.infumia.event.paper.PaperEventManager;
 import tr.com.infumia.task.BukkitTasks;
 import tr.com.infumia.terminable.CompositeTerminable;
 import tr.com.infumia.terminable.Terminable;
-import tr.com.infumia.terminable.TerminableConsumer;
 
-final class RealmFormatPlugin implements TerminableConsumer, Terminable {
+public final class RealmFormatPlugin implements Reloadable {
 
   private static final AtomicReference<RealmFormatPlugin> INSTANCE = new AtomicReference<>();
 
   @NotNull
   private final RealmFormatBoostrap boostrap;
 
-  @Delegate(types = { TerminableConsumer.class, Terminable.class })
   private final CompositeTerminable terminable = CompositeTerminable.simple();
 
-  private RealmFormatPlugin(@NotNull final RealmFormatBoostrap boostrap) {
+  @NotNull
+  private final List<Terminable> terminables;
+
+  private RealmFormatPlugin(
+    @NotNull final RealmFormatBoostrap boostrap,
+    @NotNull final List<Terminable> terminables
+  ) {
     this.boostrap = boostrap;
+    this.terminables = terminables;
   }
 
   @NotNull
@@ -38,17 +45,17 @@ final class RealmFormatPlugin implements TerminableConsumer, Terminable {
   }
 
   static void initialize(@NotNull final RealmFormatBoostrap boostrap) {
-    final var plugin = new RealmFormatPlugin(boostrap);
+    Plugins.init(boostrap, new PaperEventManager());
+    final var plugin = new RealmFormatPlugin(boostrap, List.of(BukkitTasks.init(boostrap)));
     RealmFormatPlugin.INSTANCE.set(plugin);
-    plugin.onLoad();
   }
 
-  void onDisable() {
-    this.closeUnchecked();
-  }
-
-  void onEnable() {
+  @Override
+  public void reload() {
+    this.onDisable();
+    this.terminables.forEach(terminable -> terminable.bindWith(this.terminable));
     final var folder = this.boostrap.getDataFolder().toPath();
+    Services.provide(RealmFormatPlugin.class, this);
     Services
       .provide(
         RealmFormatConfig.class,
@@ -69,14 +76,18 @@ final class RealmFormatPlugin implements TerminableConsumer, Terminable {
       .reload();
     Services
       .provide(RealmFormatLoaderModule.class, new RealmFormatLoaderModule())
-      .bindModuleWith(this);
-    Services
-      .provide(RealmFormatCommandModule.class, new RealmFormatCommandModule())
-      .bindModuleWith(this);
+      .bindModuleWith(this.terminable);
   }
 
-  private void onLoad() {
-    BukkitTasks.init(this.boostrap).bindWith(this);
-    Plugins.init(this.boostrap, new PaperEventManager());
+  void onDisable() {
+    this.terminable.closeUnchecked();
+  }
+
+  void onEnable() {
+    this.reload();
+    Services.provide(Cloud.KEY, Cloud.create(this.boostrap));
+    Services
+      .provide(RealmFormatCommandModule.class, new RealmFormatCommandModule())
+      .bindModuleWith(this.terminable);
   }
 }

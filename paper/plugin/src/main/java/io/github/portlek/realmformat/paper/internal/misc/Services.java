@@ -40,10 +40,14 @@ public class Services {
 
   @NotNull
   public <T> T provide(@NotNull final TypeToken<T> type, @NotNull final T instance) {
-    Bukkit
-      .getServicesManager()
-      .register(type.getRawType(), instance, Services.plugin(), ServicePriority.Normal);
-    return instance;
+    return Services
+      .get(type)
+      .orElseGet(() -> {
+        Bukkit
+          .getServicesManager()
+          .register(type.getRawType(), instance, Services.plugin(), ServicePriority.Normal);
+        return instance;
+      });
   }
 
   @NotNull
