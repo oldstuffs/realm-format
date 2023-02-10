@@ -5,6 +5,11 @@ package io.github.portlek.realmformat.format.realm;
  */
 public interface RealmFormat {
   /**
+   * The file extension of realm files.
+   */
+  String EXTENSION = ".realm";
+
+  /**
    * Header of the realm file.
    */
   byte[] HEADER = new byte[] { -79, 11 };
