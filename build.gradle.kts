@@ -38,7 +38,7 @@ if (spotlessApply) {
     isEnforceCheck = false
 
     format("encoding") {
-      target("modifier/agent/src/main/resources/**/*.*")
+      target("modifier/agent/src/main/resources/**/*.*", ".run/*.*")
       targetExclude("modifier/agent/src/main/resources/realm-format-modifier-core.txt")
       encoding("UTF-8")
       endWithNewline()
