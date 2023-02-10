@@ -35,24 +35,7 @@ final class RealmFormatSerializersTest {
         serialized,
         new RealmFormatPropertyMap()
       );
-      Assertions.assertEquals(imported.worldVersion(), deserialized.worldVersion());
-      Assertions.assertEquals(imported.version(), deserialized.version());
-      Assertions.assertEquals(imported.extra(), deserialized.extra());
-      Assertions.assertEquals(imported.properties(), deserialized.properties());
-      imported
-        .chunks()
-        .forEach((position, chunk) -> {
-          final var actual = deserialized.chunks().get(position);
-          Assertions.assertEquals(chunk.x(), actual.x());
-          Assertions.assertEquals(chunk.z(), actual.z());
-          Assertions.assertEquals(chunk.maxSection(), actual.maxSection());
-          Assertions.assertEquals(chunk.minSection(), actual.minSection());
-          Assertions.assertArrayEquals(chunk.biomes(), actual.biomes());
-          Assertions.assertEquals(chunk.heightMaps(), actual.heightMaps());
-          Assertions.assertEquals(chunk.tileEntities(), actual.tileEntities());
-          Assertions.assertEquals(chunk.entities(), actual.entities());
-          Assertions.assertArrayEquals(chunk.sections(), actual.sections());
-        });
+      Assertions.assertEquals(imported, deserialized);
     }
   }
 }
