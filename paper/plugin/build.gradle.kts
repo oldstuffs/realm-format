@@ -1,3 +1,5 @@
+plugins { id("xyz.jpenilla.run-paper") }
+
 dependencies {
   fun dep(dependencyId: String) = rootProject.property("dep.$dependencyId").toString()
 
@@ -40,4 +42,6 @@ tasks {
       include("plugin.yml")
     }
   }
+
+  runServer { minecraftVersion("1.19.3") }
 }
