@@ -2,6 +2,7 @@ package io.github.portlek.realmformat.paper.internal.misc;
 
 import io.github.portlek.realmformat.format.property.RealmFormatProperties;
 import io.github.portlek.realmformat.format.property.RealmFormatPropertyMap;
+import java.util.Locale;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -71,13 +72,13 @@ public final class WorldData {
   @NotNull
   public RealmFormatPropertyMap toPropertyMap() {
     try {
-      Enum.valueOf(Difficulty.class, this.difficulty.toUpperCase());
+      Enum.valueOf(Difficulty.class, this.difficulty.toUpperCase(Locale.ROOT));
     } catch (final IllegalArgumentException ex) {
       throw new IllegalArgumentException("unknown difficulty '" + this.difficulty + "'");
     }
     var environment = this.environment;
     try {
-      Enum.valueOf(World.Environment.class, environment.toUpperCase());
+      Enum.valueOf(World.Environment.class, environment.toUpperCase(Locale.ROOT));
     } catch (final IllegalArgumentException ex) {
       try {
         final var envId = Integer.parseInt(environment);

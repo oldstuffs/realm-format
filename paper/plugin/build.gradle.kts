@@ -1,3 +1,5 @@
+plugins { id("xyz.jpenilla.run-paper") }
+
 dependencies {
   fun dep(dependencyId: String) = rootProject.property("dep.$dependencyId").toString()
 
@@ -5,6 +7,7 @@ dependencies {
   implementation(project(":paper:nms:common"))
   implementation(project(":paper:nms:v1_8_R3"))
   implementation(project(":paper:nms:v1_18_R2", "reobf"))
+  implementation(project(":paper:nms:v1_19_R2", "reobf"))
 
   implementation(dep("smol"))
 
@@ -39,5 +42,12 @@ tasks {
       expand("pluginVersion" to project.version)
       include("plugin.yml")
     }
+  }
+
+  runServer {
+    jvmArgs(
+      "-javaagent:" + project(":modifier:agent").tasks["shadowJar"].outputs.files.first().path,
+    )
+    minecraftVersion("1.19.3")
   }
 }
