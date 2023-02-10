@@ -1,6 +1,7 @@
 package io.github.portlek.realmformat.format.realm.v1.misc;
 
 import io.github.portlek.realmformat.format.misc.InputStreamExtension;
+import io.github.portlek.realmformat.format.misc.Maths;
 import io.github.portlek.realmformat.format.property.RealmFormatPropertyMap;
 import io.github.portlek.realmformat.format.realm.BlockDataV1_14;
 import io.github.portlek.realmformat.format.realm.BlockDataV1_18;
@@ -55,9 +56,8 @@ public class InputStreamExtensionV1 extends InputStreamExtension {
       );
   }
 
-  public void readEntitiesInto(
-    @NotNull final Map<RealmFormatChunkPosition, RealmFormatChunk> chunks
-  ) throws IOException {
+  public void readEntities(@NotNull final Map<RealmFormatChunkPosition, RealmFormatChunk> chunks)
+    throws IOException {
     final var compound = this.readCompressedCompound();
     final var entitiesCompound = compound
       .getListTag("entities", TagTypes.COMPOUND)
@@ -67,8 +67,8 @@ public class InputStreamExtensionV1 extends InputStreamExtension {
         .asCompound()
         .getListTag("Pos", TagTypes.DOUBLE)
         .orElse(Tag.createList());
-      final var x = pos.getInteger(0).orElse(0) >> 4;
-      final var z = pos.getInteger(2).orElse(0) >> 4;
+      final var x = Maths.floor(pos.getDouble(0).orElse(0.0d)) >> 4;
+      final var z = Maths.floor(pos.getDouble(2).orElse(0.0d)) >> 4;
       final var chunk = chunks.get(new RealmFormatChunkPosition(x, z));
       if (chunk != null) {
         chunk.entities().add(entity);
@@ -76,7 +76,7 @@ public class InputStreamExtensionV1 extends InputStreamExtension {
     }
   }
 
-  public void readTileEntitiesInto(
+  public void readTileEntities(
     @NotNull final Map<RealmFormatChunkPosition, RealmFormatChunk> chunks
   ) throws IOException {
     final var compound = this.readCompressedCompound();

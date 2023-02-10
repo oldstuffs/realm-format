@@ -13,10 +13,18 @@ public final class RealmFormatLoaderLoadEvent extends Event {
 
   private static final HandlerList HANDLER_LIST = new HandlerList();
 
+  /**
+   * ctor.
+   */
   public RealmFormatLoaderLoadEvent() {
     super(!Bukkit.isPrimaryThread());
   }
 
+  /**
+   * Returns handler list.
+   *
+   * @return Handler list.
+   */
   @NotNull
   public static HandlerList getHandlerList() {
     return RealmFormatLoaderLoadEvent.HANDLER_LIST;

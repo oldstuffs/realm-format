@@ -33,6 +33,12 @@ val relocations =
 repositories { mavenCentral() }
 
 if (spotlessApply) {
+  tasks {
+    build {
+      dependsOn(spotlessApply)
+    }
+  }
+
   configure<SpotlessExtension> {
     lineEndings = LineEnding.UNIX
     isEnforceCheck = false
@@ -238,6 +244,7 @@ subprojects {
     maven("https://oss.sonatype.org/content/repositories/snapshots/")
     maven("https://repo.spongepowered.org/maven/")
     maven("https://papermc.io/repo/repository/maven-public/")
+    mavenLocal()
   }
 
   dependencies {

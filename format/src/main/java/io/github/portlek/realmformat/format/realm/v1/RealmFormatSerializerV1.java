@@ -29,8 +29,8 @@ public final class RealmFormatSerializerV1 implements RealmFormatSerializer {
     @Cleanup
     final var versionedInput = new InputStreamExtensionV1(input, properties, worldVersion);
     final var chunks = versionedInput.readCompressedChunks();
-    versionedInput.readEntitiesInto(chunks);
-    versionedInput.readTileEntitiesInto(chunks);
+    versionedInput.readEntities(chunks);
+    versionedInput.readTileEntities(chunks);
     final var extraCompound = versionedInput.readCompressedCompound();
     final var newProperties = new RealmFormatPropertyMap();
     newProperties.merge(extraCompound.getCompoundTag("properties").orElse(Tag.createCompound()));
