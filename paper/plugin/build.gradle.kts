@@ -44,7 +44,7 @@ tasks {
   }
 
   runServer {
-    jvmArgs("-javaagent:realm-format-modifier-agent.jar")
+    jvmArgs("-javaagent:\"" + project(":modifier:agent").tasks["shadowJar"].outputs.files.first().path + "\"")
     minecraftVersion("1.19.3")
   }
 }
