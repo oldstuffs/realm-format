@@ -43,5 +43,8 @@ tasks {
     }
   }
 
-  runServer { minecraftVersion("1.19.3") }
+  runServer {
+    jvmArgs("-javaagent:realm-format-modifier-agent.jar")
+    minecraftVersion("1.19.3")
+  }
 }
