@@ -37,12 +37,31 @@ if (spotlessApply) {
     lineEndings = LineEnding.UNIX
     isEnforceCheck = false
 
+    val prettierConfig =
+        mapOf(
+            "prettier" to "latest",
+            "prettier-plugin-java" to "latest",
+            "@prettier/plugin-xml" to "latest")
+
     format("encoding") {
       target("modifier/agent/src/main/resources/**/*.*", ".run/*.*")
       targetExclude("modifier/agent/src/main/resources/realm-format-modifier-core.txt")
       encoding("UTF-8")
       endWithNewline()
       trimTrailingWhitespace()
+    }
+
+    format("xml") {
+      target(".run/*.xml")
+      encoding("UTF-8")
+      endWithNewline()
+      trimTrailingWhitespace()
+      prettier(prettierConfig)
+          .config(
+              mapOf(
+                  "printWidth" to 100,
+                  "xmlSelfClosingSpace" to false,
+                  "xmlWhitespaceSensitivity" to "ignore"))
     }
 
     yaml {
@@ -71,7 +90,7 @@ if (spotlessApply) {
       indentWithSpaces(2)
       endWithNewline()
       trimTrailingWhitespace()
-      prettier(mapOf("prettier" to "2.8.3", "prettier-plugin-java" to "2.0.0"))
+      prettier(prettierConfig)
           .config(
               mapOf("parser" to "java", "tabWidth" to 2, "useTabs" to false, "printWidth" to 100))
     }
