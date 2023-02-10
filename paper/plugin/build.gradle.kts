@@ -7,6 +7,7 @@ dependencies {
   implementation(project(":paper:nms:common"))
   implementation(project(":paper:nms:v1_8_R3"))
   implementation(project(":paper:nms:v1_18_R2", "reobf"))
+  implementation(project(":paper:nms:v1_19_R2", "reobf"))
 
   implementation(dep("smol"))
 
@@ -44,7 +45,8 @@ tasks {
   }
 
   runServer {
-    jvmArgs("-javaagent:\"" + project(":modifier:agent").tasks["shadowJar"].outputs.files.first().path + "\"")
+    jvmArgs(
+        "-javaagent:" + project(":modifier:agent").tasks["shadowJar"].outputs.files.first().path)
     minecraftVersion("1.19.3")
   }
 }
