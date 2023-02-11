@@ -16,7 +16,28 @@ public final class RealmFormatLoaderMongo implements RealmFormatLoader {
   }
 
   @Override
+  public void delete(@NotNull final String worldName) {
+    throw new UnsupportedOperationException();
+  }
+
+  @Override
+  public boolean exists(@NotNull final String worldName) {
+    throw new UnsupportedOperationException();
+  }
+
+  @NotNull
+  @Override
+  public List<String> list() {
+    throw new UnsupportedOperationException();
+  }
+
+  @Override
   public byte[] load(@NotNull final String worldName, final boolean readOnly) {
+    throw new UnsupportedOperationException();
+  }
+
+  @Override
+  public boolean locked(@NotNull final String worldName) {
     throw new UnsupportedOperationException();
   }
 
@@ -31,27 +52,6 @@ public final class RealmFormatLoaderMongo implements RealmFormatLoader {
 
   @Override
   public void unlock(@NotNull final String worldName) {
-    throw new UnsupportedOperationException();
-  }
-
-  @Override
-  public boolean locked(@NotNull final String worldName) {
-    throw new UnsupportedOperationException();
-  }
-
-  @Override
-  public void delete(@NotNull final String worldName) {
-    throw new UnsupportedOperationException();
-  }
-
-  @NotNull
-  @Override
-  public List<String> list() {
-    throw new UnsupportedOperationException();
-  }
-
-  @Override
-  public boolean exists(@NotNull final String worldName) {
     throw new UnsupportedOperationException();
   }
 
