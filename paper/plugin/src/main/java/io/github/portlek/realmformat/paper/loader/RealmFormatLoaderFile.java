@@ -100,12 +100,12 @@ public final class RealmFormatLoaderFile implements RealmFormatLoader {
     this.unlock(worldName);
     RealmFormatLoaderFile.log.info("World '{}' is successfully unlocked!", worldName);
     RealmFormatLoaderFile.log.info("Trying to delete '{}' world...", worldName);
-    FileUtils.forceDelete(this.pathFor(worldName).toFile());
     file.seek(0);
     file.setLength(0);
     file.write(null);
     file.close();
     this.worlds.remove(worldName);
+    FileUtils.forceDelete(this.pathFor(worldName).toFile());
     RealmFormatLoaderFile.log.info("World '{}' is successfully deleted!", worldName);
   }
 
