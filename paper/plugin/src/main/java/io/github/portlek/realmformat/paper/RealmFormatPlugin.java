@@ -1,5 +1,7 @@
 package io.github.portlek.realmformat.paper;
 
+import io.github.portlek.realmformat.format.realm.RealmFormatSerializers;
+import io.github.portlek.realmformat.format.realm.upgrader.RealmFormatWorldUpgrades;
 import io.github.portlek.realmformat.paper.file.RealmFormatConfig;
 import io.github.portlek.realmformat.paper.file.RealmFormatMessages;
 import io.github.portlek.realmformat.paper.file.RealmFormatWorlds;
@@ -47,6 +49,8 @@ public final class RealmFormatPlugin implements Reloadable {
   static void initialize(@NotNull final RealmFormatBoostrap boostrap) {
     Plugins.init(boostrap, new PaperEventManager());
     final var plugin = new RealmFormatPlugin(boostrap, List.of(BukkitTasks.init(boostrap)));
+    RealmFormatSerializers.initiate();
+    RealmFormatWorldUpgrades.initiate();
     RealmFormatPlugin.INSTANCE.set(plugin);
   }
 
