@@ -1,5 +1,6 @@
 import io.papermc.paperweight.util.path
 import java.nio.file.Files
+import java.nio.file.StandardCopyOption
 
 val coreProject = project(":modifier:core")
 
@@ -19,7 +20,8 @@ tasks {
     dependsOn(coreProject.tasks.shadowJar)
     doFirst {
       val builtCore = coreProject.layout.buildDirectory.path.resolve("libs").resolve("realm-format-modifier-core.jar")
-      Files.copy(builtCore, project.layout.projectDirectory.path.resolve("src").resolve("main").resolve("resources").resolve("realm-format-modifier-core.txt"))
+      val destination = project.layout.projectDirectory.path.resolve("src").resolve("main").resolve("resources").resolve("realm-format-modifier-core.txt")
+      Files.copy(builtCore, destination, StandardCopyOption.REPLACE_EXISTING)
     }
   }
 
