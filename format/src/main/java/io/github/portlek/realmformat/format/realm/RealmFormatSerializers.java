@@ -9,9 +9,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
-import java.io.IOException;
 import java.util.Arrays;
-import lombok.Cleanup;
 import lombok.experimental.UtilityClass;
 import org.jetbrains.annotations.NotNull;
 
@@ -39,29 +37,25 @@ public class RealmFormatSerializers {
    * @param properties The properties to change deserialization behavior.
    *
    * @return Deserialized {@link RealmFormatWorld}.
-   *
-   * @throws IOException If something goes wrong when reading the bytes.
    */
   @NotNull
   public RealmFormatWorld deserialize(
     final byte@NotNull[] serialized,
     @NotNull final RealmFormatPropertyMap properties
-  ) throws IOException {
-    @Cleanup
-    final var input = new DataInputStream(new ByteArrayInputStream(serialized));
-    final var header = new byte[RealmFormat.HEADER.length];
-    input.read(header);
-    Preconditions.checkArgument(
-      Arrays.equals(header, RealmFormat.HEADER),
-      "Serialized data does NOT starts with the realm format's header!"
-    );
-    final var version = input.readByte();
-    final var serializer = Preconditions.checkNotNull(
-      RealmFormatSerializers.SERIALIZERS.get(version),
-      "This version '%s' is NOT supported!",
-      version
-    );
-    try {
+  ) {
+    try (final var input = new DataInputStream(new ByteArrayInputStream(serialized))) {
+      final var header = new byte[RealmFormat.HEADER.length];
+      input.read(header);
+      Preconditions.checkArgument(
+        Arrays.equals(header, RealmFormat.HEADER),
+        "Serialized data does NOT starts with the realm format's header!"
+      );
+      final var version = input.readByte();
+      final var serializer = Preconditions.checkNotNull(
+        RealmFormatSerializers.SERIALIZERS.get(version),
+        "This version '%s' is NOT supported!",
+        version
+      );
       return serializer.deserialize(input, properties);
     } catch (final Exception e) {
       throw new RuntimeException("Something went wrong when deserializing a world!", e);
@@ -81,21 +75,17 @@ public class RealmFormatSerializers {
    * @param world The world to serialize.
    *
    * @return Serialized bytes.
-   *
-   * @throws IOException If something goes wrong when writing bytes.
    */
-  public byte@NotNull[] serialize(@NotNull final RealmFormatWorld world) throws IOException {
+  public byte@NotNull[] serialize(@NotNull final RealmFormatWorld world) {
     final var stream = new ByteArrayOutputStream();
-    @Cleanup
-    final var output = new DataOutputStream(stream);
-    final var serializer = Preconditions.checkNotNull(
-      RealmFormatSerializers.SERIALIZERS.get(world.version()),
-      "This version '%s' is NOT supported!",
-      world.version()
-    );
-    output.write(RealmFormat.HEADER);
-    output.writeByte(RealmFormat.VERSION);
-    try {
+    try (final var output = new DataOutputStream(stream)) {
+      final var serializer = Preconditions.checkNotNull(
+        RealmFormatSerializers.SERIALIZERS.get(world.version()),
+        "This version '%s' is NOT supported!",
+        world.version()
+      );
+      output.write(RealmFormat.HEADER);
+      output.writeByte(RealmFormat.VERSION);
       serializer.serialize(output, world);
     } catch (final Exception e) {
       throw new RuntimeException("Something went wrong when serializing a world!", e);

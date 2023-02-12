@@ -2,3 +2,4 @@
 build/
 .gradle
 paper/plugin/run/
+modifier/agent/src/main/resources/realm-format-modifier-core.txt

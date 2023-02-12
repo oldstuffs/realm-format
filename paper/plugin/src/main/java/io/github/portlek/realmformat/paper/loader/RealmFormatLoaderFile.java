@@ -9,7 +9,6 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import lombok.Cleanup;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.io.FileUtils;
@@ -30,6 +29,41 @@ public final class RealmFormatLoaderFile implements RealmFormatLoader {
 
   @Override
   @SneakyThrows
+  public void delete(@NotNull final String worldName) {
+    Preconditions.checkState(this.exists(worldName), "World '%s' does not exists!", worldName);
+    final var file = this.randomAccessFile(worldName);
+    RealmFormatLoaderFile.log.info("Trying to unlock '{}' world...", worldName);
+    this.unlock(worldName);
+    RealmFormatLoaderFile.log.info("World '{}' is successfully unlocked!", worldName);
+    RealmFormatLoaderFile.log.info("Trying to delete '{}' world...", worldName);
+    file.seek(0);
+    file.setLength(0);
+    file.write(null);
+    file.close();
+    this.worlds.remove(worldName);
+    FileUtils.forceDelete(this.pathFor(worldName).toFile());
+    RealmFormatLoaderFile.log.info("World '{}' is successfully deleted!", worldName);
+  }
+
+  @Override
+  public boolean exists(@NotNull final String worldName) {
+    return Files.exists(this.pathFor(worldName));
+  }
+
+  @NotNull
+  @Override
+  @SneakyThrows
+  public List<String> list() {
+    return Files
+      .list(this.directory)
+      .map(Path::getFileName)
+      .map(Path::toString)
+      .map(s -> s.replace(RealmFormat.EXTENSION, ""))
+      .toList();
+  }
+
+  @Override
+  @SneakyThrows
   public byte@NotNull[] load(@NotNull final String worldName, final boolean readOnly) {
     Preconditions.checkState(this.exists(worldName), "World '%s' does not exists!", worldName);
     final var file = this.randomAccessFile(worldName);
@@ -46,6 +80,17 @@ public final class RealmFormatLoaderFile implements RealmFormatLoader {
     file.seek(0);
     file.readFully(bytes);
     return bytes;
+  }
+
+  @Override
+  @SneakyThrows
+  public boolean locked(@NotNull final String worldName) {
+    final var file = this.randomAccessFile(worldName);
+    if (!file.getChannel().isOpen()) {
+      return true;
+    }
+    file.close();
+    return false;
   }
 
   @Override
@@ -77,53 +122,6 @@ public final class RealmFormatLoaderFile implements RealmFormatLoader {
     if (channel.isOpen()) {
       removed.close();
     }
-  }
-
-  @Override
-  @SneakyThrows
-  public boolean locked(@NotNull final String worldName) {
-    final var file = this.randomAccessFile(worldName);
-    if (!file.getChannel().isOpen()) {
-      return true;
-    }
-    file.close();
-    return false;
-  }
-
-  @Override
-  @SneakyThrows
-  public void delete(@NotNull final String worldName) {
-    Preconditions.checkState(this.exists(worldName), "World '%s' does not exists!", worldName);
-    @Cleanup
-    final var file = this.randomAccessFile(worldName);
-    RealmFormatLoaderFile.log.info("Trying to unlock '{}' world...", worldName);
-    this.unlock(worldName);
-    RealmFormatLoaderFile.log.info("World '{}' is successfully unlocked!", worldName);
-    RealmFormatLoaderFile.log.info("Trying to delete '{}' world...", worldName);
-    FileUtils.forceDelete(this.pathFor(worldName).toFile());
-    file.seek(0);
-    file.setLength(0);
-    file.write(null);
-    file.close();
-    this.worlds.remove(worldName);
-    RealmFormatLoaderFile.log.info("World '{}' is successfully deleted!", worldName);
-  }
-
-  @NotNull
-  @Override
-  @SneakyThrows
-  public List<String> list() {
-    return Files
-      .list(this.directory)
-      .map(Path::getFileName)
-      .map(Path::toString)
-      .map(s -> s.replace(RealmFormat.EXTENSION, ""))
-      .toList();
-  }
-
-  @Override
-  public boolean exists(@NotNull final String worldName) {
-    return Files.exists(this.pathFor(worldName));
   }
 
   @Override

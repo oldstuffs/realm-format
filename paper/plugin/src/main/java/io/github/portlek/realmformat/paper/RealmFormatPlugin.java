@@ -1,5 +1,8 @@
 package io.github.portlek.realmformat.paper;
 
+import io.github.portlek.realmformat.format.realm.RealmFormatSerializers;
+import io.github.portlek.realmformat.format.realm.upgrader.RealmFormatWorldUpgrades;
+import io.github.portlek.realmformat.paper.api.RealmFormatManager;
 import io.github.portlek.realmformat.paper.file.RealmFormatConfig;
 import io.github.portlek.realmformat.paper.file.RealmFormatMessages;
 import io.github.portlek.realmformat.paper.file.RealmFormatWorlds;
@@ -9,6 +12,7 @@ import io.github.portlek.realmformat.paper.internal.misc.Reloadable;
 import io.github.portlek.realmformat.paper.internal.misc.Services;
 import io.github.portlek.realmformat.paper.module.RealmFormatCommandModule;
 import io.github.portlek.realmformat.paper.module.RealmFormatLoaderModule;
+import io.github.portlek.realmformat.paper.nms.NmsBackend;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
@@ -18,10 +22,13 @@ import tr.com.infumia.event.paper.PaperEventManager;
 import tr.com.infumia.task.BukkitTasks;
 import tr.com.infumia.terminable.CompositeTerminable;
 import tr.com.infumia.terminable.Terminable;
+import tr.com.infumia.versionmatched.VersionMatched;
 
 public final class RealmFormatPlugin implements Reloadable {
 
   private static final AtomicReference<RealmFormatPlugin> INSTANCE = new AtomicReference<>();
+
+  private static final VersionMatched<NmsBackend> NMS_BACKEND = new VersionMatched<>();
 
   @NotNull
   private final RealmFormatBoostrap boostrap;
@@ -47,6 +54,8 @@ public final class RealmFormatPlugin implements Reloadable {
   static void initialize(@NotNull final RealmFormatBoostrap boostrap) {
     Plugins.init(boostrap, new PaperEventManager());
     final var plugin = new RealmFormatPlugin(boostrap, List.of(BukkitTasks.init(boostrap)));
+    RealmFormatSerializers.initiate();
+    RealmFormatWorldUpgrades.initiate();
     RealmFormatPlugin.INSTANCE.set(plugin);
   }
 
@@ -84,8 +93,10 @@ public final class RealmFormatPlugin implements Reloadable {
   }
 
   void onEnable() {
-    this.reload();
     Services.provide(Cloud.KEY, Cloud.create(this.boostrap));
+    final var backend = RealmFormatPlugin.NMS_BACKEND.of().create().orElseThrow();
+    Services.provide(RealmFormatManager.class, new RealmFormatManagerImpl(backend));
+    this.reload();
     Services
       .provide(RealmFormatCommandModule.class, new RealmFormatCommandModule())
       .bindModuleWith(this.terminable);
