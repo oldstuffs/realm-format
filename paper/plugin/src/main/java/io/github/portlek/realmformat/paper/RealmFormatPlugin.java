@@ -82,9 +82,7 @@ public final class RealmFormatPlugin implements Reloadable {
         new RealmFormatWorlds(Configs.yaml(folder.resolve("worlds.yaml")))
       )
       .reload();
-    Services
-      .provide(RealmFormatLoaderModule.class, new RealmFormatLoaderModule())
-      .bindModuleWith(this.terminable);
+    Services.load(RealmFormatLoaderModule.class).bindModuleWith(this.terminable);
   }
 
   void onDisable() {
@@ -94,11 +92,9 @@ public final class RealmFormatPlugin implements Reloadable {
   void onEnable() {
     Services.provide(RealmFormatPlugin.class, this);
     Services.provide(Cloud.KEY, Cloud.create(this.boostrap));
-    final var backend = RealmFormatPlugin.NMS_BACKEND.of().create().orElseThrow();
-    Services.provide(RealmFormatManager.class, new RealmFormatManagerImpl(backend));
+    Services.provide(NmsBackend.class, RealmFormatPlugin.NMS_BACKEND.of().create().orElseThrow());
+    Services.provide(RealmFormatManager.class, new RealmFormatManagerImpl());
     this.reload();
-    Services
-      .provide(RealmFormatCommandModule.class, new RealmFormatCommandModule())
-      .bindModuleWith(this.terminable);
+    Services.load(RealmFormatCommandModule.class).bindModuleWith(this.terminable);
   }
 }

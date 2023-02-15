@@ -3,6 +3,7 @@ package io.github.portlek.realmformat.paper.internal.misc;
 import com.google.common.reflect.TypeToken;
 import io.github.portlek.realmformat.paper.RealmFormatBoostrap;
 import java.util.Optional;
+import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
@@ -30,7 +31,15 @@ public class Services {
 
   @NotNull
   public <T> T load(@NotNull final TypeToken<T> type) {
-    return Services.get(type).orElseThrow();
+    return Services
+      .get(type)
+      .or(() -> {
+        try {
+          return Optional.of(Services.provide(type, Services.initiate(type)));
+        } catch (final Exception ignored) {}
+        return Optional.empty();
+      })
+      .orElseThrow();
   }
 
   @NotNull
@@ -53,6 +62,12 @@ public class Services {
   @NotNull
   public <T> T provide(@NotNull final Class<T> type, @NotNull final T instance) {
     return Services.provide(TypeToken.of(type), instance);
+  }
+
+  @NotNull
+  @SneakyThrows
+  private <T> T initiate(@NotNull final TypeToken<T> type) {
+    return (T) type.getRawType().getConstructor().newInstance();
   }
 
   @NotNull
