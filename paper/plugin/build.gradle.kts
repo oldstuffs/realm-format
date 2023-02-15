@@ -1,8 +1,6 @@
-plugins { id("xyz.jpenilla.run-paper") }
+plugins { alias(libs.plugins.run.paper) }
 
 dependencies {
-  fun dep(dependencyId: String) = rootProject.property("dep.$dependencyId").toString()
-
   implementation(project(":format"))
   implementation(project(":modifier:core", "shadow"))
   implementation(project(":paper:api"))
@@ -11,30 +9,30 @@ dependencies {
   implementation(project(":paper:nms:v1_18_R2", "reobf"))
   implementation(project(":paper:nms:v1_19_R2", "reobf"))
 
-  implementation(dep("smol"))
+  implementation(libs.smol)
 
-  compileOnly(dep("paper"))
+  compileOnly(libs.paper)
 
-  smol(dep("configurate-yaml"))
-  smol(dep("adventure-configurate")) { isTransitive = false }
-  smol(dep("terminable"))
-  smol(dep("task-common"))
-  smol(dep("task-bukkit"))
-  smol(dep("event-common"))
-  smol(dep("event-paper"))
-  smol(dep("versionmatched"))
-  smol(dep("cloud-core"))
-  smol(dep("cloud-annotations"))
-  smol(dep("cloud-paper"))
-  smol(dep("cloud-brigadier"))
-  smol(dep("cloud-tasks"))
-  smol(dep("cloud-minecraft-extras")) { isTransitive = false }
-  smol(dep("mariadb"))
-  smol(dep("mongodb"))
-  smol(dep("commonsio"))
-  smol(dep("commonslang"))
-  smol(dep("nbt"))
-  smol(dep("zstd"))
+  smol(libs.configurate.yaml)
+  smol(libs.adventure.configurate) { isTransitive = false }
+  smol(libs.terminable)
+  smol(libs.task.common)
+  smol(libs.task.bukkit)
+  smol(libs.event.common)
+  smol(libs.event.paper)
+  smol(libs.versionmatched)
+  smol(libs.cloud.core)
+  smol(libs.cloud.annotations)
+  smol(libs.cloud.paper)
+  smol(libs.cloud.brigadier)
+  smol(libs.cloud.tasks)
+  smol(libs.cloud.minecraft.extras) { isTransitive = false }
+  smol(libs.mariadb)
+  smol(libs.mongodb)
+  smol(libs.commonsio)
+  smol(libs.commonslang)
+  smol(libs.nbt)
+  smol(libs.zstd)
 }
 
 tasks {

@@ -5,12 +5,10 @@ import java.nio.file.StandardCopyOption
 val coreProject = project(":modifier:core")
 
 dependencies {
-  fun dep(dependencyId: String) = rootProject.property("dep.$dependencyId").toString()
-
   api(coreProject)
 
-  implementation(dep("javassist"))
-  implementation(dep("snakeyaml"))
+  implementation(libs.javassist)
+  implementation(libs.snakeyaml)
 }
 
 tasks {

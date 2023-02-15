@@ -1,13 +1,12 @@
 dependencies {
-  fun dep(dependencyId: String) = rootProject.property("dep.$dependencyId").toString()
+  compileOnly(libs.zstd)
+  compileOnly(libs.fastutil)
+  compileOnly(libs.nbt)
+  compileOnly(libs.gson)
 
-  compileOnly(dep("zstd"))
-  compileOnly(dep("fastutil"))
-  compileOnly(dep("nbt"))
-
-  testImplementation(dep("nbt"))
-  testImplementation(dep("zstd"))
-  testImplementation(dep("fastutil"))
-  testImplementation(dep("guava"))
-  testImplementation(dep("commonslang"))
+  testImplementation(libs.nbt)
+  testImplementation(libs.zstd)
+  testImplementation(libs.fastutil)
+  testImplementation(libs.guava)
+  testImplementation(libs.commonslang)
 }
