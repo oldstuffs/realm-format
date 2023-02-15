@@ -7,12 +7,13 @@ import io.github.portlek.realmformat.paper.file.RealmFormatConfig;
 import io.github.portlek.realmformat.paper.file.RealmFormatMessages;
 import io.github.portlek.realmformat.paper.file.RealmFormatWorlds;
 import io.github.portlek.realmformat.paper.internal.cloud.Cloud;
-import io.github.portlek.realmformat.paper.internal.configurate.Configs;
 import io.github.portlek.realmformat.paper.internal.misc.Reloadable;
 import io.github.portlek.realmformat.paper.internal.misc.Services;
 import io.github.portlek.realmformat.paper.module.RealmFormatCommandModule;
 import io.github.portlek.realmformat.paper.module.RealmFormatLoaderModule;
 import io.github.portlek.realmformat.paper.nms.NmsBackend;
+import java.io.File;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
@@ -63,25 +64,9 @@ public final class RealmFormatPlugin implements Reloadable {
   public void reload() {
     this.onDisable();
     this.terminables.forEach(terminable -> terminable.bindWith(this.terminable));
-    final var folder = this.boostrap.getDataFolder().toPath();
-    Services
-      .provide(
-        RealmFormatConfig.class,
-        new RealmFormatConfig(Configs.yaml(folder.resolve("config.yaml")))
-      )
-      .reload();
-    Services
-      .provide(
-        RealmFormatMessages.class,
-        new RealmFormatMessages(Configs.yaml(folder.resolve("messages.yaml")))
-      )
-      .reload();
-    Services
-      .provide(
-        RealmFormatWorlds.class,
-        new RealmFormatWorlds(Configs.yaml(folder.resolve("worlds.yaml")))
-      )
-      .reload();
+    Services.load(RealmFormatConfig.class).reload();
+    Services.load(RealmFormatMessages.class).reload();
+    Services.load(RealmFormatWorlds.class).reload();
     Services.load(RealmFormatLoaderModule.class).bindModuleWith(this.terminable);
   }
 
@@ -90,6 +75,9 @@ public final class RealmFormatPlugin implements Reloadable {
   }
 
   void onEnable() {
+    Services.provide(RealmFormatBoostrap.class, this.boostrap);
+    Services.provide(File.class, this.boostrap.getDataFolder());
+    Services.provide(Path.class, this.boostrap.getDataFolder().toPath());
     Services.provide(RealmFormatPlugin.class, this);
     Services.provide(Cloud.KEY, Cloud.create(this.boostrap));
     Services.provide(NmsBackend.class, RealmFormatPlugin.NMS_BACKEND.of().create().orElseThrow());
