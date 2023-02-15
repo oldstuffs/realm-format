@@ -3,6 +3,8 @@ plugins { id("xyz.jpenilla.run-paper") }
 dependencies {
   fun dep(dependencyId: String) = rootProject.property("dep.$dependencyId").toString()
 
+  implementation(project(":format"))
+  implementation(project(":modifier:core", "shadow"))
   implementation(project(":paper:api"))
   implementation(project(":paper:nms:common"))
   implementation(project(":paper:nms:v1_8_R3"))
