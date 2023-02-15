@@ -19,12 +19,12 @@ import io.github.shiruka.nbt.ListTag;
 import io.github.shiruka.nbt.Tag;
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -42,31 +42,36 @@ public class AnvilFormatSerializer {
   private final int SECTOR_SIZE = 4096;
 
   @NotNull
-  public RealmFormatWorld deserialize(@NotNull final File worldDirectory) throws IOException {
-    final var levelFile = new File(worldDirectory, "level.dat");
-    final var regionDirectory = new File(worldDirectory, "region");
-    final var entitiesDirectory = new File(worldDirectory, "entities");
-    final var levelData = AnvilFormatSerializer.readLevelData(levelFile);
+  public RealmFormatWorld deserialize(@NotNull final Path worldDirectory) throws IOException {
+    final var levelPath = worldDirectory.resolve("level.dat");
+    final var regionPath = worldDirectory.resolve("region");
+    final var entitiesPath = worldDirectory.resolve("entities");
+    final var levelData = AnvilFormatSerializer.readLevelData(levelPath);
     final var worldVersion = levelData.version();
     Preconditions.checkArgument(
-      regionDirectory.exists() && regionDirectory.isDirectory(),
+      Files.exists(regionPath) && Files.isDirectory(regionPath),
       "'region' directory not found or it's not a directory!"
     );
     final var chunks = new HashMap<RealmFormatChunkPosition, RealmFormatChunk>();
-    final var regionFiles = Preconditions.checkNotNull(
-      regionDirectory.listFiles((dir, name) -> name.endsWith(".mca")),
-      "Not a single file, that has 'mca' extension, found!"
-    );
-    for (final var regionFile : regionFiles) {
-      chunks.putAll(AnvilFormatSerializer.loadChunks(regionFile, worldVersion));
-    }
-    final var entityFiles = entitiesDirectory.listFiles((dir, name) -> name.endsWith(".mca"));
-    if (entityFiles != null) {
-      for (final var entityFile : entityFiles) {
-        AnvilFormatSerializer.loadEntities(entityFile, worldVersion, chunks);
+    try (final var regionPathsStream = Files.list(regionPath)) {
+      final var regionPaths = regionPathsStream
+        .filter(name -> name.toString().endsWith(".mca"))
+        .toList();
+      for (final var path : regionPaths) {
+        chunks.putAll(AnvilFormatSerializer.loadChunks(path, worldVersion));
       }
     }
     Preconditions.checkArgument(!chunks.isEmpty(), "Chunks not found!");
+    if (Files.exists(entitiesPath)) {
+      try (final var entityPathsStream = Files.list(entitiesPath)) {
+        final var entityPaths = entityPathsStream
+          .filter(name -> name.toString().endsWith(".mca"))
+          .toList();
+        for (final var path : entityPaths) {
+          AnvilFormatSerializer.loadEntities(path, worldVersion, chunks);
+        }
+      }
+    }
     final var extra = Tag.createCompound();
     final var properties = new RealmFormatPropertyMap();
     properties.setValue(RealmFormatProperties.SPAWN_X, levelData.spawnX());
@@ -117,10 +122,10 @@ public class AnvilFormatSerializer {
 
   @NotNull
   private Map<RealmFormatChunkPosition, RealmFormatChunk> loadChunks(
-    @NotNull final File file,
+    @NotNull final Path path,
     final int worldVersion
   ) throws IOException {
-    final var regionByteArray = Files.readAllBytes(file.toPath());
+    final var regionByteArray = Files.readAllBytes(path);
     @Cleanup
     final var inputStream = new DataInputStream(new ByteArrayInputStream(regionByteArray));
     final var chunkEntries = new ArrayList<AnvilFormatChunkEntry>(1024);
@@ -168,11 +173,11 @@ public class AnvilFormatSerializer {
   }
 
   private void loadEntities(
-    @NotNull final File file,
+    @NotNull final Path path,
     final int version,
     @NotNull final Map<RealmFormatChunkPosition, RealmFormatChunk> chunks
   ) throws IOException {
-    final var regionByteArray = Files.readAllBytes(file.toPath());
+    final var regionByteArray = Files.readAllBytes(path);
     @Cleanup
     final var input = new DataInputStream(new ByteArrayInputStream(regionByteArray));
     final var chunkEntries = new ArrayList<AnvilFormatChunkEntry>(1024);
@@ -372,9 +377,9 @@ public class AnvilFormatSerializer {
   }
 
   @NotNull
-  private AnvilFormatLevelData readLevelData(@NotNull final File file) throws IOException {
+  private AnvilFormatLevelData readLevelData(@NotNull final Path path) throws IOException {
     final CompoundTag tag;
-    try (final var reader = Tag.createGZIPReader(new FileInputStream(file))) {
+    try (final var reader = Tag.createGZIPReader(new FileInputStream(path.toFile()))) {
       tag = reader.readCompoundTag();
     }
     final var dataTag = tag

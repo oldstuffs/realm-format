@@ -58,12 +58,13 @@ public final class RealmFormatLoaderFile implements RealmFormatLoader {
   @Override
   @SneakyThrows
   public List<String> list() {
-    return Files
-      .list(this.directory)
-      .map(Path::getFileName)
-      .map(Path::toString)
-      .map(s -> s.replace(RealmFormat.EXTENSION, ""))
-      .toList();
+    try (final var paths = Files.list(this.directory)) {
+      return paths
+        .map(Path::getFileName)
+        .map(Path::toString)
+        .map(s -> s.replace(RealmFormat.EXTENSION, ""))
+        .toList();
+    }
   }
 
   @Override
