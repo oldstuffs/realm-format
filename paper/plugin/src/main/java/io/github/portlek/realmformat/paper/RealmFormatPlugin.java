@@ -31,19 +31,12 @@ public final class RealmFormatPlugin implements Reloadable {
 
   private static final VersionMatched<NmsBackend> NMS_BACKEND = new VersionMatched<>();
 
-  @NotNull
-  private final RealmFormatBoostrap boostrap;
-
   private final CompositeTerminable terminable = CompositeTerminable.simple();
 
   @NotNull
   private final List<Terminable> terminables;
 
-  private RealmFormatPlugin(
-    @NotNull final RealmFormatBoostrap boostrap,
-    @NotNull final List<Terminable> terminables
-  ) {
-    this.boostrap = boostrap;
+  private RealmFormatPlugin(@NotNull final List<Terminable> terminables) {
     this.terminables = terminables;
   }
 
@@ -54,7 +47,7 @@ public final class RealmFormatPlugin implements Reloadable {
 
   static void initialize(@NotNull final RealmFormatBoostrap boostrap) {
     Plugins.init(boostrap, new PaperEventManager());
-    final var plugin = new RealmFormatPlugin(boostrap, List.of(BukkitTasks.init(boostrap)));
+    final var plugin = new RealmFormatPlugin(List.of(BukkitTasks.init(boostrap)));
     RealmFormatSerializers.initiate();
     RealmFormatWorldUpgrades.initiate();
     Services.provide(RealmFormatBoostrap.class, boostrap);
