@@ -133,7 +133,9 @@ subprojects {
     if (findProperty("shadow.enabled")?.toString().toBoolean()) {
       apply<ShadowPlugin>()
 
-      withType<ShadowJar> {
+      val shadowJar = withType<ShadowJar> {
+        dependsOn(jar)
+
         mergeServiceFiles()
 
         archiveBaseName.set(projectName)
@@ -144,16 +146,20 @@ subprojects {
         }
       }
 
-      build { dependsOn("shadowJar") }
+      build { dependsOn(shadowJar) }
     }
 
     if (findProperty("smol.enabled")?.toString().toBoolean()) {
       apply<SmolPlugin>()
 
-      withType<SmolJar> {
+      val smolJar = withType<SmolJar> {
         if (findProperty("smol.relocation")?.toString().toBoolean()) {
           relocations.forEach { relocate(it, "$shadePackage.$it") }
         }
+      }
+
+      build {
+        dependsOn(smolJar)
       }
     }
   }

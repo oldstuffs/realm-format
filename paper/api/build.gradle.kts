@@ -1,8 +1,8 @@
 dependencies {
   fun dep(dependencyId: String) = rootProject.property("dep.$dependencyId").toString()
 
-  api(project(":modifier:core"))
-  api(project(":format"))
+  compileOnly(project(":modifier:core"))
+  compileOnly(project(":format"))
 
   compileOnly(dep("paper"))
   compileOnly(dep("terminable"))
