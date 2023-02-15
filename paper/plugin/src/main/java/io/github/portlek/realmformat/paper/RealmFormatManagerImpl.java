@@ -26,7 +26,7 @@ final class RealmFormatManagerImpl implements RealmFormatManager {
 
   private final Map<String, RealmFormatWorld> loadedWorlds = new ConcurrentHashMap<>();
 
-  public RealmFormatManagerImpl(@NotNull final NmsBackend backend) {
+  RealmFormatManagerImpl(@NotNull final NmsBackend backend) {
     this.backend = backend;
   }
 
