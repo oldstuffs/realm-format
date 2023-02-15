@@ -57,6 +57,13 @@ public final class RealmFormatPlugin implements Reloadable {
     final var plugin = new RealmFormatPlugin(boostrap, List.of(BukkitTasks.init(boostrap)));
     RealmFormatSerializers.initiate();
     RealmFormatWorldUpgrades.initiate();
+    Services.provide(RealmFormatBoostrap.class, boostrap);
+    Services.provide(File.class, boostrap.getDataFolder());
+    Services.provide(Path.class, boostrap.getDataFolder().toPath());
+    Services.provide(RealmFormatPlugin.class, plugin);
+    Services.provide(Cloud.KEY, Cloud.create(boostrap));
+    Services.provide(NmsBackend.class, RealmFormatPlugin.NMS_BACKEND.of().create().orElseThrow());
+    Services.provide(RealmFormatManager.class, new RealmFormatManagerImpl());
     RealmFormatPlugin.INSTANCE.set(plugin);
   }
 
@@ -75,13 +82,6 @@ public final class RealmFormatPlugin implements Reloadable {
   }
 
   void onEnable() {
-    Services.provide(RealmFormatBoostrap.class, this.boostrap);
-    Services.provide(File.class, this.boostrap.getDataFolder());
-    Services.provide(Path.class, this.boostrap.getDataFolder().toPath());
-    Services.provide(RealmFormatPlugin.class, this);
-    Services.provide(Cloud.KEY, Cloud.create(this.boostrap));
-    Services.provide(NmsBackend.class, RealmFormatPlugin.NMS_BACKEND.of().create().orElseThrow());
-    Services.provide(RealmFormatManager.class, new RealmFormatManagerImpl());
     this.reload();
     Services.load(RealmFormatCommandModule.class).bindModuleWith(this.terminable);
   }
