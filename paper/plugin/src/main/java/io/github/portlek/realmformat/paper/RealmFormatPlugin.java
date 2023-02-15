@@ -64,7 +64,6 @@ public final class RealmFormatPlugin implements Reloadable {
     this.onDisable();
     this.terminables.forEach(terminable -> terminable.bindWith(this.terminable));
     final var folder = this.boostrap.getDataFolder().toPath();
-    Services.provide(RealmFormatPlugin.class, this);
     Services
       .provide(
         RealmFormatConfig.class,
@@ -93,6 +92,7 @@ public final class RealmFormatPlugin implements Reloadable {
   }
 
   void onEnable() {
+    Services.provide(RealmFormatPlugin.class, this);
     Services.provide(Cloud.KEY, Cloud.create(this.boostrap));
     final var backend = RealmFormatPlugin.NMS_BACKEND.of().create().orElseThrow();
     Services.provide(RealmFormatManager.class, new RealmFormatManagerImpl(backend));
