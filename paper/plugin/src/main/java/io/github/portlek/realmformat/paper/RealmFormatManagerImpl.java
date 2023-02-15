@@ -8,7 +8,6 @@ import io.github.portlek.realmformat.format.realm.upgrader.RealmFormatWorldUpgra
 import io.github.portlek.realmformat.paper.api.RealmFormatLoader;
 import io.github.portlek.realmformat.paper.api.RealmFormatManager;
 import io.github.portlek.realmformat.paper.internal.misc.Services;
-import io.github.portlek.realmformat.paper.loader.RealmFormatLoaderMap;
 import io.github.portlek.realmformat.paper.nms.NmsBackend;
 import java.io.File;
 import java.util.Collection;
@@ -27,7 +26,7 @@ final class RealmFormatManagerImpl implements RealmFormatManager {
 
   private final Map<String, RealmFormatWorld> loadedWorlds = new ConcurrentHashMap<>();
 
-  private final RealmFormatLoaderMap loaders = Services.load(RealmFormatLoaderMap.class);
+  private final Map<String, RealmFormatLoader> loaders = new ConcurrentHashMap<>();
 
   @NotNull
   @Override
