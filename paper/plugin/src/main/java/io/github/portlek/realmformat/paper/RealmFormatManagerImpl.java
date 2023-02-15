@@ -27,7 +27,7 @@ final class RealmFormatManagerImpl implements RealmFormatManager {
 
   private final Map<String, RealmFormatWorld> loadedWorlds = new ConcurrentHashMap<>();
 
-  private final RealmFormatLoaderMap loaderMap = Services.load(RealmFormatLoaderMap.class);
+  private final RealmFormatLoaderMap loaders = Services.load(RealmFormatLoaderMap.class);
 
   @NotNull
   @Override
@@ -96,7 +96,7 @@ final class RealmFormatManagerImpl implements RealmFormatManager {
   @NotNull
   @Override
   public Optional<RealmFormatLoader> loader(@NotNull final String type) {
-    return Optional.empty();
+    return Optional.ofNullable(this.loaders.get(type));
   }
 
   @Override
@@ -107,7 +107,9 @@ final class RealmFormatManagerImpl implements RealmFormatManager {
   ) {}
 
   @Override
-  public void registerLoader(@NotNull final String type, @NotNull final RealmFormatLoader loader) {}
+  public void registerLoader(@NotNull final String type, final @NotNull RealmFormatLoader loader) {
+    this.loaders.put(type, loader);
+  }
 
   @NotNull
   @Override
