@@ -1,4 +1,5 @@
 import com.diffplug.gradle.spotless.SpotlessExtension
+import com.diffplug.gradle.spotless.YamlExtension.JacksonYamlGradleConfig
 import com.diffplug.spotless.LineEnding
 import com.github.jengelman.gradle.plugins.shadow.ShadowPlugin
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
@@ -81,7 +82,10 @@ if (spotlessApply) {
       )
       endWithNewline()
       trimTrailingWhitespace()
-      jackson()
+      val jackson = jackson() as JacksonYamlGradleConfig
+      jackson.yamlFeature("LITERAL_BLOCK_STYLE", true)
+      jackson.yamlFeature("MINIMIZE_QUOTES", true)
+      jackson.yamlFeature("SPLIT_LINES", false)
     }
 
     kotlinGradle {

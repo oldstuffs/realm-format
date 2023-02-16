@@ -1,5 +1,5 @@
 ---
-name: "RealmFormat"
-main: "io.github.portlek.realmformat.paper.RealmFormatBoostrap"
+name: RealmFormat
+main: io.github.portlek.realmformat.paper.RealmFormatBoostrap
 version: "${pluginVersion}"
 api-version: 1.13
