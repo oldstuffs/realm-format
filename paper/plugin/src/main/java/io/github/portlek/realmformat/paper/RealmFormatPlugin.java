@@ -31,12 +31,19 @@ public final class RealmFormatPlugin implements Reloadable {
 
   private static final VersionMatched<NmsBackend> NMS_BACKEND = new VersionMatched<>();
 
+  @NotNull
+  private final RealmFormatBoostrap boostrap;
+
   private final CompositeTerminable terminable = CompositeTerminable.simple();
 
   @NotNull
   private final List<Terminable> terminables;
 
-  private RealmFormatPlugin(@NotNull final List<Terminable> terminables) {
+  private RealmFormatPlugin(
+    @NotNull final RealmFormatBoostrap boostrap,
+    @NotNull final List<Terminable> terminables
+  ) {
+    this.boostrap = boostrap;
     this.terminables = terminables;
   }
 
@@ -47,14 +54,13 @@ public final class RealmFormatPlugin implements Reloadable {
 
   static void initialize(@NotNull final RealmFormatBoostrap boostrap) {
     Plugins.init(boostrap, new PaperEventManager());
-    final var plugin = new RealmFormatPlugin(List.of(BukkitTasks.init(boostrap)));
+    final var plugin = new RealmFormatPlugin(boostrap, List.of(BukkitTasks.init(boostrap)));
     RealmFormatSerializers.initiate();
     RealmFormatWorldUpgrades.initiate();
     Services.provide(RealmFormatBoostrap.class, boostrap);
     Services.provide(File.class, boostrap.getDataFolder());
     Services.provide(Path.class, boostrap.getDataFolder().toPath());
     Services.provide(RealmFormatPlugin.class, plugin);
-    Services.provide(Cloud.KEY, Cloud.create(boostrap));
     Services.provide(NmsBackend.class, RealmFormatPlugin.NMS_BACKEND.of().create().orElseThrow());
     Services.provide(RealmFormatManager.class, new RealmFormatManagerImpl());
     RealmFormatPlugin.INSTANCE.set(plugin);
@@ -75,6 +81,7 @@ public final class RealmFormatPlugin implements Reloadable {
   }
 
   void onEnable() {
+    Services.provide(Cloud.KEY, Cloud.create(this.boostrap));
     this.reload();
     Services.load(RealmFormatCommandModule.class).bindModuleWith(this.terminable);
   }
