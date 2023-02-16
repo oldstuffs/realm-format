@@ -1,24 +1,24 @@
 ---
-name-template: $RESOLVED_VERSION 📈
+name-template: 📈 $RESOLVED_VERSION
 tag-template: $RESOLVED_VERSION
 prerelease: true
 template: |
-  # Release Notes 📃
+  # 📃 Release Notes
 
-  ## Uncategoried changes 🤷‍♀️
+  ## 🤷‍♀️ Uncategoried changes
   $CHANGES
 categories:
-- title: Breaking 🔥
+- title: 🔥 Breaking
   label: breaking
-- title: New 🆕
+- title: 🆕 New
   label: enhancement
-- title: Bug Fixes 🐛
+- title: 🐛 Bug Fixes
   label: bug
-- title: Maintenance 🛠️
+- title: 🛠️ Maintenance
   label: maintenance
-- title: Documentation 📖
+- title: 📖 Documentation
   label: documentation
-- title: Dependency Updates 🔄
+- title: 🔄 Dependency Updates
   label: dependencies
 version-resolver:
   major:
