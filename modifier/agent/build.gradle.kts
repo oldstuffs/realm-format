@@ -17,7 +17,7 @@ tasks {
   processResources {
     dependsOn(coreProject.tasks.jar)
     doFirst {
-      val builtCore = project(":modifier:agent").tasks["jar"].outputs.files.first().toPath()
+      val builtCore = project(":modifier:core").tasks["jar"].outputs.files.first().toPath()
       val destination = project.layout.projectDirectory.path.resolve("src").resolve("main").resolve("resources").resolve("realm-format-modifier-core.txt")
       Files.copy(builtCore, destination, StandardCopyOption.REPLACE_EXISTING)
     }
