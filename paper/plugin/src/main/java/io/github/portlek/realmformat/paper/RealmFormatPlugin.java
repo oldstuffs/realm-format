@@ -13,6 +13,7 @@ import io.github.portlek.realmformat.paper.internal.misc.Services;
 import io.github.portlek.realmformat.paper.module.RealmFormatCommandModule;
 import io.github.portlek.realmformat.paper.module.RealmFormatLoaderModule;
 import io.github.portlek.realmformat.paper.nms.NmsBackend;
+import io.github.portlek.realmformat.paper.nms.v1_19_R2.NmsBackendV1_19_R2;
 import java.io.File;
 import java.nio.file.Path;
 import java.util.List;
@@ -29,7 +30,9 @@ public final class RealmFormatPlugin implements Reloadable {
 
   private static final AtomicBoolean INITIALIZED = new AtomicBoolean();
 
-  private static final VersionMatched<NmsBackend> NMS_BACKEND = new VersionMatched<>();
+  private static final VersionMatched<NmsBackend> NMS_BACKEND = new VersionMatched<>(
+    NmsBackendV1_19_R2.class
+  );
 
   @NotNull
   private final RealmFormatBoostrap boostrap;

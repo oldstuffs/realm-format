@@ -7,6 +7,7 @@ import io.github.portlek.realmformat.format.property.RealmFormatPropertyMap;
 import io.github.portlek.realmformat.format.realm.BlockDataV1_14;
 import io.github.portlek.realmformat.format.realm.BlockDataV1_18;
 import io.github.portlek.realmformat.format.realm.BlockDataV1_8;
+import io.github.portlek.realmformat.format.realm.RealmFormat;
 import io.github.portlek.realmformat.format.realm.RealmFormatChunk;
 import io.github.portlek.realmformat.format.realm.RealmFormatChunkPosition;
 import io.github.portlek.realmformat.format.realm.RealmFormatChunkSection;
@@ -84,27 +85,6 @@ public class AnvilFormatSerializer {
       .properties(properties)
       .extra(extra)
       .build();
-  }
-
-  private byte dataVersionToWorldVersion(final int dataVersion) {
-    if (dataVersion <= 0) {
-      return (byte) 1;
-    } else if (dataVersion < 818) {
-      return (byte) 2;
-    } else if (dataVersion < 1501) {
-      return (byte) 3;
-    } else if (dataVersion < 1517) {
-      return (byte) 4;
-    } else if (dataVersion < 2566) {
-      return (byte) 5;
-    } else if (dataVersion <= 2586) {
-      return (byte) 6;
-    } else if (dataVersion <= 2730) {
-      return (byte) 7;
-    } else if (dataVersion <= 3218) {
-      return (byte) 8;
-    }
-    throw new UnsupportedOperationException("Unsupported world version: " + dataVersion);
   }
 
   private boolean isEmpty(final long@NotNull[] array) {
@@ -219,7 +199,7 @@ public class AnvilFormatSerializer {
     final var chunkX = compound.getInteger("xPos").orElseThrow();
     final var chunkZ = compound.getInteger("zPos").orElseThrow();
     if (worldVersion >= 8) {
-      final var dataVersion = AnvilFormatSerializer.dataVersionToWorldVersion(
+      final var dataVersion = RealmFormat.dataVersionToWorldVersion(
         compound.getInteger("DataVersion").orElse(-1)
       );
       if (dataVersion != worldVersion) {
@@ -353,7 +333,7 @@ public class AnvilFormatSerializer {
     final var position = compound.getIntArray("Position").orElseThrow();
     final var chunkX = position[0];
     final var chunkZ = position[1];
-    final var dataVersion = AnvilFormatSerializer.dataVersionToWorldVersion(
+    final var dataVersion = RealmFormat.dataVersionToWorldVersion(
       compound.getInteger("DataVersion").orElse(-1)
     );
     if (dataVersion != version) {
@@ -388,9 +368,7 @@ public class AnvilFormatSerializer {
       .getCompoundTag("Data")
       .orElseThrow(() -> new IllegalStateException("This file is not a proper level.dat file!"));
     final var worldVersionOptional = dataTag.getInteger("DataVersion");
-    final var worldVersion = AnvilFormatSerializer.dataVersionToWorldVersion(
-      worldVersionOptional.orElse(-1)
-    );
+    final var worldVersion = RealmFormat.dataVersionToWorldVersion(worldVersionOptional.orElse(-1));
     final var spawnX = dataTag.getInteger("SpawnX").orElse(0);
     final var spawnY = dataTag.getInteger("SpawnY").orElse(255);
     final var spawnZ = dataTag.getInteger("SpawnZ").orElse(0);
