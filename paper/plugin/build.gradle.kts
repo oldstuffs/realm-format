@@ -2,7 +2,7 @@ plugins { alias(libs.plugins.run.paper) }
 
 dependencies {
   implementation(project(":format"))
-  implementation(project(":modifier:core", "shadow"))
+  implementation(project(":modifier:core"))
   implementation(project(":paper:api"))
   implementation(project(":paper:nms:common"))
   implementation(project(":paper:nms:v1_8_R3"))
@@ -46,7 +46,7 @@ tasks {
 
   runServer {
     jvmArgs(
-      "-javaagent:" + project(":modifier:agent").tasks["shadowJar"].outputs.files.first().path,
+      "-javaagent:" + project(":modifier:agent").tasks["jar"].outputs.files.first().path,
     )
     minecraftVersion("1.19.3")
   }
