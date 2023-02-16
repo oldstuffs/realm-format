@@ -25,4 +25,4 @@ jobs:
         key: "${{ runner.os }}-gradle-wrapper-${{ hashFiles('**/gradle-wrapper.properties')\
           \ }}"
         restore-keys: "${{ runner.os }}-gradlew-\n"
-    - run: "chmod +x gradlew\n./gradlew build\n"
+    - run: "chmod +x gradlew\n./gradlew build -Pspotless.apply=true\n"
