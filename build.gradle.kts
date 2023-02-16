@@ -7,7 +7,6 @@ import io.github.portlek.smol.tasks.SmolJar
 
 plugins {
   java
-  `java-library`
   `maven-publish`
   signing
   alias(libs.plugins.spotless)
@@ -112,7 +111,6 @@ allprojects { group = "io.github.portlek" }
 
 subprojects {
   apply<JavaPlugin>()
-  apply<JavaLibraryPlugin>()
 
   val projectName = property("project.name").toString()
 
