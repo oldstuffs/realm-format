@@ -1,5 +1,6 @@
 package io.github.portlek.realmformat.paper;
 
+import com.google.common.base.Preconditions;
 import io.github.portlek.realmformat.format.realm.RealmFormatSerializers;
 import io.github.portlek.realmformat.format.realm.upgrader.RealmFormatWorldUpgrades;
 import io.github.portlek.realmformat.paper.api.RealmFormatManager;
@@ -15,6 +16,7 @@ import io.github.portlek.realmformat.paper.nms.NmsBackend;
 import java.io.File;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 import org.jetbrains.annotations.NotNull;
 import tr.com.infumia.event.common.Plugins;
 import tr.com.infumia.event.paper.PaperEventManager;
@@ -24,6 +26,8 @@ import tr.com.infumia.terminable.Terminable;
 import tr.com.infumia.versionmatched.VersionMatched;
 
 public final class RealmFormatPlugin implements Reloadable {
+
+  private static final AtomicBoolean INITIALIZED = new AtomicBoolean();
 
   private static final VersionMatched<NmsBackend> NMS_BACKEND = new VersionMatched<>();
 
@@ -56,6 +60,7 @@ public final class RealmFormatPlugin implements Reloadable {
     Services.provide(Path.class, boostrap.getDataFolder().toPath());
     Services.provide(NmsBackend.class, RealmFormatPlugin.NMS_BACKEND.of().create().orElseThrow());
     Services.provide(RealmFormatManager.class, new RealmFormatManagerImpl());
+    RealmFormatPlugin.INITIALIZED.set(true);
   }
 
   @Override
@@ -73,6 +78,10 @@ public final class RealmFormatPlugin implements Reloadable {
   }
 
   void onEnable() {
+    Preconditions.checkState(
+      RealmFormatPlugin.INITIALIZED.get(),
+      "RealmFormat plugin cannot be initialized properly, please check the logs!"
+    );
     Services.provide(Cloud.KEY, Cloud.create(this.boostrap));
     this.reload();
     Services.load(RealmFormatCommandModule.class).bindModuleWith(this.terminable);
