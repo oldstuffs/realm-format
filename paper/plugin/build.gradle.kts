@@ -40,10 +40,8 @@ dependencies {
 
 tasks {
   processResources {
-    duplicatesStrategy = DuplicatesStrategy.INCLUDE
-    from(project.the<SourceSetContainer>()["main"].resources.srcDirs) {
+    filesMatching("plugin.yml") {
       expand("pluginVersion" to project.version)
-      include("plugin.yml")
     }
   }
 
