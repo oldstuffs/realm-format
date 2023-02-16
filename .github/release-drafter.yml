@@ -2,7 +2,7 @@
 name-template: "$RESOLVED_VERSION"
 tag-template: "$RESOLVED_VERSION"
 prerelease: true
-template: "# Release Notes\n\nThis release includes the following changes:$CHANGES\n"
+template: "# Release Notes\n\nThis release includes the following changes:\n$CHANGES\n"
 categories:
 - title: "Breaking 🔥"
   label: "breaking"
