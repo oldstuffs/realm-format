@@ -1,4 +1,4 @@
-plugins { id("io.papermc.paperweight.userdev") }
+plugins { alias(libs.plugins.paperweight) }
 
 dependencies {
   implementation(project(":paper:nms:common"))

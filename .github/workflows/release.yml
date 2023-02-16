@@ -35,3 +35,7 @@ jobs:
         ${{ secrets.GPG_SECRET_KEY_ID }}\" -Psigning.gnupg.passphrase=\"${{ secrets.GPG_PASSPHRASE\
         \ }}\" -PsonatypeUsername=\"${{ secrets.SONATYPE_USERNAME }}\" -PsonatypePassword=\"\
         ${{ secrets.SONATYPE_PASSWORD }}\"\n"
+    - uses: "softprops/action-gh-release@v1"
+      with:
+        files: "paper/plugin/build/libs/realm-format-paper-plugin-${{ github.event.release.tag_name\
+          \ }}.jar\nmodifier/agent/build/libs/realm-format-modifier-agent.jar\n"

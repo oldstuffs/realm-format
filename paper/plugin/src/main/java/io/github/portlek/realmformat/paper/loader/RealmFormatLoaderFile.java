@@ -3,6 +3,10 @@ package io.github.portlek.realmformat.paper.loader;
 import com.google.common.base.Preconditions;
 import io.github.portlek.realmformat.format.realm.RealmFormat;
 import io.github.portlek.realmformat.paper.api.RealmFormatLoader;
+import io.github.portlek.realmformat.paper.api.RealmFormatManager;
+import io.github.portlek.realmformat.paper.file.RealmFormatConfig;
+import io.github.portlek.realmformat.paper.internal.misc.Services;
+import java.io.File;
 import java.io.RandomAccessFile;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -18,14 +22,14 @@ import tr.com.infumia.terminable.TerminableConsumer;
 @Log4j2
 public final class RealmFormatLoaderFile implements RealmFormatLoader {
 
+  private final RealmFormatConfig config = Services.load(RealmFormatConfig.class);
+
   @NotNull
-  private final Path directory;
+  private final Path directory = new File(this.config.fileLoaderPath()).toPath();
+
+  private final RealmFormatManager manager = Services.load(RealmFormatManager.class);
 
   private final Map<String, RandomAccessFile> worlds = new ConcurrentHashMap<>();
-
-  public RealmFormatLoaderFile(@NotNull final Path directory) {
-    this.directory = directory;
-  }
 
   @Override
   @SneakyThrows
@@ -54,12 +58,13 @@ public final class RealmFormatLoaderFile implements RealmFormatLoader {
   @Override
   @SneakyThrows
   public List<String> list() {
-    return Files
-      .list(this.directory)
-      .map(Path::getFileName)
-      .map(Path::toString)
-      .map(s -> s.replace(RealmFormat.EXTENSION, ""))
-      .toList();
+    try (final var paths = Files.list(this.directory)) {
+      return paths
+        .map(Path::getFileName)
+        .map(Path::toString)
+        .map(s -> s.replace(RealmFormat.EXTENSION, ""))
+        .toList();
+    }
   }
 
   @Override
@@ -127,6 +132,7 @@ public final class RealmFormatLoaderFile implements RealmFormatLoader {
   @Override
   @SneakyThrows
   public void setup(@NotNull final TerminableConsumer consumer) {
+    this.manager.registerLoader("file", this);
     Preconditions.checkState(
       Files.notExists(this.directory) || Files.isDirectory(this.directory),
       "This file '%s' is not a directory! Please delete or rename the file to start the RealmFormat plugin!",

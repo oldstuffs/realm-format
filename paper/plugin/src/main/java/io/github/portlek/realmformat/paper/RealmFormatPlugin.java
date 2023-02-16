@@ -7,12 +7,13 @@ import io.github.portlek.realmformat.paper.file.RealmFormatConfig;
 import io.github.portlek.realmformat.paper.file.RealmFormatMessages;
 import io.github.portlek.realmformat.paper.file.RealmFormatWorlds;
 import io.github.portlek.realmformat.paper.internal.cloud.Cloud;
-import io.github.portlek.realmformat.paper.internal.configurate.Configs;
 import io.github.portlek.realmformat.paper.internal.misc.Reloadable;
 import io.github.portlek.realmformat.paper.internal.misc.Services;
 import io.github.portlek.realmformat.paper.module.RealmFormatCommandModule;
 import io.github.portlek.realmformat.paper.module.RealmFormatLoaderModule;
 import io.github.portlek.realmformat.paper.nms.NmsBackend;
+import java.io.File;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
@@ -30,19 +31,12 @@ public final class RealmFormatPlugin implements Reloadable {
 
   private static final VersionMatched<NmsBackend> NMS_BACKEND = new VersionMatched<>();
 
-  @NotNull
-  private final RealmFormatBoostrap boostrap;
-
   private final CompositeTerminable terminable = CompositeTerminable.simple();
 
   @NotNull
   private final List<Terminable> terminables;
 
-  private RealmFormatPlugin(
-    @NotNull final RealmFormatBoostrap boostrap,
-    @NotNull final List<Terminable> terminables
-  ) {
-    this.boostrap = boostrap;
+  private RealmFormatPlugin(@NotNull final List<Terminable> terminables) {
     this.terminables = terminables;
   }
 
@@ -53,9 +47,16 @@ public final class RealmFormatPlugin implements Reloadable {
 
   static void initialize(@NotNull final RealmFormatBoostrap boostrap) {
     Plugins.init(boostrap, new PaperEventManager());
-    final var plugin = new RealmFormatPlugin(boostrap, List.of(BukkitTasks.init(boostrap)));
+    final var plugin = new RealmFormatPlugin(List.of(BukkitTasks.init(boostrap)));
     RealmFormatSerializers.initiate();
     RealmFormatWorldUpgrades.initiate();
+    Services.provide(RealmFormatBoostrap.class, boostrap);
+    Services.provide(File.class, boostrap.getDataFolder());
+    Services.provide(Path.class, boostrap.getDataFolder().toPath());
+    Services.provide(RealmFormatPlugin.class, plugin);
+    Services.provide(Cloud.KEY, Cloud.create(boostrap));
+    Services.provide(NmsBackend.class, RealmFormatPlugin.NMS_BACKEND.of().create().orElseThrow());
+    Services.provide(RealmFormatManager.class, new RealmFormatManagerImpl());
     RealmFormatPlugin.INSTANCE.set(plugin);
   }
 
@@ -63,29 +64,10 @@ public final class RealmFormatPlugin implements Reloadable {
   public void reload() {
     this.onDisable();
     this.terminables.forEach(terminable -> terminable.bindWith(this.terminable));
-    final var folder = this.boostrap.getDataFolder().toPath();
-    Services.provide(RealmFormatPlugin.class, this);
-    Services
-      .provide(
-        RealmFormatConfig.class,
-        new RealmFormatConfig(Configs.yaml(folder.resolve("config.yaml")))
-      )
-      .reload();
-    Services
-      .provide(
-        RealmFormatMessages.class,
-        new RealmFormatMessages(Configs.yaml(folder.resolve("messages.yaml")))
-      )
-      .reload();
-    Services
-      .provide(
-        RealmFormatWorlds.class,
-        new RealmFormatWorlds(Configs.yaml(folder.resolve("worlds.yaml")))
-      )
-      .reload();
-    Services
-      .provide(RealmFormatLoaderModule.class, new RealmFormatLoaderModule())
-      .bindModuleWith(this.terminable);
+    Services.load(RealmFormatConfig.class).reload();
+    Services.load(RealmFormatMessages.class).reload();
+    Services.load(RealmFormatWorlds.class).reload();
+    Services.load(RealmFormatLoaderModule.class).bindModuleWith(this.terminable);
   }
 
   void onDisable() {
@@ -93,12 +75,7 @@ public final class RealmFormatPlugin implements Reloadable {
   }
 
   void onEnable() {
-    Services.provide(Cloud.KEY, Cloud.create(this.boostrap));
-    final var backend = RealmFormatPlugin.NMS_BACKEND.of().create().orElseThrow();
-    Services.provide(RealmFormatManager.class, new RealmFormatManagerImpl(backend));
     this.reload();
-    Services
-      .provide(RealmFormatCommandModule.class, new RealmFormatCommandModule())
-      .bindModuleWith(this.terminable);
+    Services.load(RealmFormatCommandModule.class).bindModuleWith(this.terminable);
   }
 }

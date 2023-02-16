@@ -7,6 +7,7 @@ import io.github.portlek.realmformat.format.realm.RealmFormatWorld;
 import io.github.portlek.realmformat.format.realm.upgrader.RealmFormatWorldUpgrades;
 import io.github.portlek.realmformat.paper.api.RealmFormatLoader;
 import io.github.portlek.realmformat.paper.api.RealmFormatManager;
+import io.github.portlek.realmformat.paper.internal.misc.Services;
 import io.github.portlek.realmformat.paper.nms.NmsBackend;
 import java.io.File;
 import java.util.Collection;
@@ -21,14 +22,11 @@ import org.jetbrains.annotations.UnmodifiableView;
 @Log4j2
 final class RealmFormatManagerImpl implements RealmFormatManager {
 
-  @NotNull
-  private final NmsBackend backend;
+  private final NmsBackend backend = Services.load(NmsBackend.class);
 
   private final Map<String, RealmFormatWorld> loadedWorlds = new ConcurrentHashMap<>();
 
-  public RealmFormatManagerImpl(@NotNull final NmsBackend backend) {
-    this.backend = backend;
-  }
+  private final Map<String, RealmFormatLoader> loaders = new ConcurrentHashMap<>();
 
   @NotNull
   @Override
@@ -97,7 +95,7 @@ final class RealmFormatManagerImpl implements RealmFormatManager {
   @NotNull
   @Override
   public Optional<RealmFormatLoader> loader(@NotNull final String type) {
-    return Optional.empty();
+    return Optional.ofNullable(this.loaders.get(type));
   }
 
   @Override
@@ -108,7 +106,9 @@ final class RealmFormatManagerImpl implements RealmFormatManager {
   ) {}
 
   @Override
-  public void registerLoader(@NotNull final String type, @NotNull final RealmFormatLoader loader) {}
+  public void registerLoader(@NotNull final String type, final @NotNull RealmFormatLoader loader) {
+    this.loaders.put(type, loader);
+  }
 
   @NotNull
   @Override

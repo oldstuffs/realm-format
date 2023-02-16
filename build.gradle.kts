@@ -10,12 +10,12 @@ plugins {
   `java-library`
   `maven-publish`
   signing
-  id("com.diffplug.spotless") version "6.15.0"
-  id("io.github.gradle-nexus.publish-plugin") version "1.1.0"
-  id("com.github.johnrengelman.shadow") version "7.1.2" apply false
-  id("io.github.portlek.smol-plugin-gradle") version "0.2.2-SNAPSHOT" apply false
-  id("io.papermc.paperweight.userdev") version "1.5.0" apply false
-  id("xyz.jpenilla.run-paper") version "2.0.1" apply false
+  alias(libs.plugins.spotless)
+  alias(libs.plugins.nexus)
+  alias(libs.plugins.shadow)
+  alias(libs.plugins.smol) apply false
+  alias(libs.plugins.paperweight) apply false
+  alias(libs.plugins.run.paper) apply false
 }
 
 val spotlessApply = property("spotless.apply").toString().toBoolean()
@@ -254,19 +254,17 @@ subprojects {
   }
 
   dependencies {
-    fun dep(dependencyId: String) = rootProject.property("dep.$dependencyId").toString()
+    compileOnly(rootProject.libs.lombok)
+    compileOnly(rootProject.libs.annotations)
 
-    compileOnly(dep("lombok"))
-    compileOnly(dep("annotations"))
+    annotationProcessor(rootProject.libs.lombok)
+    annotationProcessor(rootProject.libs.annotations)
 
-    annotationProcessor(dep("lombok"))
-    annotationProcessor(dep("annotations"))
+    testImplementation(rootProject.libs.junit.api)
+    testRuntimeOnly(rootProject.libs.junit.engine)
 
-    testImplementation(dep("junit.api"))
-    testRuntimeOnly(dep("junit.engine"))
-
-    testAnnotationProcessor(dep("lombok"))
-    testAnnotationProcessor(dep("annotations"))
+    testAnnotationProcessor(rootProject.libs.lombok)
+    testAnnotationProcessor(rootProject.libs.annotations)
   }
 }
 
