@@ -2,19 +2,19 @@
 name-template: "$RESOLVED_VERSION"
 tag-template: "$RESOLVED_VERSION"
 prerelease: true
-template: "# What's Changed\n\n$CHANGES\n"
+template: "# Release Notes\n\nThis release includes the following changes:\n$CHANGES\n"
 categories:
-- title: "Breaking"
+- title: "Breaking 🔥"
   label: "breaking"
-- title: "New"
+- title: "New 🆕"
   label: "enhancement"
-- title: "Bug Fixes"
+- title: "Bug Fixes 🐛"
   label: "bug"
-- title: "Maintenance"
+- title: "Maintenance 🛠️"
   label: "maintenance"
-- title: "Documentation"
+- title: "Documentation 📖"
   label: "documentation"
-- title: "Dependency Updates"
+- title: "Dependency Updates 🔄"
   label: "dependencies"
 version-resolver:
   major:
