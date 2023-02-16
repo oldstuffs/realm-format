@@ -130,7 +130,7 @@ subprojects {
 
     build { dependsOn(jar) }
 
-    if (findProperty("shadow.enabled")?.toString().toBoolean()) {
+    if (hasProperty("shadow.enabled")) {
       apply<ShadowPlugin>()
 
       val shadowJar = withType<ShadowJar> {
@@ -141,7 +141,7 @@ subprojects {
         archiveBaseName.set(projectName)
         archiveClassifier.set("")
 
-        if (findProperty("shadow.relocation")?.toString().toBoolean()) {
+        if (hasProperty("shadow.relocation")) {
           relocations.forEach { relocate(it, "$shadePackage.$it") }
         }
       }
@@ -149,11 +149,11 @@ subprojects {
       build { dependsOn(shadowJar) }
     }
 
-    if (findProperty("smol.enabled")?.toString().toBoolean()) {
+    if (hasProperty("smol.enabled")) {
       apply<SmolPlugin>()
 
       val smolJar = withType<SmolJar> {
-        if (findProperty("smol.relocation")?.toString().toBoolean()) {
+        if (hasProperty("smol.relocation")) {
           relocations.forEach { relocate(it, "$shadePackage.$it") }
         }
       }
@@ -164,7 +164,7 @@ subprojects {
     }
   }
 
-  if (findProperty("maven.publish")?.toString().toBoolean()) {
+  if (hasProperty("maven.publish")) {
     apply<MavenPublishPlugin>()
     apply<SigningPlugin>()
 

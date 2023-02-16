@@ -1,6 +1,7 @@
 package io.github.portlek.realmformat.paper;
 
 import io.github.portlek.realmformat.paper.internal.Dependencies;
+import io.github.portlek.realmformat.paper.internal.misc.Services;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class RealmFormatBoostrap extends JavaPlugin {
@@ -15,11 +16,11 @@ public final class RealmFormatBoostrap extends JavaPlugin {
 
   @Override
   public void onDisable() {
-    RealmFormatPlugin.get().onDisable();
+    Services.load(RealmFormatPlugin.class).onDisable();
   }
 
   @Override
   public void onEnable() {
-    RealmFormatPlugin.get().onEnable();
+    Services.load(RealmFormatPlugin.class).onEnable();
   }
 }

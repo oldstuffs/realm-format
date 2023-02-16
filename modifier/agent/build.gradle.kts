@@ -5,7 +5,7 @@ import java.nio.file.StandardCopyOption
 val coreProject = project(":modifier:core")
 
 dependencies {
-  api(coreProject)
+  compileOnly(project(":modifier:core"))
 
   implementation(libs.javassist)
   implementation(libs.snakeyaml)
@@ -15,9 +15,9 @@ tasks {
   shadowJar { archiveVersion.set("") }
 
   processResources {
-    dependsOn(coreProject.tasks.shadowJar)
+    dependsOn(coreProject.tasks.jar)
     doFirst {
-      val builtCore = coreProject.layout.buildDirectory.path.resolve("libs").resolve("realm-format-modifier-core.jar")
+      val builtCore = project(":modifier:core").tasks["jar"].outputs.files.first().toPath()
       val destination = project.layout.projectDirectory.path.resolve("src").resolve("main").resolve("resources").resolve("realm-format-modifier-core.txt")
       Files.copy(builtCore, destination, StandardCopyOption.REPLACE_EXISTING)
     }

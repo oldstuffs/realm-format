@@ -1,5 +1,6 @@
 package io.github.portlek.realmformat.paper;
 
+import com.google.common.base.Preconditions;
 import io.github.portlek.realmformat.format.realm.RealmFormatSerializers;
 import io.github.portlek.realmformat.format.realm.upgrader.RealmFormatWorldUpgrades;
 import io.github.portlek.realmformat.paper.api.RealmFormatManager;
@@ -12,11 +13,11 @@ import io.github.portlek.realmformat.paper.internal.misc.Services;
 import io.github.portlek.realmformat.paper.module.RealmFormatCommandModule;
 import io.github.portlek.realmformat.paper.module.RealmFormatLoaderModule;
 import io.github.portlek.realmformat.paper.nms.NmsBackend;
+import io.github.portlek.realmformat.paper.nms.v1_19_R2.NmsBackendV1_19_R2;
 import java.io.File;
 import java.nio.file.Path;
 import java.util.List;
-import java.util.Objects;
-import java.util.concurrent.atomic.AtomicReference;
+import java.util.concurrent.atomic.AtomicBoolean;
 import org.jetbrains.annotations.NotNull;
 import tr.com.infumia.event.common.Plugins;
 import tr.com.infumia.event.paper.PaperEventManager;
@@ -27,37 +28,42 @@ import tr.com.infumia.versionmatched.VersionMatched;
 
 public final class RealmFormatPlugin implements Reloadable {
 
-  private static final AtomicReference<RealmFormatPlugin> INSTANCE = new AtomicReference<>();
+  private static final AtomicBoolean INITIALIZED = new AtomicBoolean();
 
-  private static final VersionMatched<NmsBackend> NMS_BACKEND = new VersionMatched<>();
+  private static final VersionMatched<NmsBackend> NMS_BACKEND = new VersionMatched<>(
+    NmsBackendV1_19_R2.class
+  );
+
+  @NotNull
+  private final RealmFormatBoostrap boostrap;
 
   private final CompositeTerminable terminable = CompositeTerminable.simple();
 
   @NotNull
   private final List<Terminable> terminables;
 
-  private RealmFormatPlugin(@NotNull final List<Terminable> terminables) {
+  private RealmFormatPlugin(
+    @NotNull final RealmFormatBoostrap boostrap,
+    @NotNull final List<Terminable> terminables
+  ) {
+    this.boostrap = boostrap;
     this.terminables = terminables;
-  }
-
-  @NotNull
-  static RealmFormatPlugin get() {
-    return Objects.requireNonNull(RealmFormatPlugin.INSTANCE.get());
   }
 
   static void initialize(@NotNull final RealmFormatBoostrap boostrap) {
     Plugins.init(boostrap, new PaperEventManager());
-    final var plugin = new RealmFormatPlugin(List.of(BukkitTasks.init(boostrap)));
+    Services.provide(
+      RealmFormatPlugin.class,
+      new RealmFormatPlugin(boostrap, List.of(BukkitTasks.init(boostrap)))
+    );
     RealmFormatSerializers.initiate();
     RealmFormatWorldUpgrades.initiate();
     Services.provide(RealmFormatBoostrap.class, boostrap);
     Services.provide(File.class, boostrap.getDataFolder());
     Services.provide(Path.class, boostrap.getDataFolder().toPath());
-    Services.provide(RealmFormatPlugin.class, plugin);
-    Services.provide(Cloud.KEY, Cloud.create(boostrap));
     Services.provide(NmsBackend.class, RealmFormatPlugin.NMS_BACKEND.of().create().orElseThrow());
     Services.provide(RealmFormatManager.class, new RealmFormatManagerImpl());
-    RealmFormatPlugin.INSTANCE.set(plugin);
+    RealmFormatPlugin.INITIALIZED.set(true);
   }
 
   @Override
@@ -75,6 +81,11 @@ public final class RealmFormatPlugin implements Reloadable {
   }
 
   void onEnable() {
+    Preconditions.checkState(
+      RealmFormatPlugin.INITIALIZED.get(),
+      "RealmFormat plugin cannot be initialized properly, please check the logs!"
+    );
+    Services.provide(Cloud.KEY, Cloud.create(this.boostrap));
     this.reload();
     Services.load(RealmFormatCommandModule.class).bindModuleWith(this.terminable);
   }
