@@ -128,7 +128,7 @@ subprojects {
     if (hasProperty("shadow.enabled")) {
       apply<ShadowPlugin>()
 
-      val shadowJar = withType<ShadowJar> {
+      shadowJar {
         dependsOn(jar)
 
         mergeServiceFiles()
