@@ -1,0 +1,6 @@
+{
+    java.util.concurrent.CompletableFuture chunk = io.github.portlek.realmformat.modifier.Modifier.chunkAt($0.r, $1.e, $1.f);
+    if (chunk != null) {
+        return chunk;
+    }
+}

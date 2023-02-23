@@ -3,6 +3,7 @@ package io.github.portlek.realmformat.paper;
 import com.google.common.base.Preconditions;
 import io.github.portlek.realmformat.format.realm.RealmFormatSerializers;
 import io.github.portlek.realmformat.format.realm.upgrader.RealmFormatWorldUpgrades;
+import io.github.portlek.realmformat.modifier.ModifierBackend;
 import io.github.portlek.realmformat.paper.api.RealmFormatManager;
 import io.github.portlek.realmformat.paper.file.RealmFormatConfig;
 import io.github.portlek.realmformat.paper.file.RealmFormatMessages;
@@ -13,6 +14,7 @@ import io.github.portlek.realmformat.paper.internal.misc.Services;
 import io.github.portlek.realmformat.paper.module.RealmFormatCommandModule;
 import io.github.portlek.realmformat.paper.module.RealmFormatLoaderModule;
 import io.github.portlek.realmformat.paper.nms.NmsBackend;
+import io.github.portlek.realmformat.paper.nms.v1_19_R2.ModifierBackendV1_19_R2;
 import io.github.portlek.realmformat.paper.nms.v1_19_R2.NmsBackendV1_19_R2;
 import java.io.File;
 import java.nio.file.Path;
@@ -32,6 +34,10 @@ public final class RealmFormatPlugin implements Reloadable {
 
   private static final VersionMatched<NmsBackend> NMS_BACKEND = new VersionMatched<>(
     NmsBackendV1_19_R2.class
+  );
+
+  private static final VersionMatched<ModifierBackend> MODIFIER_BACKEND = new VersionMatched<>(
+    ModifierBackendV1_19_R2.class
   );
 
   private final CompositeTerminable terminable = CompositeTerminable.simple();
