@@ -1,4 +1,3 @@
-import com.diffplug.gradle.spotless.SpotlessExtension
 import com.diffplug.gradle.spotless.YamlExtension.JacksonYamlGradleConfig
 import com.diffplug.spotless.LineEnding
 import com.github.jengelman.gradle.plugins.shadow.ShadowPlugin
@@ -33,13 +32,7 @@ val relocations =
 repositories { mavenCentral() }
 
 if (spotlessApply) {
-  tasks {
-    build {
-      dependsOn(spotlessApply)
-    }
-  }
-
-  configure<SpotlessExtension> {
+  spotless {
     lineEndings = LineEnding.UNIX
     isEnforceCheck = false
 
