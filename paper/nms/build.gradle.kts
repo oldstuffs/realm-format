@@ -5,5 +5,6 @@ subprojects {
     compileOnly(project(":paper:api"))
 
     compileOnly(rootProject.libs.nbt)
+    compileOnly(rootProject.libs.terminable)
   }
 }
