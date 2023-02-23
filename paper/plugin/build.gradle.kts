@@ -47,7 +47,7 @@ tasks {
 
   runServer {
     jvmArgs(
-      "-javaagent:" + project(":modifier:agent").tasks["jar"].outputs.files.first().path,
+      "-javaagent:" + project(":modifier:agent").tasks.jar.get().outputs.files.first().path,
     )
     minecraftVersion("1.19.3")
   }
