@@ -3,6 +3,7 @@ package io.github.portlek.realmformat.paper;
 import com.google.common.base.Preconditions;
 import io.github.portlek.realmformat.format.realm.RealmFormatSerializers;
 import io.github.portlek.realmformat.format.realm.upgrader.RealmFormatWorldUpgrades;
+import io.github.portlek.realmformat.modifier.Modifier;
 import io.github.portlek.realmformat.modifier.ModifierBackend;
 import io.github.portlek.realmformat.paper.api.RealmFormatManager;
 import io.github.portlek.realmformat.paper.file.RealmFormatConfig;
@@ -59,7 +60,13 @@ public final class RealmFormatPlugin implements Reloadable {
     RealmFormatWorldUpgrades.initiate();
     Services.provide(RealmFormatBoostrap.class, boostrap);
     Services.provide(Path.class, Services.provide(File.class, boostrap.getDataFolder()).toPath());
-    Services.provide(NmsBackend.class, RealmFormatPlugin.NMS_BACKEND.of().create().orElseThrow());
+    final var nmsBackend = Services.provide(
+      NmsBackend.class,
+      RealmFormatPlugin.NMS_BACKEND.of().create().orElseThrow()
+    );
+    Modifier.initiateBackend(
+      RealmFormatPlugin.MODIFIER_BACKEND.of(NmsBackend.class).create(nmsBackend).orElseThrow()
+    );
     Services.provide(RealmFormatManager.class, new RealmFormatManagerImpl());
     RealmFormatPlugin.INITIALIZED.set(true);
   }

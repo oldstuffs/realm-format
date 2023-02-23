@@ -1,10 +1,18 @@
 package io.github.portlek.realmformat.paper.nms.v1_19_R2;
 
 import io.github.portlek.realmformat.modifier.ModifierBackend;
+import io.github.portlek.realmformat.paper.nms.NmsBackend;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public final class ModifierBackendV1_19_R2 implements ModifierBackend {
+
+  @NotNull
+  private final NmsBackend backend;
+
+  public ModifierBackendV1_19_R2(@NotNull final NmsBackend backend) {
+    this.backend = backend;
+  }
 
   @NotNull
   @Override
