@@ -1,7 +1,6 @@
 import com.diffplug.gradle.spotless.YamlExtension.JacksonYamlGradleConfig
 import com.diffplug.spotless.LineEnding
 import com.github.jengelman.gradle.plugins.shadow.ShadowPlugin
-import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import io.github.portlek.smol.SmolPlugin
 import io.github.portlek.smol.tasks.SmolJar
 
@@ -110,6 +109,11 @@ subprojects {
   apply<JavaPlugin>()
 
   val projectName = property("project.name").toString()
+  val shadowEnabled = findProperty("shadow.enabled")?.toString().toBoolean()
+  val shadowRelocation = findProperty("shadow.relocation")?.toString().toBoolean()
+  val smolEnabled = findProperty("smol.enabled")?.toString().toBoolean()
+  val smolRelocation = findProperty("smol.relocation")?.toString().toBoolean()
+  val mavenPublish = findProperty("maven.publish")?.toString().toBoolean()
 
   java { toolchain { languageVersion.set(JavaLanguageVersion.of(17)) } }
 
@@ -124,10 +128,12 @@ subprojects {
     jar { archiveBaseName.set(projectName) }
 
     build { dependsOn(jar) }
+  }
 
-    if (hasProperty("shadow.enabled")) {
-      apply<ShadowPlugin>()
+  if (shadowEnabled) {
+    apply<ShadowPlugin>()
 
+    tasks {
       shadowJar {
         dependsOn(jar)
 
@@ -136,20 +142,24 @@ subprojects {
         archiveBaseName.set(projectName)
         archiveClassifier.set("")
 
-        if (hasProperty("shadow.relocation")) {
+        if (shadowRelocation) {
           relocations.forEach { relocate(it, "$shadePackage.$it") }
         }
       }
 
       build { dependsOn(shadowJar) }
     }
+  }
 
-    if (hasProperty("smol.enabled")) {
-      apply<SmolPlugin>()
+  if (smolEnabled) {
+    apply<SmolPlugin>()
 
+    tasks {
       val smolJar = withType<SmolJar> {
-        if (hasProperty("smol.relocation")) {
-          relocations.forEach { relocate(it, "$shadePackage.$it") }
+        if (smolRelocation) {
+          relocations.forEach {
+            relocate(it, "$shadePackage.$it")
+          }
         }
       }
 
@@ -159,7 +169,7 @@ subprojects {
     }
   }
 
-  if (hasProperty("maven.publish")) {
+  if (mavenPublish) {
     apply<MavenPublishPlugin>()
     apply<SigningPlugin>()
 
@@ -205,9 +215,9 @@ subprojects {
             artifact(tasks["sourcesJar"])
             artifact(tasks["javadocJar"])
             pom {
-              name.set("Event")
-              description.set("A builder-like event library for Paper/Velocity.")
-              url.set("https://infumia.com.tr/")
+              name.set("RealmFormatApi")
+              description.set("A single-file world format plugin for Minecraft")
+              url.set("https://github.com/portlek/")
               licenses {
                 license {
                   name.set("MIT License")
@@ -222,9 +232,9 @@ subprojects {
                 }
               }
               scm {
-                connection.set("scm:git:git://github.com/infumia/event.git")
-                developerConnection.set("scm:git:ssh://github.com/infumia/event.git")
-                url.set("https://github.com/infumia/event")
+                connection.set("scm:git:git://github.com/portlek/realm-format.git")
+                developerConnection.set("scm:git:ssh://github.com/portlek/realm-format.git")
+                url.set("https://github.com/portlek/realm-format")
               }
             }
           }
