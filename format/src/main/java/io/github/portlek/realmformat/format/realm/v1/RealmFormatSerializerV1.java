@@ -27,7 +27,7 @@ public final class RealmFormatSerializerV1 implements RealmFormatSerializer {
   ) throws IOException {
     final var worldVersion = input.readByte();
     @Cleanup
-    final var versionedInput = new InputStreamExtensionV1(input, properties, worldVersion);
+    final var versionedInput = new InputStreamExtensionV1(input, worldVersion);
     final var chunks = versionedInput.readCompressedChunks();
     versionedInput.readEntities(chunks);
     versionedInput.readTileEntities(chunks);
@@ -49,11 +49,7 @@ public final class RealmFormatSerializerV1 implements RealmFormatSerializer {
     @NotNull final DataOutputStream output,
     @NotNull final RealmFormatWorld world
   ) throws IOException {
-    final var versionedOutput = new OutputStreamExtensionV1(
-      output,
-      world.properties(),
-      world.worldVersion()
-    );
+    final var versionedOutput = new OutputStreamExtensionV1(output, world.worldVersion());
     versionedOutput.writeByte(world.worldVersion());
     versionedOutput.writeCompressedChunks(world.chunks().values());
     versionedOutput.writeEntities(world.chunks().values());

@@ -2,7 +2,6 @@ package io.github.portlek.realmformat.format.realm.v1.misc;
 
 import io.github.portlek.realmformat.format.misc.InputStreamExtension;
 import io.github.portlek.realmformat.format.misc.Maths;
-import io.github.portlek.realmformat.format.property.RealmFormatPropertyMap;
 import io.github.portlek.realmformat.format.realm.BlockDataV1_14;
 import io.github.portlek.realmformat.format.realm.BlockDataV1_18;
 import io.github.portlek.realmformat.format.realm.BlockDataV1_8;
@@ -26,18 +25,10 @@ import org.jetbrains.annotations.NotNull;
 
 public class InputStreamExtensionV1 extends InputStreamExtension {
 
-  @NotNull
-  private final RealmFormatPropertyMap properties;
-
   private final byte worldVersion;
 
-  public InputStreamExtensionV1(
-    @NotNull final DataInputStream input,
-    @NotNull final RealmFormatPropertyMap properties,
-    final byte worldVersion
-  ) {
+  public InputStreamExtensionV1(@NotNull final DataInputStream input, final byte worldVersion) {
     super(input);
-    this.properties = properties;
     this.worldVersion = worldVersion;
   }
 
@@ -97,7 +88,6 @@ public class InputStreamExtensionV1 extends InputStreamExtension {
   protected final InputStreamExtensionV1 withV1(final byte@NotNull[] bytes) {
     return new InputStreamExtensionV1(
       new DataInputStream(new ByteArrayInputStream(bytes)),
-      this.properties,
       this.worldVersion
     );
   }
