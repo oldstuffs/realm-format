@@ -34,7 +34,7 @@ cloud-brigadier = { module = "cloud.commandframework:cloud-brigadier", version.r
 cloud-tasks = { module = "cloud.commandframework:cloud-tasks", version.ref = "cloud" }
 cloud-minecraft-extras = { module = "cloud.commandframework:cloud-minecraft-extras", version.ref = "cloud" }
 javassist = { module = "org.javassist:javassist", version = "3.29.2-GA" }
-snakeyaml = { module = "org.yaml:snakeyaml", version = "1.33" }
+snakeyaml = { module = "org.yaml:snakeyaml", version = "2.0" }
 junit-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit" }
 junit-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit" }
 smol = { module = "io.github.portlek:smol", version = "0.2.2-SNAPSHOT" }
