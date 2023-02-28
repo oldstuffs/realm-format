@@ -15,7 +15,7 @@ event-common = { module = "tr.com.infumia:EventCommon", version.ref = "event" }
 event-paper = { module = "tr.com.infumia:EventPaper", version.ref = "event" }
 versionmatched = { module = "tr.com.infumia:versionmatched", version = "0.1.6-SNAPSHOT" }
 nbt = { module = "io.github.shiruka:nbt", version = "2.0.1-SNAPSHOT" }
-zstd = { module = "com.github.luben:zstd-jni", version = "1.5.4-1" }
+zstd = { module = "com.github.luben:zstd-jni", version = "1.5.4-2" }
 fastutil = { module = "it.unimi.dsi:fastutil", version = "8.5.11" }
 redis = { module = "io.lettuce:lettuce-core", version = "6.2.3.RELEASE" }
 hikari = { module = "com.zaxxer:HikariCP", version = "5.0.1" }
@@ -40,9 +40,9 @@ junit-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref 
 smol = { module = "io.github.portlek:smol", version = "0.2.2-SNAPSHOT" }
 
 [plugins]
-spotless = { id = "com.diffplug.spotless", version = "6.15.0" }
+spotless = { id = "com.diffplug.spotless", version = "6.16.0" }
 nexus = { id = "io.github.gradle-nexus.publish-plugin", version = "1.2.0" }
 shadow = { id = "com.github.johnrengelman.shadow", version = "8.1.0" }
 smol = { id = "io.github.portlek.smol-plugin-gradle", version = "0.2.2-SNAPSHOT" }
-paperweight = { id = "io.papermc.paperweight.userdev", version = "1.5.1" }
+paperweight = { id = "io.papermc.paperweight.userdev", version = "1.5.2" }
 run-paper = { id = "xyz.jpenilla.run-paper", version = "2.0.1" }
