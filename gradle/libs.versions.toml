@@ -9,7 +9,7 @@ event-common = { module = "tr.com.infumia:EventCommon", version = "0.1.3" }
 event-paper = { module = "tr.com.infumia:EventPaper", version = "0.1.3" }
 versionmatched = { module = "tr.com.infumia:versionmatched", version = "0.1.6-SNAPSHOT" }
 nbt = { module = "io.github.shiruka:nbt", version = "2.0.1-SNAPSHOT" }
-zstd = { module = "com.github.luben:zstd-jni", version = "1.5.4-1" }
+zstd = { module = "com.github.luben:zstd-jni", version = "1.5.4-2" }
 fastutil = { module = "it.unimi.dsi:fastutil", version = "8.5.11" }
 redis = { module = "io.lettuce:lettuce-core", version = "6.2.3.RELEASE" }
 hikari = { module = "com.zaxxer:HikariCP", version = "5.0.1" }
