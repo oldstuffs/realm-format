@@ -7,6 +7,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 @Getter
 @ToString
@@ -24,11 +25,11 @@ public final class RealmFormatPropertyMap {
     this(Tag.createCompound());
   }
 
-  @NotNull
+  @Nullable
   public <T> T getValue(@NotNull final RealmFormatProperty<T> property) {
     return this.tag.get(property.nbtName())
       .map(property::readValue)
-      .orElse(property.defaultValue());
+      .orElseGet(property::defaultValue);
   }
 
   public void merge(@NotNull final CompoundTag tag) {

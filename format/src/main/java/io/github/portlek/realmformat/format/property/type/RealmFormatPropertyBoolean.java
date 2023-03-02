@@ -11,7 +11,7 @@ public final class RealmFormatPropertyBoolean extends RealmFormatProperty<Boolea
 
   public RealmFormatPropertyBoolean(
     @NotNull final String nbtName,
-    @NotNull final Boolean defaultValue,
+    @Nullable final Boolean defaultValue,
     @Nullable final Predicate<Boolean> validator
   ) {
     super(nbtName, defaultValue, validator);
@@ -19,11 +19,12 @@ public final class RealmFormatPropertyBoolean extends RealmFormatProperty<Boolea
 
   public RealmFormatPropertyBoolean(
     @NotNull final String nbtName,
-    @NotNull final Boolean defaultValue
+    @Nullable final Boolean defaultValue
   ) {
     this(nbtName, defaultValue, null);
   }
 
+  @Nullable
   @Override
   protected Boolean readValue(@NotNull final Tag tag) {
     if (tag.isByte()) {

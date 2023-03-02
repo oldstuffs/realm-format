@@ -17,7 +17,7 @@ public final class FormattedMessage {
   @Setting(nodeFromParent = true)
   private Component component;
 
-  public FormattedMessage(final Component component) {
+  private FormattedMessage(final Component component) {
     this.component = component;
   }
 

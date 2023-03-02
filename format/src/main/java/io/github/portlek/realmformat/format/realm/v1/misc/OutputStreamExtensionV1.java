@@ -1,7 +1,6 @@
 package io.github.portlek.realmformat.format.realm.v1.misc;
 
 import io.github.portlek.realmformat.format.misc.OutputStreamExtension;
-import io.github.portlek.realmformat.format.property.RealmFormatPropertyMap;
 import io.github.portlek.realmformat.format.realm.RealmFormatChunk;
 import io.github.portlek.realmformat.format.realm.RealmFormatChunkSection;
 import io.github.shiruka.nbt.Tag;
@@ -19,18 +18,10 @@ import org.jetbrains.annotations.Nullable;
 
 public class OutputStreamExtensionV1 extends OutputStreamExtension {
 
-  @NotNull
-  private final RealmFormatPropertyMap properties;
-
   private final byte worldVersion;
 
-  public OutputStreamExtensionV1(
-    @NotNull final DataOutputStream output,
-    @NotNull final RealmFormatPropertyMap properties,
-    final byte worldVersion
-  ) {
+  public OutputStreamExtensionV1(@NotNull final DataOutputStream output, final byte worldVersion) {
     super(output);
-    this.properties = properties;
     this.worldVersion = worldVersion;
   }
 
@@ -72,11 +63,7 @@ public class OutputStreamExtensionV1 extends OutputStreamExtension {
 
   @ApiStatus.Internal
   protected OutputStreamExtensionV1 with(@NotNull final OutputStream stream) {
-    return new OutputStreamExtensionV1(
-      new DataOutputStream(stream),
-      this.properties,
-      this.worldVersion
-    );
+    return new OutputStreamExtensionV1(new DataOutputStream(stream), this.worldVersion);
   }
 
   @ApiStatus.Internal

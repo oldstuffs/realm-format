@@ -13,7 +13,7 @@ import org.jetbrains.annotations.Nullable;
 @ToString(onlyExplicitlyIncluded = true)
 public abstract class RealmFormatProperty<T> {
 
-  @NotNull
+  @Nullable
   @ToString.Include
   private final T defaultValue;
 
@@ -21,16 +21,17 @@ public abstract class RealmFormatProperty<T> {
   @ToString.Include
   private final String nbtName;
 
-  private final Predicate<T> validator;
+  @Nullable
+  private final Predicate<@NotNull T> validator;
 
   protected RealmFormatProperty(
     @NotNull final String nbtName,
-    @NotNull final T defaultValue,
+    @Nullable final T defaultValue,
     @Nullable final Predicate<T> validator
   ) {
     this.nbtName = nbtName;
     Preconditions.checkArgument(
-      validator == null || validator.test(defaultValue),
+      validator == null || defaultValue == null || validator.test(defaultValue),
       "Invalid default value for property %s! %s",
       nbtName,
       defaultValue

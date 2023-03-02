@@ -40,16 +40,14 @@ dependencies {
 
 tasks {
   processResources {
-    duplicatesStrategy = DuplicatesStrategy.INCLUDE
-    from(project.the<SourceSetContainer>()["main"].resources.srcDirs) {
+    filesMatching("plugin.yml") {
       expand("pluginVersion" to project.version)
-      include("plugin.yml")
     }
   }
 
   runServer {
     jvmArgs(
-      "-javaagent:" + project(":modifier:agent").tasks["jar"].outputs.files.first().path,
+      "-javaagent:" + project(":modifier:agent").tasks.jar.get().outputs.files.first().path,
     )
     minecraftVersion("1.19.3")
   }

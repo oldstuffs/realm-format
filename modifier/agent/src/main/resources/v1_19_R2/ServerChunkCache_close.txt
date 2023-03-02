@@ -1,0 +1,5 @@
+{
+    if (io.github.portlek.realmformat.modifier.Modifier.isCustomWorld($0.d)) {
+        return true;
+    }
+}
