@@ -1,7 +1,7 @@
 [libraries]
 paper = { module = "io.papermc.paper:paper-api", version = "1.19.3-R0.1-SNAPSHOT" }
 lombok = { module = "org.projectlombok:lombok", version = "1.18.26" }
-annotations = { module = "org.jetbrains:annotations", version = "24.0.0" }
+annotations = { module = "org.jetbrains:annotations", version = "24.0.1" }
 terminable = { module = "tr.com.infumia:terminable", version = "0.1.4-SNAPSHOT" }
 task-common = { module = "tr.com.infumia:TaskCommon", version = "0.1.4" }
 task-bukkit = { module = "tr.com.infumia:TaskBukkit", version = "0.1.4" }
