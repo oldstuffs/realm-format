@@ -16,7 +16,7 @@ event-paper = { module = "tr.com.infumia:EventPaper", version.ref = "event" }
 versionmatched = { module = "tr.com.infumia:versionmatched", version = "0.1.6-SNAPSHOT" }
 nbt = { module = "io.github.shiruka:nbt", version = "2.0.1-SNAPSHOT" }
 zstd = { module = "com.github.luben:zstd-jni", version = "1.5.4-2" }
-fastutil = { module = "it.unimi.dsi:fastutil", version = "8.5.11" }
+fastutil = { module = "it.unimi.dsi:fastutil", version = "8.5.12" }
 redis = { module = "io.lettuce:lettuce-core", version = "6.2.3.RELEASE" }
 hikari = { module = "com.zaxxer:HikariCP", version = "5.0.1" }
 mongodb = { module = "org.mongodb:mongodb-driver-sync", version = "4.9.0" }
