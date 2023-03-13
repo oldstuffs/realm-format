@@ -40,7 +40,7 @@ junit-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref 
 smol = { module = "io.github.portlek:smol", version = "0.2.2-SNAPSHOT" }
 
 [plugins]
-spotless = { id = "com.diffplug.spotless", version = "6.16.0" }
+spotless = { id = "com.diffplug.spotless", version = "6.17.0" }
 nexus = { id = "io.github.gradle-nexus.publish-plugin", version = "1.3.0" }
 shadow = { id = "com.github.johnrengelman.shadow", version = "8.1.0" }
 smol = { id = "io.github.portlek.smol-plugin-gradle", version = "0.2.2-SNAPSHOT" }
