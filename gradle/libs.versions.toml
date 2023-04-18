@@ -17,7 +17,7 @@ versionmatched = { module = "tr.com.infumia:versionmatched", version = "0.1.6-SN
 nbt = { module = "io.github.shiruka:nbt", version = "2.0.1-SNAPSHOT" }
 zstd = { module = "com.github.luben:zstd-jni", version = "1.5.5-1" }
 fastutil = { module = "it.unimi.dsi:fastutil", version = "8.5.12" }
-redis = { module = "io.lettuce:lettuce-core", version = "6.2.3.RELEASE" }
+redis = { module = "io.lettuce:lettuce-core", version = "6.2.4.RELEASE" }
 hikari = { module = "com.zaxxer:HikariCP", version = "5.0.1" }
 mongodb = { module = "org.mongodb:mongodb-driver-sync", version = "4.9.1" }
 commonsio = { module = "commons-io:commons-io", version = "2.11.0" }
