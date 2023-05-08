@@ -8,8 +8,8 @@ import io.github.portlek.realmformat.format.realm.upgrader.v1_16.RealmFormatWorl
 import io.github.portlek.realmformat.format.realm.upgrader.v1_17.RealmFormatWorldUpgradeV1_17;
 import io.github.portlek.realmformat.format.realm.upgrader.v1_18.RealmFormatWorldUpgradeV1_18;
 import io.github.portlek.realmformat.format.realm.upgrader.v1_9.RealmFormatWorldUpgradeV1_9;
-import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
-import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 import lombok.experimental.UtilityClass;
 import lombok.extern.java.Log;
@@ -28,17 +28,24 @@ public class RealmFormatWorldUpgrades {
   /**
    * The upgrade list.
    */
-  private final Byte2ObjectMap<RealmFormatWorldUpgrade> UPGRADES = new Byte2ObjectOpenHashMap<>();
-
-  static {
-    RealmFormatWorldUpgrades.register((byte) 0x02, new RealmFormatWorldUpgradeV1_9());
-    RealmFormatWorldUpgrades.register((byte) 0x03, new RealmFormatWorldUpgradeV1_11());
-    RealmFormatWorldUpgrades.register((byte) 0x04, new RealmFormatWorldUpgradeV1_13());
-    RealmFormatWorldUpgrades.register((byte) 0x05, new RealmFormatWorldUpgradeV1_14());
-    RealmFormatWorldUpgrades.register((byte) 0x06, new RealmFormatWorldUpgradeV1_16());
-    RealmFormatWorldUpgrades.register((byte) 0x07, new RealmFormatWorldUpgradeV1_17());
-    RealmFormatWorldUpgrades.register((byte) 0x08, new RealmFormatWorldUpgradeV1_18());
-  }
+  private final Map<Byte, RealmFormatWorldUpgrade> UPGRADES = new HashMap<>(
+    Map.of(
+      (byte) 0x02,
+      new RealmFormatWorldUpgradeV1_9(),
+      (byte) 0x03,
+      new RealmFormatWorldUpgradeV1_11(),
+      (byte) 0x04,
+      new RealmFormatWorldUpgradeV1_13(),
+      (byte) 0x05,
+      new RealmFormatWorldUpgradeV1_14(),
+      (byte) 0x06,
+      new RealmFormatWorldUpgradeV1_16(),
+      (byte) 0x07,
+      new RealmFormatWorldUpgradeV1_17(),
+      (byte) 0x08,
+      new RealmFormatWorldUpgradeV1_18()
+    )
+  );
 
   /**
    * Tries to upgrade the specified world to {@code to}.

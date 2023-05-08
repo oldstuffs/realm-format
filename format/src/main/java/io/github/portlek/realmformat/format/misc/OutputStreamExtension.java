@@ -10,7 +10,6 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import lombok.Cleanup;
 import lombok.experimental.Delegate;
-import org.apache.commons.lang3.function.FailableBiConsumer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
