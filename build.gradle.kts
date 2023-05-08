@@ -25,6 +25,8 @@ val relocations =
     .filter { it.isNotEmpty() }
     .filter { it.isNotBlank() }
 
+defaultTasks("build")
+
 repositories { mavenCentral() }
 
 spotless {
