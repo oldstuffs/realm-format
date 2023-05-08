@@ -14,6 +14,8 @@ dependencies {
 
   compileOnly(libs.paper)
 
+  compileOnly(libs.commonsio)
+
   implementation(libs.configurate.yaml)
   implementation(libs.adventure.configurate) { isTransitive = false }
   implementation(libs.terminable)
@@ -30,8 +32,6 @@ dependencies {
   implementation(libs.cloud.minecraft.extras) { isTransitive = false }
   implementation(libs.mariadb)
   implementation(libs.mongodb)
-  implementation(libs.commonsio)
-  implementation(libs.commonslang)
   implementation(libs.nbt)
   implementation(libs.zstd)
 }
