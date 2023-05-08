@@ -37,7 +37,7 @@ spotless {
     )
 
   format("encoding") {
-    target("modifier/agent/src/main/resources/**/*.*", "/.editorconfig")
+    target("*.*")
     targetExclude("modifier/agent/src/main/resources/realm-format-modifier-core.txt")
     encoding("UTF-8")
     endWithNewline()
