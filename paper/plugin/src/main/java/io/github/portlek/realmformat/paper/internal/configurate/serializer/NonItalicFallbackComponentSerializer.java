@@ -11,7 +11,8 @@ import org.jetbrains.annotations.NotNull;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class NonItalicFallbackComponentSerializer implements LegacyComponentSerializer {
 
-  public static final NonItalicFallbackComponentSerializer INSTANCE = new NonItalicFallbackComponentSerializer();
+  public static final NonItalicFallbackComponentSerializer INSTANCE =
+    new NonItalicFallbackComponentSerializer();
 
   private static final LegacyComponentSerializer DELEGATE = LegacyComponentSerializer
     .builder()

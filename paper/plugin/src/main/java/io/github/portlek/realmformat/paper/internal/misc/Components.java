@@ -13,7 +13,8 @@ import org.jetbrains.annotations.Nullable;
 @UtilityClass
 public class Components {
 
-  private final LegacyComponentSerializer LEGACY_SERIALIZER = LegacyComponentSerializer.legacyAmpersand();
+  private final LegacyComponentSerializer LEGACY_SERIALIZER =
+    LegacyComponentSerializer.legacyAmpersand();
 
   @Nullable
   @Contract("null -> null; !null -> !null")

@@ -1,8 +1,7 @@
 import com.diffplug.gradle.spotless.YamlExtension.JacksonYamlGradleConfig
 import com.diffplug.spotless.LineEnding
 import com.github.jengelman.gradle.plugins.shadow.ShadowPlugin
-import io.github.portlek.smol.SmolPlugin
-import io.github.portlek.smol.tasks.SmolJar
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
 plugins {
   java
@@ -10,13 +9,11 @@ plugins {
   signing
   alias(libs.plugins.spotless)
   alias(libs.plugins.nexus)
-  alias(libs.plugins.shadow)
-  alias(libs.plugins.smol) apply false
+  alias(libs.plugins.shadow) apply false
   alias(libs.plugins.paperweight) apply false
   alias(libs.plugins.run.paper) apply false
 }
 
-val spotlessApply = property("spotless.apply").toString().toBoolean()
 val shadePackage = property("shade.package")
 val signRequired = !property("dev").toString().toBoolean()
 val relocations =
@@ -30,76 +27,57 @@ val relocations =
 
 repositories { mavenCentral() }
 
-if (spotlessApply) {
-  spotless {
-    lineEndings = LineEnding.UNIX
-    isEnforceCheck = false
+spotless {
+  lineEndings = LineEnding.UNIX
 
-    val prettierConfig =
-      mapOf(
-        "prettier" to "latest",
-        "prettier-plugin-java" to "latest",
-        "@prettier/plugin-xml" to "latest",
+  val prettierConfig =
+    mapOf(
+      "prettier" to "latest",
+      "prettier-plugin-java" to "latest",
+    )
+
+  format("encoding") {
+    target("modifier/agent/src/main/resources/**/*.*", "/.editorconfig")
+    targetExclude("modifier/agent/src/main/resources/realm-format-modifier-core.txt")
+    encoding("UTF-8")
+    endWithNewline()
+    trimTrailingWhitespace()
+  }
+
+  yaml {
+    target(
+      "**/src/main/resources/*.yaml",
+      "**/src/main/resources/*.yml",
+      ".github/**/*.yml",
+      ".github/**/*.yaml",
+    )
+    endWithNewline()
+    trimTrailingWhitespace()
+    val jackson = jackson() as JacksonYamlGradleConfig
+    jackson.yamlFeature("LITERAL_BLOCK_STYLE", true)
+    jackson.yamlFeature("MINIMIZE_QUOTES", true)
+    jackson.yamlFeature("SPLIT_LINES", false)
+  }
+
+  kotlinGradle {
+    target("**/*.gradle.kts")
+    indentWithSpaces(2)
+    endWithNewline()
+    trimTrailingWhitespace()
+    ktlint()
+  }
+
+  java {
+    target("**/src/**/java/**/*.java")
+    importOrder()
+    removeUnusedImports()
+    indentWithSpaces(2)
+    endWithNewline()
+    trimTrailingWhitespace()
+    prettier(prettierConfig)
+      .config(
+        mapOf("parser" to "java", "tabWidth" to 2, "useTabs" to false, "printWidth" to 100),
       )
-
-    format("encoding") {
-      target("modifier/agent/src/main/resources/**/*.*", "/.editorconfig")
-      targetExclude("modifier/agent/src/main/resources/realm-format-modifier-core.txt")
-      encoding("UTF-8")
-      endWithNewline()
-      trimTrailingWhitespace()
-    }
-
-    format("xml") {
-      target(".run/*.xml")
-      encoding("UTF-8")
-      endWithNewline()
-      trimTrailingWhitespace()
-      prettier(prettierConfig)
-        .config(
-          mapOf(
-            "printWidth" to 100,
-            "xmlSelfClosingSpace" to false,
-            "xmlWhitespaceSensitivity" to "ignore",
-          ),
-        )
-    }
-
-    yaml {
-      target(
-        "**/src/main/resources/*.yaml",
-        "**/src/main/resources/*.yml",
-        ".github/**/*.yml",
-        ".github/**/*.yaml",
-      )
-      endWithNewline()
-      trimTrailingWhitespace()
-      val jackson = jackson() as JacksonYamlGradleConfig
-      jackson.yamlFeature("LITERAL_BLOCK_STYLE", true)
-      jackson.yamlFeature("MINIMIZE_QUOTES", true)
-      jackson.yamlFeature("SPLIT_LINES", false)
-    }
-
-    kotlinGradle {
-      target("**/*.gradle.kts")
-      indentWithSpaces(2)
-      endWithNewline()
-      trimTrailingWhitespace()
-      ktlint()
-    }
-
-    java {
-      target("**/src/**/java/**/*.java")
-      importOrder()
-      removeUnusedImports()
-      indentWithSpaces(2)
-      endWithNewline()
-      trimTrailingWhitespace()
-      prettier(prettierConfig)
-        .config(
-          mapOf("parser" to "java", "tabWidth" to 2, "useTabs" to false, "printWidth" to 100),
-        )
-    }
   }
 }
 
@@ -108,11 +86,8 @@ allprojects { group = "io.github.portlek" }
 subprojects {
   apply<JavaPlugin>()
 
-  val projectName = property("project.name").toString()
   val shadowEnabled = findProperty("shadow.enabled")?.toString().toBoolean()
   val shadowRelocation = findProperty("shadow.relocation")?.toString().toBoolean()
-  val smolEnabled = findProperty("smol.enabled")?.toString().toBoolean()
-  val smolRelocation = findProperty("smol.relocation")?.toString().toBoolean()
   val mavenPublish = findProperty("maven.publish")?.toString().toBoolean()
 
   java { toolchain { languageVersion.set(JavaLanguageVersion.of(17)) } }
@@ -125,8 +100,6 @@ subprojects {
 
     compileJava { options.encoding = Charsets.UTF_8.name() }
 
-    jar { archiveBaseName.set(projectName) }
-
     build { dependsOn(jar) }
   }
 
@@ -134,12 +107,11 @@ subprojects {
     apply<ShadowPlugin>()
 
     tasks {
-      shadowJar {
+      withType<ShadowJar> {
         dependsOn(jar)
 
         mergeServiceFiles()
 
-        archiveBaseName.set(projectName)
         archiveClassifier.set("")
 
         if (shadowRelocation) {
@@ -147,25 +119,7 @@ subprojects {
         }
       }
 
-      build { dependsOn(shadowJar) }
-    }
-  }
-
-  if (smolEnabled) {
-    apply<SmolPlugin>()
-
-    tasks {
-      val smolJar = withType<SmolJar> {
-        if (smolRelocation) {
-          relocations.forEach {
-            relocate(it, "$shadePackage.$it")
-          }
-        }
-      }
-
-      build {
-        dependsOn(smolJar)
-      }
+      build { dependsOn("shadowJar") }
     }
   }
 
@@ -183,8 +137,6 @@ subprojects {
         creating(Jar::class) {
           dependsOn("javadoc")
           archiveClassifier.set("javadoc")
-          archiveBaseName.set(projectName)
-          archiveVersion.set(project.version.toString())
           from(javadoc)
         }
 
@@ -192,8 +144,6 @@ subprojects {
         creating(Jar::class) {
           dependsOn("classes")
           archiveClassifier.set("sources")
-          archiveBaseName.set(projectName)
-          archiveVersion.set(project.version.toString())
           from(sourceSets["main"].allSource)
         }
 
@@ -207,10 +157,6 @@ subprojects {
       publications {
         val publication =
           create<MavenPublication>("mavenJava") {
-            groupId = project.group.toString()
-            artifactId = projectName
-            version = project.version.toString()
-
             from(components["java"])
             artifact(tasks["sourcesJar"])
             artifact(tasks["javadocJar"])

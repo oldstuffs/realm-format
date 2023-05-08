@@ -10,16 +10,28 @@ pluginManagement {
 
 rootProject.name = "realm-format"
 
-include(
-  "format",
-  "modifier",
-  "modifier:core",
-  "modifier:agent",
-  "paper:api",
-  "paper:nms",
-  "paper:nms:common",
-  "paper:nms:v1_19_R2",
-  "paper:nms:v1_18_R2",
-  "paper:nms:v1_8_R3",
-  "paper:plugin",
+include0(
+  mapOf(
+    ":format" to "realm-format-format",
+    ":modifier" to null,
+    ":modifier:core" to "realm-format-modifier-core",
+    ":modifier:agent" to "realm-format-modifier-agent",
+    ":paper" to null,
+    ":paper:api" to "realm-format-paper-api",
+    ":paper:nms" to null,
+    ":paper:nms:common" to "realm-format-paper-nms-common",
+    ":paper:nms:v1_19_R3" to "realm-format-paper-nms-v1_19_R3",
+    ":paper:nms:v1_18_R2" to "realm-format-paper-nms-v1_18_R2",
+    ":paper:nms:v1_8_R3" to "realm-format-paper-nms-v1_8_R3",
+    ":paper:plugin" to "realm-format-paper-plugin",
+  ),
 )
+
+fun include0(modules: Map<String, String?>) {
+  modules.forEach { (module, projectName) ->
+    include(module)
+    if (projectName != null) {
+      project(module).name = projectName
+    }
+  }
+}

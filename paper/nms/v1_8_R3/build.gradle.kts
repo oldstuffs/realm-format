@@ -1,1 +1,1 @@
-dependencies { implementation(project(":paper:nms:common")) }
+dependencies { implementation(project(":paper:nms:realm-format-paper-nms-common")) }
