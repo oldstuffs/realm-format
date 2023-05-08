@@ -1,17 +1,9 @@
 package io.github.portlek.realmformat.format.anvil;
 
-import com.google.common.base.Preconditions;
 import io.github.portlek.realmformat.format.misc.NibbleArray;
 import io.github.portlek.realmformat.format.property.RealmFormatProperties;
 import io.github.portlek.realmformat.format.property.RealmFormatPropertyMap;
-import io.github.portlek.realmformat.format.realm.BlockDataV1_14;
-import io.github.portlek.realmformat.format.realm.BlockDataV1_18;
-import io.github.portlek.realmformat.format.realm.BlockDataV1_8;
-import io.github.portlek.realmformat.format.realm.RealmFormat;
-import io.github.portlek.realmformat.format.realm.RealmFormatChunk;
-import io.github.portlek.realmformat.format.realm.RealmFormatChunkPosition;
-import io.github.portlek.realmformat.format.realm.RealmFormatChunkSection;
-import io.github.portlek.realmformat.format.realm.RealmFormatWorld;
+import io.github.portlek.realmformat.format.realm.*;
 import io.github.portlek.realmformat.format.realm.v1.RealmFormatChunkSectionV1;
 import io.github.portlek.realmformat.format.realm.v1.RealmFormatChunkV1;
 import io.github.portlek.realmformat.format.realm.v1.RealmFormatWorldV1;
@@ -49,10 +41,9 @@ public class AnvilFormatSerializer {
     final var entitiesPath = worldDirectory.resolve("entities");
     final var levelData = AnvilFormatSerializer.readLevelData(levelPath);
     final var worldVersion = levelData.version();
-    Preconditions.checkArgument(
-      Files.exists(regionPath) && Files.isDirectory(regionPath),
-      "'region' directory not found or it's not a directory!"
-    );
+    if (!Files.exists(regionPath) || !Files.isDirectory(regionPath)) {
+      throw new IllegalArgumentException("'region' directory not found or it's not a directory!");
+    }
     final var chunks = new HashMap<RealmFormatChunkPosition, RealmFormatChunk>();
     try (final var regionPathsStream = Files.list(regionPath)) {
       final var regionPaths = regionPathsStream
@@ -62,7 +53,9 @@ public class AnvilFormatSerializer {
         chunks.putAll(AnvilFormatSerializer.loadChunks(path, worldVersion));
       }
     }
-    Preconditions.checkArgument(!chunks.isEmpty(), "Chunks not found!");
+    if (chunks.isEmpty()) {
+      throw new IllegalArgumentException("Chunks not found!");
+    }
     if (Files.exists(entitiesPath)) {
       try (final var entityPathsStream = Files.list(entitiesPath)) {
         final var entityPaths = entityPathsStream
