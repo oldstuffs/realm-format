@@ -1,6 +1,5 @@
 package io.github.portlek.realmformat.format.property;
 
-import com.google.common.base.Preconditions;
 import io.github.shiruka.nbt.CompoundTag;
 import io.github.shiruka.nbt.Tag;
 import java.util.function.Predicate;
@@ -30,12 +29,11 @@ public abstract class RealmFormatProperty<T> {
     @Nullable final Predicate<T> validator
   ) {
     this.nbtName = nbtName;
-    Preconditions.checkArgument(
-      validator == null || defaultValue == null || validator.test(defaultValue),
-      "Invalid default value for property %s! %s",
-      nbtName,
-      defaultValue
-    );
+    if (validator != null && defaultValue != null && !validator.test(defaultValue)) {
+      throw new IllegalArgumentException(
+        "Invalid default value for property %s! %s".formatted(nbtName, defaultValue)
+      );
+    }
     this.defaultValue = defaultValue;
     this.validator = validator;
   }

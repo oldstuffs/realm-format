@@ -1,47 +1,45 @@
 plugins { alias(libs.plugins.run.paper) }
 
 dependencies {
-  implementation(project(":format"))
-  implementation(project(":modifier:core"))
-  implementation(project(":paper:api"))
-  implementation(project(":paper:nms:common"))
+  implementation(project(":realm-format-format"))
+  implementation(project(":modifier:realm-format-modifier-core"))
+  implementation(project(":paper:realm-format-paper-api"))
+  implementation(project(":paper:nms:realm-format-paper-nms-common"))
 
-  compileOnly(project(":paper:nms:v1_18_R2"))
-  compileOnly(project(":paper:nms:v1_19_R2"))
-  implementation(project(":paper:nms:v1_8_R3"))
-  implementation(project(":paper:nms:v1_18_R2", "reobf"))
-  implementation(project(":paper:nms:v1_19_R2", "reobf"))
-
-  implementation(libs.smol)
+  compileOnly(project(":paper:nms:realm-format-paper-nms-v1_18_R2"))
+  compileOnly(project(":paper:nms:realm-format-paper-nms-v1_19_R3"))
+  implementation(project(":paper:nms:realm-format-paper-nms-v1_8_R3"))
+  implementation(project(":paper:nms:realm-format-paper-nms-v1_18_R2", "reobf"))
+  implementation(project(":paper:nms:realm-format-paper-nms-v1_19_R3", "reobf"))
 
   compileOnly(libs.paper)
 
-  smol(libs.configurate.yaml)
-  smol(libs.adventure.configurate) { isTransitive = false }
-  smol(libs.terminable)
-  smol(libs.task.common)
-  smol(libs.task.bukkit)
-  smol(libs.event.common)
-  smol(libs.event.paper)
-  smol(libs.versionmatched)
-  smol(libs.cloud.core)
-  smol(libs.cloud.annotations)
-  smol(libs.cloud.paper)
-  smol(libs.cloud.brigadier)
-  smol(libs.cloud.tasks)
-  smol(libs.cloud.minecraft.extras) { isTransitive = false }
-  smol(libs.mariadb)
-  smol(libs.mongodb)
-  smol(libs.commonsio)
-  smol(libs.commonslang)
-  smol(libs.nbt)
-  smol(libs.zstd)
+  compileOnly(libs.commonsio)
+
+  implementation(libs.configurate.yaml)
+  implementation(libs.adventure.configurate) { isTransitive = false }
+  implementation(libs.terminable)
+  implementation(libs.task.common)
+  implementation(libs.task.bukkit)
+  implementation(libs.event.common)
+  implementation(libs.event.paper)
+  implementation(libs.versionmatched)
+  implementation(libs.cloud.core)
+  implementation(libs.cloud.annotations)
+  implementation(libs.cloud.paper)
+  implementation(libs.cloud.brigadier)
+  implementation(libs.cloud.tasks)
+  implementation(libs.cloud.minecraft.extras) { isTransitive = false }
+  implementation(libs.mariadb)
+  implementation(libs.mongodb)
+  implementation(libs.nbt)
+  implementation(libs.zstd)
 }
 
 tasks {
   processResources {
     filesMatching("plugin.yml") {
-      expand("pluginVersion" to project.version)
+      expand(project.properties)
     }
   }
 

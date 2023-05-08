@@ -5,26 +5,23 @@ event = "0.1.3"
 junit = "5.9.3"
 
 [libraries]
-paper = { module = "io.papermc.paper:paper-api", version = "1.19.3-R0.1-SNAPSHOT" }
+paper = { module = "io.papermc.paper:paper-api", version = "1.19.4-R0.1-SNAPSHOT" }
 lombok = { module = "org.projectlombok:lombok", version = "1.18.26" }
 annotations = { module = "org.jetbrains:annotations", version = "24.0.1" }
-terminable = { module = "tr.com.infumia:terminable", version = "0.1.4-SNAPSHOT" }
-task-common = { module = "tr.com.infumia:TaskCommon", version.ref = "task" }
-task-bukkit = { module = "tr.com.infumia:TaskBukkit", version.ref = "task" }
-event-common = { module = "tr.com.infumia:EventCommon", version.ref = "event" }
-event-paper = { module = "tr.com.infumia:EventPaper", version.ref = "event" }
-versionmatched = { module = "tr.com.infumia:versionmatched", version = "0.1.6-SNAPSHOT" }
 nbt = { module = "io.github.shiruka:nbt", version = "2.0.1-SNAPSHOT" }
 zstd = { module = "com.github.luben:zstd-jni", version = "1.5.5-2" }
-fastutil = { module = "it.unimi.dsi:fastutil", version = "8.5.12" }
 redis = { module = "io.lettuce:lettuce-core", version = "6.2.4.RELEASE" }
 hikari = { module = "com.zaxxer:HikariCP", version = "5.0.1" }
 mongodb = { module = "org.mongodb:mongodb-driver-sync", version = "4.9.1" }
 commonsio = { module = "commons-io:commons-io", version = "2.11.0" }
-commonslang = { module = "org.apache.commons:commons-lang3", version = "3.12.0" }
-guava = { module = "com.google.guava:guava", version = "31.1-jre" }
 gson = { module = "com.google.code.gson:gson", version = "2.10.1" }
 mariadb = { module = "org.mariadb.jdbc:mariadb-java-client", version = "3.1.4" }
+javassist = { module = "org.javassist:javassist", version = "3.29.2-GA" }
+snakeyaml = { module = "org.yaml:snakeyaml", version = "2.0" }
+junit-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit" }
+junit-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit" }
+
+# Unnecessary dependencies, refactor the project to remove all of those.
 adventure-configurate = { module = "net.kyori:adventure-serializer-configurate4", version = "4.13.1" }
 configurate-yaml = { module = "org.spongepowered:configurate-yaml", version = "4.2.0-SNAPSHOT" }
 cloud-core = { module = "cloud.commandframework:cloud-core", version.ref = "cloud" }
@@ -33,16 +30,16 @@ cloud-paper = { module = "cloud.commandframework:cloud-paper", version.ref = "cl
 cloud-brigadier = { module = "cloud.commandframework:cloud-brigadier", version.ref = "cloud" }
 cloud-tasks = { module = "cloud.commandframework:cloud-tasks", version.ref = "cloud" }
 cloud-minecraft-extras = { module = "cloud.commandframework:cloud-minecraft-extras", version.ref = "cloud" }
-javassist = { module = "org.javassist:javassist", version = "3.29.2-GA" }
-snakeyaml = { module = "org.yaml:snakeyaml", version = "2.0" }
-junit-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit" }
-junit-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit" }
-smol = { module = "io.github.portlek:smol", version = "0.2.2-SNAPSHOT" }
+terminable = { module = "tr.com.infumia:terminable", version = "0.1.4-SNAPSHOT" }
+task-common = { module = "tr.com.infumia:TaskCommon", version.ref = "task" }
+task-bukkit = { module = "tr.com.infumia:TaskBukkit", version.ref = "task" }
+event-common = { module = "tr.com.infumia:EventCommon", version.ref = "event" }
+event-paper = { module = "tr.com.infumia:EventPaper", version.ref = "event" }
+versionmatched = { module = "tr.com.infumia:versionmatched", version = "0.1.6-SNAPSHOT" }
 
 [plugins]
 spotless = { id = "com.diffplug.spotless", version = "6.18.0" }
 nexus = { id = "io.github.gradle-nexus.publish-plugin", version = "1.3.0" }
 shadow = { id = "com.github.johnrengelman.shadow", version = "8.1.1" }
-smol = { id = "io.github.portlek.smol-plugin-gradle", version = "0.2.2-SNAPSHOT" }
 paperweight = { id = "io.papermc.paperweight.userdev", version = "1.5.5" }
 run-paper = { id = "xyz.jpenilla.run-paper", version = "2.1.0" }

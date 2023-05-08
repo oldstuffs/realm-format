@@ -1,6 +1,5 @@
 package io.github.portlek.realmformat.format.property;
 
-import com.google.common.base.Preconditions;
 import io.github.shiruka.nbt.CompoundTag;
 import io.github.shiruka.nbt.Tag;
 import lombok.EqualsAndHashCode;
@@ -41,11 +40,9 @@ public final class RealmFormatPropertyMap {
   }
 
   public <T> void setValue(@NotNull final RealmFormatProperty<T> property, @NotNull final T value) {
-    Preconditions.checkArgument(
-      property.validator() == null || property.validator().test(value),
-      "'%s' is not a valid property value.",
-      value
-    );
+    if (property.validator() != null && !property.validator().test(value)) {
+      throw new IllegalArgumentException("'%s' is not a valid property value.".formatted(value));
+    }
     property.writeValue(this.tag, value);
   }
 }

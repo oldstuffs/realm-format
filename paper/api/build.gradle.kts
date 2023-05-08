@@ -1,6 +1,6 @@
 dependencies {
-  compileOnly(project(":modifier:core"))
-  compileOnly(project(":format"))
+  compileOnly(project(":modifier:realm-format-modifier-core"))
+  compileOnly(project(":realm-format-format"))
 
   compileOnly(libs.paper)
   compileOnly(libs.terminable)

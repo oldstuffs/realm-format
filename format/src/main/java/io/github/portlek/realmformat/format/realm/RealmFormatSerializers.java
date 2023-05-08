@@ -1,15 +1,14 @@
 package io.github.portlek.realmformat.format.realm;
 
-import com.google.common.base.Preconditions;
 import io.github.portlek.realmformat.format.property.RealmFormatPropertyMap;
 import io.github.portlek.realmformat.format.realm.v1.RealmFormatSerializerV1;
-import it.unimi.dsi.fastutil.bytes.Byte2ObjectMap;
-import it.unimi.dsi.fastutil.bytes.Byte2ObjectOpenHashMap;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.util.Arrays;
+import java.util.Map;
+import java.util.Objects;
 import lombok.Cleanup;
 import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
@@ -26,11 +25,10 @@ public class RealmFormatSerializers {
   /**
    * Realm format version -> serializer.
    */
-  private final Byte2ObjectMap<RealmFormatSerializer> SERIALIZERS = new Byte2ObjectOpenHashMap<>();
-
-  static {
-    RealmFormatSerializers.SERIALIZERS.put((byte) 1, RealmFormatSerializerV1.INSTANCE);
-  }
+  private final Map<Byte, RealmFormatSerializer> SERIALIZERS = Map.of(
+    (byte) 1,
+    RealmFormatSerializerV1.INSTANCE
+  );
 
   /**
    * Deserializes the given bytes into {@link RealmFormatWorld}.
@@ -50,15 +48,15 @@ public class RealmFormatSerializers {
     final var input = new DataInputStream(new ByteArrayInputStream(serialized));
     final var header = new byte[RealmFormat.HEADER.length];
     input.read(header);
-    Preconditions.checkArgument(
-      Arrays.equals(header, RealmFormat.HEADER),
-      "Serialized data does NOT starts with the realm format's header!"
-    );
+    if (!Arrays.equals(header, RealmFormat.HEADER)) {
+      throw new IllegalArgumentException(
+        "Serialized data does NOT starts with the realm format's header!"
+      );
+    }
     final var version = input.readByte();
-    final var serializer = Preconditions.checkNotNull(
+    final var serializer = Objects.requireNonNull(
       RealmFormatSerializers.SERIALIZERS.get(version),
-      "This version '%s' is NOT supported!",
-      version
+      "This version '%s' is NOT supported!".formatted(version)
     );
     return serializer.deserialize(input, properties);
   }
@@ -82,10 +80,9 @@ public class RealmFormatSerializers {
     final var stream = new ByteArrayOutputStream();
     @Cleanup
     final var output = new DataOutputStream(stream);
-    final var serializer = Preconditions.checkNotNull(
+    final var serializer = Objects.requireNonNull(
       RealmFormatSerializers.SERIALIZERS.get(world.version()),
-      "This version '%s' is NOT supported!",
-      world.version()
+      "This version '%s' is NOT supported!".formatted(world.version())
     );
     output.write(RealmFormat.HEADER);
     output.writeByte(RealmFormat.VERSION);
