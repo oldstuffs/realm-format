@@ -22,7 +22,7 @@ junit-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "jun
 junit-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit" }
 
 # Unnecessary dependencies, refactor the project to remove all of those.
-adventure-configurate = { module = "net.kyori:adventure-serializer-configurate4", version = "4.13.1" }
+adventure-configurate = { module = "net.kyori:adventure-serializer-configurate4", version = "4.14.0" }
 configurate-yaml = { module = "org.spongepowered:configurate-yaml", version = "4.2.0-SNAPSHOT" }
 cloud-core = { module = "cloud.commandframework:cloud-core", version.ref = "cloud" }
 cloud-annotations = { module = "cloud.commandframework:cloud-annotations", version.ref = "cloud" }
