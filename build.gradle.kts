@@ -1,4 +1,3 @@
-import com.diffplug.gradle.spotless.YamlExtension.JacksonYamlGradleConfig
 import com.diffplug.spotless.LineEnding
 import com.github.jengelman.gradle.plugins.shadow.ShadowPlugin
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
@@ -28,60 +27,6 @@ val relocations =
 defaultTasks("build")
 
 repositories { mavenCentral() }
-
-spotless {
-  lineEndings = LineEnding.UNIX
-
-  val prettierConfig =
-    mapOf(
-      "prettier" to "latest",
-      "prettier-plugin-java" to "latest",
-    )
-
-  format("encoding") {
-    target("*.*")
-    targetExclude("modifier/agent/src/main/resources/realm-format-modifier-core.txt")
-    encoding("UTF-8")
-    endWithNewline()
-    trimTrailingWhitespace()
-  }
-
-  yaml {
-    target(
-      "**/src/main/resources/*.yaml",
-      "**/src/main/resources/*.yml",
-      ".github/**/*.yml",
-      ".github/**/*.yaml",
-    )
-    endWithNewline()
-    trimTrailingWhitespace()
-    val jackson = jackson() as JacksonYamlGradleConfig
-    jackson.yamlFeature("LITERAL_BLOCK_STYLE", true)
-    jackson.yamlFeature("MINIMIZE_QUOTES", true)
-    jackson.yamlFeature("SPLIT_LINES", false)
-  }
-
-  kotlinGradle {
-    target("**/*.gradle.kts")
-    indentWithSpaces(2)
-    endWithNewline()
-    trimTrailingWhitespace()
-    ktlint()
-  }
-
-  java {
-    target("**/src/**/java/**/*.java")
-    importOrder()
-    removeUnusedImports()
-    indentWithSpaces(2)
-    endWithNewline()
-    trimTrailingWhitespace()
-    prettier(prettierConfig)
-      .config(
-        mapOf("parser" to "java", "tabWidth" to 2, "useTabs" to false, "printWidth" to 100),
-      )
-  }
-}
 
 allprojects { group = "io.github.portlek" }
 
@@ -222,3 +167,57 @@ subprojects {
 }
 
 nexusPublishing { repositories { sonatype() } }
+
+spotless {
+  lineEndings = LineEnding.UNIX
+
+  val prettierConfig =
+    mapOf(
+      "prettier" to "2.8.8",
+      "prettier-plugin-java" to "2.2.0",
+    )
+
+  format("encoding") {
+    target("*.*")
+    targetExclude("modifier/agent/src/main/resources/realm-format-modifier-core.txt")
+    encoding("UTF-8")
+    endWithNewline()
+    trimTrailingWhitespace()
+  }
+
+  yaml {
+    target(
+      "**/src/main/resources/*.yaml",
+      "**/src/main/resources/*.yml",
+      ".github/**/*.yml",
+      ".github/**/*.yaml",
+    )
+    endWithNewline()
+    trimTrailingWhitespace()
+    val jackson = jackson()
+    jackson.yamlFeature("LITERAL_BLOCK_STYLE", true)
+    jackson.yamlFeature("MINIMIZE_QUOTES", true)
+    jackson.yamlFeature("SPLIT_LINES", false)
+  }
+
+  kotlinGradle {
+    target("**/*.gradle.kts")
+    indentWithSpaces(2)
+    endWithNewline()
+    trimTrailingWhitespace()
+    ktlint()
+  }
+
+  java {
+    target("**/src/**/java/**/*.java")
+    importOrder()
+    removeUnusedImports()
+    indentWithSpaces(2)
+    endWithNewline()
+    trimTrailingWhitespace()
+    prettier(prettierConfig)
+      .config(
+        mapOf("parser" to "java", "tabWidth" to 2, "useTabs" to false, "printWidth" to 100),
+      )
+  }
+}
