@@ -41,7 +41,7 @@ public class InputStreamExtensionV1 extends InputStreamExtension {
       .stream(chunkInput.readChunks())
       .collect(
         Collectors.toMap(
-          chunk -> new RealmFormatChunkPosition(chunk.x(), chunk.z()),
+          chunk -> RealmFormatChunkPosition.builder().x(chunk.x()).z(chunk.z()).build(),
           Function.identity()
         )
       );
@@ -60,7 +60,7 @@ public class InputStreamExtensionV1 extends InputStreamExtension {
         .orElse(Tag.createList());
       final var x = Maths.floor(pos.getDouble(0).orElse(0.0d)) >> 4;
       final var z = Maths.floor(pos.getDouble(2).orElse(0.0d)) >> 4;
-      final var chunk = chunks.get(new RealmFormatChunkPosition(x, z));
+      final var chunk = chunks.get(RealmFormatChunkPosition.builder().x(x).z(z).build());
       if (chunk != null) {
         chunk.entities().add(entity);
       }
@@ -76,7 +76,7 @@ public class InputStreamExtensionV1 extends InputStreamExtension {
       final var tileEntityCompound = tileEntity.asCompound();
       final var x = tileEntityCompound.getInteger("x").orElse(0) >> 4;
       final var z = tileEntityCompound.getInteger("z").orElse(0) >> 4;
-      final var chunk = chunks.get(new RealmFormatChunkPosition(x, z));
+      final var chunk = chunks.get(RealmFormatChunkPosition.builder().x(x).z(z).build());
       if (chunk != null) {
         chunk.tileEntities().add(tileEntity);
       }
@@ -108,7 +108,7 @@ public class InputStreamExtensionV1 extends InputStreamExtension {
       builder.blockLight(blockLight).skyLight(skyLight);
       if (this.worldVersion < 4) {
         final var data = this.readNibbleArray();
-        builder.blockDataV1_8(new BlockDataV1_8(data));
+        builder.blockDataV1_8(BlockDataV1_8.builder().data(data).build());
       } else if (this.worldVersion < 8) {
         final var palette = this.readListTag();
         final var blockStates = this.readLongArray();
@@ -116,7 +116,9 @@ public class InputStreamExtensionV1 extends InputStreamExtension {
       } else {
         final var blockStates = this.readCompoundTag();
         final var biomes = this.readCompoundTag();
-        builder.blockDataV1_18(new BlockDataV1_18(biomes, blockStates));
+        builder.blockDataV1_18(
+          BlockDataV1_18.builder().biomes(biomes).blockStates(blockStates).build()
+        );
       }
       chunkSectionArray[y] = builder.build();
     }
