@@ -37,7 +37,10 @@ subprojects {
   val shadowRelocation = findProperty("shadow.relocation")?.toString().toBoolean()
   val mavenPublish = findProperty("maven.publish")?.toString().toBoolean()
 
-  java { toolchain { languageVersion.set(JavaLanguageVersion.of(17)) } }
+  java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+  }
 
   tasks {
     test {
