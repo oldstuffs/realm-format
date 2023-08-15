@@ -84,7 +84,7 @@ public abstract class RealmFormatWorldNmsBase implements RealmFormatWorldNms {
   @Override
   public final RealmFormatChunk chunkAt(final int x, final int z) {
     synchronized (this.chunkAccessLock) {
-      return this.chunks.get(new RealmFormatChunkPosition(x, z));
+      return this.chunks.get(RealmFormatChunkPosition.builder().x(x).z(z).build());
     }
   }
 
