@@ -4,6 +4,7 @@ import com.github.luben.zstd.Zstd;
 import io.github.shiruka.nbt.CompoundTag;
 import io.github.shiruka.nbt.ListTag;
 import io.github.shiruka.nbt.Tag;
+import io.github.shiruka.nbt.stream.NBTInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.Closeable;
 import java.io.DataInputStream;
@@ -33,7 +34,7 @@ public abstract class InputStreamExtension implements Closeable {
       return Tag.createCompound();
     }
     @Cleanup
-    final var reader = Tag.createReader(new ByteArrayInputStream(bytes));
+    final NBTInputStream reader = Tag.createReader(new ByteArrayInputStream(bytes));
     return reader.readCompoundTag();
   }
 
@@ -43,7 +44,7 @@ public abstract class InputStreamExtension implements Closeable {
       return Tag.createList();
     }
     @Cleanup
-    final var reader = Tag.createReader(new ByteArrayInputStream(bytes));
+    final NBTInputStream reader = Tag.createReader(new ByteArrayInputStream(bytes));
     return reader.readListTag();
   }
 
@@ -51,9 +52,9 @@ public abstract class InputStreamExtension implements Closeable {
     @NotNull final IntFunction<T[]> arrayCreator,
     @NotNull final FailableSupplier<T, IOException> reader
   ) throws IOException {
-    final var arrayLength = this.readInt();
-    final var arrays = arrayCreator.apply(arrayLength);
-    for (var index = 0; index < arrayLength; index++) {
+    final int arrayLength = this.readInt();
+    final T[] arrays = arrayCreator.apply(arrayLength);
+    for (int index = 0; index < arrayLength; index++) {
       arrays[index] = reader.get();
     }
     return arrays;
@@ -61,16 +62,16 @@ public abstract class InputStreamExtension implements Closeable {
 
   @NotNull
   public final CompoundTag readCompoundTag() throws IOException {
-    final var bytes = new byte[this.readInt()];
+    final byte[] bytes = new byte[this.readInt()];
     this.read(bytes);
     return InputStreamExtension.deserializeCompoundTag(bytes);
   }
 
   public final byte@NotNull[] readCompressed() throws IOException {
-    final var compressedLength = this.readInt();
-    final var resultLength = this.readInt();
-    final var compressed = new byte[compressedLength];
-    final var result = new byte[resultLength];
+    final int compressedLength = this.readInt();
+    final int resultLength = this.readInt();
+    final byte[] compressed = new byte[compressedLength];
+    final byte[] result = new byte[resultLength];
     this.read(compressed);
     Zstd.decompress(result, compressed);
     return result;
@@ -82,9 +83,9 @@ public abstract class InputStreamExtension implements Closeable {
   }
 
   public final int@NotNull[] readIntArray() throws IOException {
-    final var arrayLength = this.readInt();
-    final var ints = new int[arrayLength];
-    for (var index = 0; index < arrayLength; index++) {
+    final int arrayLength = this.readInt();
+    final int[] ints = new int[arrayLength];
+    for (int index = 0; index < arrayLength; index++) {
       ints[index] = this.readInt();
     }
     return ints;
@@ -92,15 +93,15 @@ public abstract class InputStreamExtension implements Closeable {
 
   @NotNull
   public final ListTag readListTag() throws IOException {
-    final var bytes = new byte[this.readInt()];
+    final byte[] bytes = new byte[this.readInt()];
     this.read(bytes);
     return InputStreamExtension.deserializeListTag(bytes);
   }
 
   public final long@NotNull[] readLongArray() throws IOException {
-    final var arrayLength = this.readInt();
-    final var longs = new long[arrayLength];
-    for (var index = 0; index < arrayLength; index++) {
+    final int arrayLength = this.readInt();
+    final long[] longs = new long[arrayLength];
+    for (int index = 0; index < arrayLength; index++) {
       longs[index] = this.readLong();
     }
     return longs;
@@ -108,7 +109,7 @@ public abstract class InputStreamExtension implements Closeable {
 
   @NotNull
   public final NibbleArray readNibbleArray() throws IOException {
-    final var bytes = new byte[InputStreamExtension.ARRAY_SIZE];
+    final byte[] bytes = new byte[InputStreamExtension.ARRAY_SIZE];
     this.read(bytes);
     return new NibbleArray(bytes);
   }

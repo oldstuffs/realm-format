@@ -1,9 +1,20 @@
 package io.github.portlek.realmformat.format.realm;
 
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.ToString;
+
 /**
  * A simple record class that represents {@link RealmFormatChunk}'s position.
- *
- * @param x The x coordinate of the chunk.
- * @param z The z coordinate of the chunk.
  */
-public record RealmFormatChunkPosition(int x, int z) {}
+@Getter
+@Builder
+@ToString
+@EqualsAndHashCode
+public final class RealmFormatChunkPosition {
+
+  private final int x;
+
+  private final int z;
+}
