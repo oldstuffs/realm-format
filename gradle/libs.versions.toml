@@ -30,7 +30,7 @@ cloud-paper = { module = "cloud.commandframework:cloud-paper", version.ref = "cl
 cloud-brigadier = { module = "cloud.commandframework:cloud-brigadier", version.ref = "cloud" }
 cloud-tasks = { module = "cloud.commandframework:cloud-tasks", version.ref = "cloud" }
 cloud-minecraft-extras = { module = "cloud.commandframework:cloud-minecraft-extras", version.ref = "cloud" }
-terminable = { module = "tr.com.infumia:terminable", version = "0.1.4-SNAPSHOT" }
+terminable = { module = "tr.com.infumia:terminable", version = "0.1.4" }
 task-common = { module = "tr.com.infumia:TaskCommon", version.ref = "task" }
 task-bukkit = { module = "tr.com.infumia:TaskBukkit", version.ref = "task" }
 event-common = { module = "tr.com.infumia:EventCommon", version.ref = "event" }
