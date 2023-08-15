@@ -8,7 +8,7 @@ junit = "5.10.0"
 paper = { module = "io.papermc.paper:paper-api", version = "1.19.4-R0.1-SNAPSHOT" }
 lombok = { module = "org.projectlombok:lombok", version = "1.18.28" }
 annotations = { module = "org.jetbrains:annotations", version = "24.0.1" }
-nbt = { module = "io.github.shiruka:nbt", version = "2.0.1" }
+nbt = { module = "io.github.shiruka:nbt", version = "2.0.2" }
 zstd = { module = "com.github.luben:zstd-jni", version = "1.5.5-5" }
 redis = { module = "io.lettuce:lettuce-core", version = "6.2.5.RELEASE" }
 hikari = { module = "com.zaxxer:HikariCP", version = "5.0.1" }
