@@ -159,13 +159,11 @@ subprojects {
     compileOnly(rootProject.libs.annotations)
 
     annotationProcessor(rootProject.libs.lombok)
-    annotationProcessor(rootProject.libs.annotations)
 
     testImplementation(rootProject.libs.junit.api)
     testRuntimeOnly(rootProject.libs.junit.engine)
 
     testAnnotationProcessor(rootProject.libs.lombok)
-    testAnnotationProcessor(rootProject.libs.annotations)
   }
 }
 
