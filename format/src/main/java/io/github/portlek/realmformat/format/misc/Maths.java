@@ -10,7 +10,7 @@ public class Maths {
   }
 
   public int floor(final double number) {
-    final var floor = (int) number;
+    final int floor = (int) number;
     return floor == number ? floor : floor - (int) (Double.doubleToRawLongBits(number) >>> 63);
   }
 }

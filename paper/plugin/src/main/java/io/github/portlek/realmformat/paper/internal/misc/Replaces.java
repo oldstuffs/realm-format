@@ -121,8 +121,8 @@ public class Replaces {
       matchAndReplaces.length % 2 == 0,
       "'matchAndReplaces' must be even!"
     );
-    final var map = new HashMap<>();
-    for (var index = 0; index < matchAndReplaces.length; index += 2) {
+    final HashMap<Object, Object> map = new HashMap<>();
+    for (int index = 0; index < matchAndReplaces.length; index += 2) {
       map.put(matchAndReplaces[index], matchAndReplaces[index + 1]);
     }
     map.put(match1, replace1);
@@ -136,9 +136,9 @@ public class Replaces {
     @NotNull final Map<?, ?> replaces,
     final int flags
   ) {
-    final var compiled = new HashMap<PatternKeyed, Object>();
+    final HashMap<PatternKeyed, Object> compiled = new HashMap<PatternKeyed, Object>();
     replaces.forEach((s, o) -> {
-      final var pattern = prefix + s.toString() + suffix;
+      final String pattern = prefix + s.toString() + suffix;
       compiled.put(PatternKeyed.of(pattern, flags), o);
     });
     return compiled;

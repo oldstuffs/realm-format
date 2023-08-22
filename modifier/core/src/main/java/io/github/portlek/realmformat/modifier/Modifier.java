@@ -13,7 +13,7 @@ public class Modifier {
 
   @Nullable
   public CompletableFuture<?> chunkAt(@NotNull final Object world, final int x, final int z) {
-    final var backend = Modifier.backend();
+    final ModifierBackend backend = Modifier.backend();
     if (backend == null || !Modifier.isCustomWorld(world)) {
       return null;
     }
@@ -30,7 +30,7 @@ public class Modifier {
     @NotNull final Object priority,
     @NotNull final Object status
   ) {
-    final var backend = Modifier.backend();
+    final ModifierBackend backend = Modifier.backend();
     if (backend == null || !Modifier.isCustomWorld(world)) {
       return null;
     }
@@ -38,7 +38,7 @@ public class Modifier {
   }
 
   public boolean flushEntities(final Object storage) {
-    final var backend = Modifier.backend();
+    final ModifierBackend backend = Modifier.backend();
     if (backend == null) {
       return false;
     }
@@ -53,7 +53,7 @@ public class Modifier {
 
   @Nullable
   public Object injectCustomWorlds() {
-    final var backend = Modifier.backend();
+    final ModifierBackend backend = Modifier.backend();
     if (backend == null) {
       return null;
     }
@@ -61,7 +61,7 @@ public class Modifier {
   }
 
   public boolean isCustomWorld(final Object world) {
-    final var backend = Modifier.backend();
+    final ModifierBackend backend = Modifier.backend();
     return backend != null && backend.isCustomWorld(world);
   }
 
@@ -70,7 +70,7 @@ public class Modifier {
     @NotNull final Object storage,
     @NotNull final Object chunkCoordinates
   ) {
-    final var backend = Modifier.backend();
+    final ModifierBackend backend = Modifier.backend();
     if (backend == null) {
       return null;
     }
@@ -78,12 +78,12 @@ public class Modifier {
   }
 
   public boolean saveChunk(@NotNull final Object world, @NotNull final Object chunkAccess) {
-    final var backend = Modifier.backend();
+    final ModifierBackend backend = Modifier.backend();
     return backend != null && backend.saveChunk(world, chunkAccess);
   }
 
   public boolean storeEntities(@NotNull final Object storage, @NotNull final Object entities) {
-    final var backend = Modifier.backend();
+    final ModifierBackend backend = Modifier.backend();
     if (backend == null) {
       return false;
     }

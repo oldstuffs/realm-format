@@ -1,8 +1,8 @@
 package io.github.portlek.realmformat.format.realm.v1.misc;
 
 import io.github.portlek.realmformat.format.misc.OutputStreamExtension;
-import io.github.portlek.realmformat.format.realm.RealmFormatChunk;
-import io.github.portlek.realmformat.format.realm.RealmFormatChunkSection;
+import io.github.portlek.realmformat.format.realm.*;
+import io.github.shiruka.nbt.ListTag;
 import io.github.shiruka.nbt.Tag;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
@@ -31,9 +31,9 @@ public class OutputStreamExtensionV1 extends OutputStreamExtension {
   }
 
   public void writeEntities(@NotNull final Collection<RealmFormatChunk> chunks) throws IOException {
-    final var entities = Tag.createList();
-    for (final var chunk : chunks) {
-      for (final var entity : chunk.entities()) {
+    final ListTag entities = Tag.createList();
+    for (final RealmFormatChunk chunk : chunks) {
+      for (final Tag entity : chunk.entities()) {
         entities.add(entity);
       }
     }
@@ -42,9 +42,9 @@ public class OutputStreamExtensionV1 extends OutputStreamExtension {
 
   public void writeTileEntities(@NotNull final Collection<RealmFormatChunk> chunks)
     throws IOException {
-    final var entities = Tag.createList();
-    for (final var chunk : chunks) {
-      for (final var entity : chunk.tileEntities()) {
+    final ListTag entities = Tag.createList();
+    for (final RealmFormatChunk chunk : chunks) {
+      for (final Tag entity : chunk.tileEntities()) {
         entities.add(entity);
       }
     }
@@ -54,9 +54,9 @@ public class OutputStreamExtensionV1 extends OutputStreamExtension {
   @ApiStatus.Internal
   protected byte@NotNull[] serializeChunks(@NotNull final Collection<RealmFormatChunk> chunks)
     throws IOException {
-    final var outputStream = new ByteArrayOutputStream(16384);
+    final ByteArrayOutputStream outputStream = new ByteArrayOutputStream(16384);
     @Cleanup
-    final var output = this.with(outputStream);
+    final OutputStreamExtensionV1 output = this.with(outputStream);
     output.writeChunks(chunks);
     return outputStream.toByteArray();
   }
@@ -69,12 +69,12 @@ public class OutputStreamExtensionV1 extends OutputStreamExtension {
   @ApiStatus.Internal
   protected void writeChunkSections(@Nullable final RealmFormatChunkSection@NotNull[] sections)
     throws IOException {
-    final var sectionCount = Math.toIntExact(
+    final int sectionCount = Math.toIntExact(
       Arrays.stream(sections).filter(Objects::nonNull).count()
     );
     this.writeInt(sectionCount);
-    for (var i = 0; i < sections.length; i++) {
-      final var section = sections[i];
+    for (int i = 0; i < sections.length; i++) {
+      final RealmFormatChunkSection section = sections[i];
       if (section == null) {
         continue;
       }
@@ -82,20 +82,20 @@ public class OutputStreamExtensionV1 extends OutputStreamExtension {
       this.writeOptionalNibbleArray(section.blockLight());
       this.writeOptionalNibbleArray(section.skyLight());
       if (this.worldVersion < 4) {
-        final var blockDataV1_8 = Objects.requireNonNull(
+        final BlockDataV1_8 blockDataV1_8 = Objects.requireNonNull(
           section.blockDataV1_8(),
           "Block data for 1.8 not found!"
         );
         this.writeNibbleArray(blockDataV1_8.data());
       } else if (this.worldVersion < 8) {
-        final var blockDataV1_14 = Objects.requireNonNull(
+        final BlockDataV1_14 blockDataV1_14 = Objects.requireNonNull(
           section.blockDataV1_14(),
           "Block data for 1.14 not found!"
         );
         this.writeListTag(blockDataV1_14.palette());
         this.writeLongArray(blockDataV1_14.blockStates());
       } else {
-        final var blockDataV1_18 = Objects.requireNonNull(
+        final BlockDataV1_18 blockDataV1_18 = Objects.requireNonNull(
           section.blockDataV1_18(),
           "Block data for 1.18 not found!"
         );

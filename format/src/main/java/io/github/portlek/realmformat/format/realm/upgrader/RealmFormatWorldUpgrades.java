@@ -54,8 +54,8 @@ public class RealmFormatWorldUpgrades {
    * @param version The version upgrade to.
    */
   public void apply(@NotNull final RealmFormatWorld world, final byte version) {
-    for (var ver = (byte) (world.worldVersion() + 1); ver <= version; ver++) {
-      final var upgrade = RealmFormatWorldUpgrades.get(ver);
+    for (byte ver = (byte) (world.worldVersion() + 1); ver <= version; ver++) {
+      final RealmFormatWorldUpgrade upgrade = RealmFormatWorldUpgrades.get(ver);
       if (upgrade == null) {
         RealmFormatWorldUpgrades.log.log(
           Level.WARNING,

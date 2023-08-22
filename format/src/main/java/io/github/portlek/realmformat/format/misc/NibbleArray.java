@@ -20,7 +20,7 @@ public final class NibbleArray {
   }
 
   public int get(final int index) {
-    final var value = this.backing[index / 2];
+    final byte value = this.backing[index / 2];
     return index % 2 == 0 ? value & 0xF : (value & 0xF0) >> 4;
   }
 
@@ -37,7 +37,7 @@ public final class NibbleArray {
     if (o == null || this.getClass() != o.getClass()) {
       return false;
     }
-    final var that = (NibbleArray) o;
+    final NibbleArray that = (NibbleArray) o;
     return Arrays.equals(this.backing, that.backing);
   }
 
@@ -47,13 +47,13 @@ public final class NibbleArray {
   }
 
   public void set(final int index, final int value) {
-    final var nibble = value & 0xF;
-    final var halfIndex = index / 2;
+    final int nibble = value & 0xF;
+    final int halfIndex = index / 2;
     final int previous = this.backing[halfIndex];
     if (index % 2 == 0) {
-      this.backing[halfIndex] = (byte) (previous & 0xF0 | nibble);
+      this.backing[halfIndex] = (byte) ((previous & 0xF0) | nibble);
     } else {
-      this.backing[halfIndex] = (byte) (previous & 0xF | nibble << 4);
+      this.backing[halfIndex] = (byte) ((previous & 0xF) | (nibble << 4));
     }
   }
 }

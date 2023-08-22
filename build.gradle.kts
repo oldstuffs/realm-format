@@ -169,7 +169,7 @@ subprojects {
   }
 }
 
-nexusPublishing { repositories { sonatype() } }
+nexusPublishing.repositories.sonatype()
 
 spotless {
   lineEndings = LineEnding.UNIX
@@ -177,7 +177,7 @@ spotless {
   val prettierConfig =
     mapOf(
       "prettier" to "2.8.8",
-      "prettier-plugin-java" to "2.2.0",
+      "prettier-plugin-java" to "2.3.0",
     )
 
   format("encoding") {

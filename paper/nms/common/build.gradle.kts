@@ -1,5 +1,5 @@
 dependencies {
   compileOnly(project(":realm-format-format"))
 
-  compileOnly(libs.paper)
+  compileOnly(libs.bukkit)
 }

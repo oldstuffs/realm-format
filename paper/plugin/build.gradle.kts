@@ -12,18 +12,12 @@ dependencies {
   implementation(project(":paper:nms:realm-format-paper-nms-v1_18_R2", "reobf"))
   implementation(project(":paper:nms:realm-format-paper-nms-v1_19_R3", "reobf"))
 
-  compileOnly(libs.paper)
+  compileOnly(libs.bukkit)
 
   compileOnly(libs.commonsio)
 
   implementation(libs.configurate.yaml)
   implementation(libs.adventure.configurate) { isTransitive = false }
-  implementation(libs.terminable)
-  implementation(libs.task.common)
-  implementation(libs.task.bukkit)
-  implementation(libs.event.common)
-  implementation(libs.event.paper)
-  implementation(libs.versionmatched)
   implementation(libs.cloud.core)
   implementation(libs.cloud.annotations)
   implementation(libs.cloud.paper)

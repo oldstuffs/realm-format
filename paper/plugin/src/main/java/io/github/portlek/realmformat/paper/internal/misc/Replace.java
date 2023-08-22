@@ -29,7 +29,7 @@ public final class Replace {
 
   @NotNull
   public Replace merge(@NotNull final Replace replace) {
-    final var merge = new HashMap<>(this.replacements);
+    final HashMap<PatternKeyed, Object> merge = new HashMap<>(this.replacements);
     merge.putAll(replace.replacements);
     return Replace.of(merge);
   }
@@ -106,7 +106,7 @@ public final class Replace {
 
   @NotNull
   public Component replace(@NotNull final Component component) {
-    final var result = new AtomicReference<>(component);
+    final AtomicReference<@NotNull Component> result = new AtomicReference<>(component);
     this.replacements.forEach((pattern, replace) ->
         result.updateAndGet(old ->
           old.replaceText(builder -> this.replace(builder.match(pattern.compiled()), replace))
@@ -117,7 +117,7 @@ public final class Replace {
 
   @NotNull
   public String replace(@NotNull final String text) {
-    final var result = new AtomicReference<>(text);
+    final AtomicReference<@NotNull String> result = new AtomicReference<>(text);
     this.replacements.forEach((pattern, value) ->
         result.updateAndGet(old -> pattern.compiled().matcher(old).replaceAll(value.toString()))
       );

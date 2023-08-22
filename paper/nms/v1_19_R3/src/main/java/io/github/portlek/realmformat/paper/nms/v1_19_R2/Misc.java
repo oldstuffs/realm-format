@@ -43,12 +43,12 @@ class Misc {
         case LONG_ARRAY -> new LongArrayTag(tag.asLongArray().primitiveValue());
         case STRING -> StringTag.valueOf(tag.asString().value());
         case LIST -> {
-          final var list = new ListTag();
+          final ListTag list = new ListTag();
           tag.asList().stream().map(Misc::fromTag).forEach(list::add);
           yield list;
         }
         case COMPOUND -> {
-          final var compound = new CompoundTag();
+          final CompoundTag compound = new CompoundTag();
           tag.asCompound().all().forEach((key, value) -> compound.put(key, Misc.fromTag(value)));
           yield compound;
         }
@@ -88,15 +88,16 @@ class Misc {
       );
       case Tag.TAG_STRING -> io.github.shiruka.nbt.Tag.createString(tag.getAsString());
       case Tag.TAG_LIST -> {
-        final var list = io.github.shiruka.nbt.Tag.createList();
+        final io.github.shiruka.nbt.ListTag list = io.github.shiruka.nbt.Tag.createList();
         ((ListTag) tag).stream().map(Misc::toTag).forEach(list::add);
         yield list;
       }
       case Tag.TAG_COMPOUND -> {
-        final var originalCompound = (CompoundTag) tag;
-        final var compound = io.github.shiruka.nbt.Tag.createCompound();
-        for (final var key : originalCompound.getAllKeys()) {
-          final var value = originalCompound.get(key);
+        final CompoundTag originalCompound = (CompoundTag) tag;
+        final io.github.shiruka.nbt.CompoundTag compound =
+          io.github.shiruka.nbt.Tag.createCompound();
+        for (final String key : originalCompound.getAllKeys()) {
+          final Tag value = originalCompound.get(key);
           if (value != null) {
             compound.set(key, Misc.toTag(value));
           }

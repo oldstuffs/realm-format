@@ -9,6 +9,7 @@ import com.google.common.reflect.TypeToken;
 import lombok.SneakyThrows;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jetbrains.annotations.NotNull;
 
 public interface Cloud {
@@ -17,7 +18,7 @@ public interface Cloud {
   @NotNull
   @SneakyThrows
   static PaperCommandManager<CommandSender> create(@NotNull final Plugin plugin) {
-    final var manager = PaperCommandManager.createNative(
+    final PaperCommandManager<@NonNull CommandSender> manager = PaperCommandManager.createNative(
       plugin,
       CommandExecutionCoordinator.simpleCoordinator()
     );
@@ -35,11 +36,14 @@ public interface Cloud {
     @NotNull final Command.Builder<CommandSender> builder,
     @NotNull final String command
   ) {
-    final var helpHandler = MinecraftHelp.createNative("/" + command + " help", commandManager);
+    final MinecraftHelp<CommandSender> helpHandler = MinecraftHelp.createNative(
+      "/" + command + " help",
+      commandManager
+    );
     helpHandler.commandFilter(c ->
       c.getArguments().stream().findFirst().orElseThrow().getName().equals(command)
     );
-    final var help = builder
+    final Command.Builder<CommandSender> help = builder
       .literal("help", "?")
       .argument(StringArgument.optional("query", StringArgument.StringMode.GREEDY))
       .handler(context ->

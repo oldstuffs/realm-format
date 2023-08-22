@@ -1,11 +1,11 @@
 [versions]
 cloud = "1.8.3"
-task = "0.1.4"
-event = "0.1.3"
+task = "0.1.6-SNAPSHOT"
+event = "0.1.5-SNAPSHOT"
 junit = "5.10.0"
 
 [libraries]
-paper = { module = "io.papermc.paper:paper-api", version = "1.19.4-R0.1-SNAPSHOT" }
+bukkit = { module = "org.bukkit:bukkit", version = "1.8-R0.1-SNAPSHOT" }
 lombok = { module = "org.projectlombok:lombok", version = "1.18.28" }
 annotations = { module = "org.jetbrains:annotations", version = "24.0.1" }
 nbt = { module = "io.github.shiruka:nbt", version = "2.0.2" }
@@ -30,7 +30,6 @@ cloud-paper = { module = "cloud.commandframework:cloud-paper", version.ref = "cl
 cloud-brigadier = { module = "cloud.commandframework:cloud-brigadier", version.ref = "cloud" }
 cloud-tasks = { module = "cloud.commandframework:cloud-tasks", version.ref = "cloud" }
 cloud-minecraft-extras = { module = "cloud.commandframework:cloud-minecraft-extras", version.ref = "cloud" }
-terminable = { module = "tr.com.infumia:terminable", version = "0.1.4" }
 task-common = { module = "tr.com.infumia:TaskCommon", version.ref = "task" }
 task-bukkit = { module = "tr.com.infumia:TaskBukkit", version.ref = "task" }
 event-common = { module = "tr.com.infumia:EventCommon", version.ref = "event" }

@@ -23,7 +23,9 @@ public final class NonItalicFallbackComponentSerializer implements LegacyCompone
   @NotNull
   @Override
   public TextComponent deserialize(@NotNull final String input) {
-    final var component = NonItalicFallbackComponentSerializer.DELEGATE.deserialize(input);
+    final TextComponent component = NonItalicFallbackComponentSerializer.DELEGATE.deserialize(
+      input
+    );
     return (TextComponent) component.applyFallbackStyle(TextDecoration.ITALIC.withState(false));
   }
 

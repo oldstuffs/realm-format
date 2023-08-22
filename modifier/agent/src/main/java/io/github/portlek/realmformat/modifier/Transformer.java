@@ -7,24 +7,19 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.instrument.ClassFileTransformer;
 import java.lang.instrument.Instrumentation;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.security.ProtectionDomain;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.jar.JarFile;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
-import javassist.CannotCompileException;
-import javassist.ClassPool;
-import javassist.LoaderClassPath;
-import javassist.NotFoundException;
-import lombok.Cleanup;
-import lombok.SneakyThrows;
+import javassist.*;
+import lombok.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.yaml.snakeyaml.Yaml;
@@ -53,15 +48,15 @@ public final class Transformer implements ClassFileTransformer {
 
   @SneakyThrows
   public static void premain(final String agentArgs, final Instrumentation instrumentation) {
-    final var modifierApiPath = Files.createTempFile(Transformer.MODIFIER_TEMP_FILE_NAME, ".jar");
+    final Path modifierApiPath = Files.createTempFile(Transformer.MODIFIER_TEMP_FILE_NAME, ".jar");
     @Cleanup
-    final var inputStream = Objects.requireNonNull(
+    final InputStream inputStream = Objects.requireNonNull(
       Transformer.class.getResourceAsStream("/" + Transformer.MODIFIER_CORE_FILE_NAME),
-      "File '%s' not found!".formatted(Transformer.MODIFIER_CORE_FILE_NAME)
+      String.format("File '%s' not found!", Transformer.MODIFIER_CORE_FILE_NAME)
     );
     @Cleanup
-    final var outputStream = new FileOutputStream(modifierApiPath.toFile());
-    final var buf = new byte[8192];
+    final FileOutputStream outputStream = new FileOutputStream(modifierApiPath.toFile());
+    final byte[] buf = new byte[8192];
     int length;
     while ((length = inputStream.read(buf)) > 0) {
       outputStream.write(buf, 0, length);
@@ -70,47 +65,47 @@ public final class Transformer implements ClassFileTransformer {
     instrumentation.appendToBootstrapClassLoaderSearch(new JarFile(modifierApiPath.toFile()));
     instrumentation.addTransformer(new Transformer());
     @Cleanup
-    final var fileStream = Objects.requireNonNull(
+    final InputStream fileStream = Objects.requireNonNull(
       Transformer.class.getResourceAsStream("/" + Transformer.MODIFIER_LIST_FILE_NAME),
-      "File '%s' not found!".formatted(Transformer.MODIFIER_LIST_FILE_NAME)
+      String.format("File '%s' not found!", Transformer.MODIFIER_LIST_FILE_NAME)
     );
-    final var yaml = new Yaml();
+    final Yaml yaml = new Yaml();
     @Cleanup
-    final var reader = new InputStreamReader(fileStream);
-    final var versionData = yaml.<Map<String, Object>>load(reader);
-    for (final var version : versionData.keySet()) {
-      final var data = (Map<String, Object>) versionData.get(version);
-      for (final var originalClass : data.keySet()) {
-        final var optional = originalClass.startsWith("__optional__");
-        final var cls = originalClass.substring(optional ? 12 : 0);
-        final var changeList = (List<String>) data.get(originalClass);
-        final var changeArray = new Change[changeList.size()];
-        for (var i = 0; i < changeList.size(); i++) {
-          final var changeText = changeList.get(i);
-          final var matcher = Transformer.PATTERN.matcher(changeText);
+    final InputStreamReader reader = new InputStreamReader(fileStream);
+    final Map<String, Object> versionData = yaml.<Map<String, Object>>load(reader);
+    for (final String version : versionData.keySet()) {
+      final Map<String, Object> data = (Map<String, Object>) versionData.get(version);
+      for (final String originalClass : data.keySet()) {
+        final boolean optional = originalClass.startsWith("__optional__");
+        final String cls = originalClass.substring(optional ? 12 : 0);
+        final List<String> changeList = (List<String>) data.get(originalClass);
+        final Change[] changeArray = new Change[changeList.size()];
+        for (int i = 0; i < changeList.size(); i++) {
+          final String changeText = changeList.get(i);
+          final Matcher matcher = Transformer.PATTERN.matcher(changeText);
           if (!matcher.find()) {
             System.err.printf("Invalid change '%s' on class %s.%n", changeText, cls);
             System.exit(1);
             return;
           }
-          final var methodName = matcher.group(1);
-          final var paramsString = matcher.group(2).trim();
-          final var parameters = paramsString.isEmpty()
+          final String methodName = matcher.group(1);
+          final String paramsString = matcher.group(2).trim();
+          final String[] parameters = paramsString.isEmpty()
             ? new String[0]
             : matcher.group(2).split(",");
-          final var location = matcher.group(3);
+          final String location = matcher.group(3);
           @Cleanup
-          final var changeStream = Objects.requireNonNull(
+          final InputStream changeStream = Objects.requireNonNull(
             Transformer.class.getResourceAsStream("/" + location),
-            "File '%s' not found!".formatted(location)
+            String.format("File '%s' not found!", location)
           );
           changeArray[i] =
-            new Change(
-              methodName,
-              parameters,
-              new String(Transformer.readAllBytes(changeStream), StandardCharsets.UTF_8),
-              optional
-            );
+          new Change(
+            methodName,
+            parameters,
+            new String(Transformer.readAllBytes(changeStream), StandardCharsets.UTF_8),
+            optional
+          );
         }
         if (Transformer.DEBUG) {
           System.out.printf("Loaded %s changes for class %s.%n", changeArray.length, cls);
@@ -123,7 +118,7 @@ public final class Transformer implements ClassFileTransformer {
               if (old == null) {
                 return changeArray;
               }
-              final var newChanges = new Change[old.length + changeArray.length];
+              final Change[] newChanges = new Change[old.length + changeArray.length];
               System.arraycopy(old, 0, newChanges, 0, old.length);
               System.arraycopy(changeArray, 0, newChanges, old.length, changeArray.length);
               return newChanges;
@@ -135,18 +130,24 @@ public final class Transformer implements ClassFileTransformer {
 
   @NotNull
   private static String nmsVersion(@NotNull final String minecraftVersion) {
-    return switch (minecraftVersion) {
-      case "1.18.2" -> "v1_18_R2";
-      case "1.19", "1.19.1" -> "v1_19_R1";
-      case "1.19.2", "1.19.3" -> "v1_19_R2";
-      default -> throw new UnsupportedOperationException(minecraftVersion);
-    };
+    switch (minecraftVersion) {
+      case "1.18.2":
+        return "v1_18_R2";
+      case "1.19":
+      case "1.19.1":
+        return "v1_19_R1";
+      case "1.19.2":
+      case "1.19.3":
+        return "v1_19_R2";
+      default:
+        throw new UnsupportedOperationException(minecraftVersion);
+    }
   }
 
   private static byte@NotNull[] readAllBytes(@NotNull final InputStream stream) throws IOException {
     @Cleanup
-    final var byteStream = new ByteArrayOutputStream();
-    final var buffer = new byte[4096];
+    final ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
+    final byte[] buffer = new byte[4096];
     int readLen;
     while ((readLen = stream.read(buffer)) != -1) {
       byteStream.write(buffer, 0, readLen);
@@ -165,7 +166,7 @@ public final class Transformer implements ClassFileTransformer {
     if (this.version == null && !this.findVersion(protectionDomain)) {
       return null;
     }
-    final var changes = Transformer.VERSION_CHANGES.get(this.version);
+    final Map<String, Change[]> changes = Transformer.VERSION_CHANGES.get(this.version);
     if (changes == null) {
       return null;
     }
@@ -175,25 +176,25 @@ public final class Transformer implements ClassFileTransformer {
     if (!changes.containsKey(className)) {
       return null;
     }
-    final var fixedClassName = className.replace("/", ".");
+    final String fixedClassName = className.replace("/", ".");
     if (Transformer.DEBUG) {
       System.out.printf("Applying changes for class %s%n", fixedClassName);
     }
     try {
-      final var pool = ClassPool.getDefault();
+      final ClassPool pool = ClassPool.getDefault();
       pool.appendClassPath(new LoaderClassPath(loader));
       pool.appendClassPath(new LoaderClassPath(Transformer.class.getClassLoader()));
-      final var ctClass = pool.get(fixedClassName);
-      for (final var change : changes.get(className)) {
+      final CtClass ctClass = pool.get(fixedClassName);
+      for (final Change change : changes.get(className)) {
         try {
-          final var methods = ctClass.getDeclaredMethods(change.methodName());
-          var found = false;
-          main:for (final var method : methods) {
-            final var params = method.getParameterTypes();
+          final CtMethod[] methods = ctClass.getDeclaredMethods(change.methodName());
+          boolean found = false;
+          main:for (final CtMethod method : methods) {
+            final CtClass[] params = method.getParameterTypes();
             if (params.length != change.parameters().length) {
               continue;
             }
-            for (var i = 0; i < params.length; i++) {
+            for (int i = 0; i < params.length; i++) {
               if (!change.parameters()[i].trim().equals(params[i].getName())) {
                 continue main;
               }
@@ -224,23 +225,23 @@ public final class Transformer implements ClassFileTransformer {
   }
 
   private boolean findVersion(@NotNull final ProtectionDomain protectionDomain) {
-    final var location = protectionDomain.getCodeSource().getLocation();
+    final URL location = protectionDomain.getCodeSource().getLocation();
     if (!location.getProtocol().equals("file")) {
       return false;
     }
-    final var filePath = location.getFile();
+    final String filePath = location.getFile();
     if (this.filesChecked.contains(filePath)) {
       return false;
     }
     try {
       @Cleanup
-      final var zipFile = new ZipFile(filePath);
-      final var entries = zipFile.entries();
+      final ZipFile zipFile = new ZipFile(filePath);
+      final Enumeration<? extends ZipEntry> entries = zipFile.entries();
       while (entries.hasMoreElements()) {
-        final var zipEntry = entries.nextElement();
+        final ZipEntry zipEntry = entries.nextElement();
         if (!zipEntry.isDirectory() && zipEntry.getName().equals("version.json")) {
-          final var contents = Transformer.readAllBytes(zipFile.getInputStream(zipEntry));
-          final var versionInfo = Transformer.YAML.<Map<String, String>>load(
+          final byte[] contents = Transformer.readAllBytes(zipFile.getInputStream(zipEntry));
+          final Map<String, String> versionInfo = Transformer.YAML.<Map<String, String>>load(
             new String(contents, StandardCharsets.UTF_8)
           );
           this.version = Transformer.nmsVersion(versionInfo.get("id"));
@@ -258,10 +259,32 @@ public final class Transformer implements ClassFileTransformer {
     return this.version != null;
   }
 
-  private record Change(
-    @NotNull String methodName,
-    @NotNull String@NotNull[] parameters,
-    @NotNull String content,
-    boolean optional
-  ) {}
+  @Getter
+  @ToString
+  @EqualsAndHashCode
+  private static final class Change {
+
+    @NotNull
+    private final String methodName;
+
+    @NotNull
+    private final String@NotNull[] parameters;
+
+    @NotNull
+    private final String content;
+
+    private final boolean optional;
+
+    private Change(
+      @NotNull String methodName,
+      @NotNull String@NotNull[] parameters,
+      @NotNull String content,
+      boolean optional
+    ) {
+      this.methodName = methodName;
+      this.parameters = parameters;
+      this.content = content;
+      this.optional = optional;
+    }
+  }
 }

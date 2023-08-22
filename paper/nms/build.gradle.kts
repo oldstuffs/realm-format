@@ -5,6 +5,5 @@ subprojects {
     compileOnly(project(":paper:realm-format-paper-api"))
 
     compileOnly(rootProject.libs.nbt)
-    compileOnly(rootProject.libs.terminable)
   }
 }

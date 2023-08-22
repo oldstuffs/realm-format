@@ -117,8 +117,10 @@ public class AnvilFormatSerializer {
         chunkEntries.add(chunkEntry);
       }
     }
-    final HashMap<RealmFormatChunkPosition, RealmFormatChunk> chunks =
-      new HashMap<RealmFormatChunkPosition, RealmFormatChunk>();
+    final HashMap<RealmFormatChunkPosition, RealmFormatChunk> chunks = new HashMap<
+      RealmFormatChunkPosition,
+      RealmFormatChunk
+    >();
     for (final AnvilFormatChunkEntry entry : chunkEntries) {
       @Cleanup
       final DataInputStream headerStream = new DataInputStream(
@@ -254,16 +256,16 @@ public class AnvilFormatSerializer {
       tileEntities = compound.getListTag("TileEntities").orElse(Tag.createList());
       entities = compound.getListTag("Entities").orElse(Tag.createList());
       sections =
-        compound
-          .getListTag("Sections")
-          .orElseThrow(() -> new IllegalStateException("Sections list tag not found!"));
+      compound
+        .getListTag("Sections")
+        .orElseThrow(() -> new IllegalStateException("Sections list tag not found!"));
     } else {
       tileEntities = compound.getListTag("block_entities").orElse(Tag.createList());
       entities = compound.getListTag("entities").orElse(Tag.createList());
       sections =
-        compound
-          .getListTag("sections")
-          .orElseThrow(() -> new IllegalStateException("sections list tag not found!"));
+      compound
+        .getListTag("sections")
+        .orElseThrow(() -> new IllegalStateException("sections list tag not found!"));
       final Tag yPos = compound
         .get("yPos")
         .orElseThrow(() -> new IllegalStateException("yPos tag not found!"));
@@ -273,12 +275,12 @@ public class AnvilFormatSerializer {
         minSection = yPos.asInt().intValue();
       }
       maxSection =
-        sections
-          .stream()
-          .map(c -> c.asCompound().getByte("Y").orElseThrow())
-          .max(Byte::compareTo)
-          .orElse((byte) 0) +
-        1;
+      sections
+        .stream()
+        .map(c -> c.asCompound().getByte("Y").orElseThrow())
+        .max(Byte::compareTo)
+        .orElse((byte) 0) +
+      1;
     }
     final RealmFormatChunkSection[] sectionArray = new RealmFormatChunkSection[maxSection -
     minSection];
@@ -336,7 +338,7 @@ public class AnvilFormatSerializer {
         .map(NibbleArray::new)
         .orElse(null);
       sectionArray[index - minSection] =
-        builder.blockLight(blockLightArray).skyLight(skyLightArray).build();
+      builder.blockLight(blockLightArray).skyLight(skyLightArray).build();
     }
     for (final RealmFormatChunkSection section : sectionArray) {
       if (section != null) {

@@ -45,16 +45,16 @@ public class RealmFormatSerializers {
     @NotNull final RealmFormatPropertyMap properties
   ) {
     @Cleanup
-    final var input = new DataInputStream(new ByteArrayInputStream(serialized));
-    final var header = new byte[RealmFormat.HEADER.length];
+    final DataInputStream input = new DataInputStream(new ByteArrayInputStream(serialized));
+    final byte[] header = new byte[RealmFormat.HEADER.length];
     input.read(header);
     if (!Arrays.equals(header, RealmFormat.HEADER)) {
       throw new IllegalArgumentException(
         "Serialized data does NOT starts with the realm format's header!"
       );
     }
-    final var version = input.readByte();
-    final var serializer = Objects.requireNonNull(
+    final byte version = input.readByte();
+    final RealmFormatSerializer serializer = Objects.requireNonNull(
       RealmFormatSerializers.SERIALIZERS.get(version),
       "This version '%s' is NOT supported!".formatted(version)
     );
@@ -77,10 +77,10 @@ public class RealmFormatSerializers {
    */
   @SneakyThrows
   public byte@NotNull[] serialize(@NotNull final RealmFormatWorld world) {
-    final var stream = new ByteArrayOutputStream();
+    final ByteArrayOutputStream stream = new ByteArrayOutputStream();
     @Cleanup
-    final var output = new DataOutputStream(stream);
-    final var serializer = Objects.requireNonNull(
+    final DataOutputStream output = new DataOutputStream(stream);
+    final RealmFormatSerializer serializer = Objects.requireNonNull(
       RealmFormatSerializers.SERIALIZERS.get(world.version()),
       "This version '%s' is NOT supported!".formatted(world.version())
     );

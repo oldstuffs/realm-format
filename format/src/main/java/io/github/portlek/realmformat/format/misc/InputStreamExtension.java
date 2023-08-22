@@ -17,7 +17,7 @@ import org.jetbrains.annotations.Nullable;
 
 public abstract class InputStreamExtension implements Closeable {
 
-  private static final int ARRAY_SIZE = 16 * 16 * 16 / (8 / 4);
+  private static final int ARRAY_SIZE = (16 * 16 * 16) / (8 / 4);
 
   @NotNull
   @Delegate

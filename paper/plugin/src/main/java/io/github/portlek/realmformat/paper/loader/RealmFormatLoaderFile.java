@@ -1,6 +1,5 @@
 package io.github.portlek.realmformat.paper.loader;
 
-import com.google.common.base.Preconditions;
 import io.github.portlek.realmformat.format.realm.RealmFormat;
 import io.github.portlek.realmformat.paper.api.RealmFormatLoader;
 import io.github.portlek.realmformat.paper.api.RealmFormatManager;
@@ -8,16 +7,17 @@ import io.github.portlek.realmformat.paper.file.RealmFormatConfig;
 import io.github.portlek.realmformat.paper.internal.misc.Services;
 import java.io.File;
 import java.io.RandomAccessFile;
+import java.nio.channels.FileChannel;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Stream;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.io.FileUtils;
 import org.jetbrains.annotations.NotNull;
-import tr.com.infumia.terminable.TerminableConsumer;
 
 @Log4j2
 public final class RealmFormatLoaderFile implements RealmFormatLoader {
@@ -34,8 +34,10 @@ public final class RealmFormatLoaderFile implements RealmFormatLoader {
   @Override
   @SneakyThrows
   public void delete(@NotNull final String worldName) {
-    Preconditions.checkState(this.exists(worldName), "World '%s' does not exists!", worldName);
-    final var file = this.randomAccessFile(worldName);
+    if (!this.exists(worldName)) {
+      throw new IllegalStateException(String.format("World '%s' does not exists!", worldName));
+    }
+    final RandomAccessFile file = this.randomAccessFile(worldName);
     RealmFormatLoaderFile.log.info("Trying to unlock '{}' world...", worldName);
     this.unlock(worldName);
     RealmFormatLoaderFile.log.info("World '{}' is successfully unlocked!", worldName);
@@ -58,7 +60,7 @@ public final class RealmFormatLoaderFile implements RealmFormatLoader {
   @Override
   @SneakyThrows
   public List<String> list() {
-    try (final var paths = Files.list(this.directory)) {
+    try (final Stream<Path> paths = Files.list(this.directory)) {
       return paths
         .map(Path::getFileName)
         .map(Path::toString)
@@ -70,18 +72,18 @@ public final class RealmFormatLoaderFile implements RealmFormatLoader {
   @Override
   @SneakyThrows
   public byte@NotNull[] load(@NotNull final String worldName, final boolean readOnly) {
-    Preconditions.checkState(this.exists(worldName), "World '%s' does not exists!", worldName);
-    final var file = this.randomAccessFile(worldName);
+    if (!this.exists(worldName)) {
+      throw new IllegalStateException(String.format("World '%s' does not exists!", worldName));
+    }
+    final RandomAccessFile file = this.randomAccessFile(worldName);
     if (!readOnly && file.getChannel().isOpen()) {
       RealmFormatLoaderFile.log.info("World '{}' is unlocked by loading it.", worldName);
     }
-    final var fileLength = file.length();
-    Preconditions.checkState(
-      fileLength <= Integer.MAX_VALUE,
-      "World '%s' file is too big!",
-      worldName
-    );
-    final var bytes = new byte[(int) fileLength];
+    final long fileLength = file.length();
+    if (fileLength > Integer.MAX_VALUE) {
+      throw new IllegalStateException(String.format("World '%s' file is too big!", worldName));
+    }
+    final byte[] bytes = new byte[(int) fileLength];
     file.seek(0);
     file.readFully(bytes);
     return bytes;
@@ -90,7 +92,7 @@ public final class RealmFormatLoaderFile implements RealmFormatLoader {
   @Override
   @SneakyThrows
   public boolean locked(@NotNull final String worldName) {
-    final var file = this.randomAccessFile(worldName);
+    final RandomAccessFile file = this.randomAccessFile(worldName);
     if (!file.getChannel().isOpen()) {
       return true;
     }
@@ -105,7 +107,7 @@ public final class RealmFormatLoaderFile implements RealmFormatLoader {
     final byte@NotNull[] serialized,
     final boolean lock
   ) {
-    final var worldFile = this.randomAccessFile(worldName);
+    final RandomAccessFile worldFile = this.randomAccessFile(worldName);
     worldFile.seek(0);
     worldFile.setLength(0);
     worldFile.write(serialized);
@@ -118,12 +120,14 @@ public final class RealmFormatLoaderFile implements RealmFormatLoader {
   @Override
   @SneakyThrows
   public void unlock(@NotNull final String worldName) {
-    Preconditions.checkState(this.exists(worldName), "World '%s' does not exists!", worldName);
-    final var removed = this.worlds.remove(worldName);
+    if (!this.exists(worldName)) {
+      throw new IllegalStateException(String.format("World '%s' does not exists!", worldName));
+    }
+    final RandomAccessFile removed = this.worlds.remove(worldName);
     if (removed == null) {
       return;
     }
-    final var channel = removed.getChannel();
+    final FileChannel channel = removed.getChannel();
     if (channel.isOpen()) {
       removed.close();
     }

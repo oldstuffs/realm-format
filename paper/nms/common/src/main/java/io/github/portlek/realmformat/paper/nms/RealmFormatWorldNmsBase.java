@@ -123,7 +123,7 @@ public abstract class RealmFormatWorldNmsBase implements RealmFormatWorldNms {
       "World '%s' is already exists!",
       worldName
     );
-    final var world = this.createRealmFormatWorld(worldName, loader, lock);
+    final RealmFormatWorldNmsBase world = this.createRealmFormatWorld(worldName, loader, lock);
     if (loader != null) {
       loader.save(worldName, world.serialize().join(), lock);
     }

@@ -76,12 +76,12 @@ public final class WorldData {
     } catch (final IllegalArgumentException ex) {
       throw new IllegalArgumentException("unknown difficulty '" + this.difficulty + "'");
     }
-    var environment = this.environment;
+    String environment = this.environment;
     try {
       Enum.valueOf(World.Environment.class, environment.toUpperCase(Locale.ROOT));
     } catch (final IllegalArgumentException ex) {
       try {
-        final var envId = Integer.parseInt(environment);
+        final int envId = Integer.parseInt(environment);
         if (envId < -1 || envId > 1) {
           throw new NumberFormatException(environment);
         }
@@ -90,7 +90,7 @@ public final class WorldData {
         throw new IllegalArgumentException("Unknown environment '" + this.environment + "'");
       }
     }
-    final var propertyMap = new RealmFormatPropertyMap();
+    final RealmFormatPropertyMap propertyMap = new RealmFormatPropertyMap();
     propertyMap.setValue(RealmFormatProperties.SPAWN_X, (int) this.spawn.x());
     propertyMap.setValue(RealmFormatProperties.SPAWN_Y, (int) this.spawn.y());
     propertyMap.setValue(RealmFormatProperties.SPAWN_Z, (int) this.spawn.z());

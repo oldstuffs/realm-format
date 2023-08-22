@@ -57,9 +57,9 @@ final class RealmFormatManagerImpl implements RealmFormatManager {
     final boolean readOnly,
     @NotNull final RealmFormatPropertyMap properties
   ) {
-    final var start = System.currentTimeMillis();
+    final long start = System.currentTimeMillis();
     RealmFormatManagerImpl.log.info("Loading world {}.", worldName);
-    final var serializedWorld = loader.load(worldName, readOnly);
+    final byte[] serializedWorld = loader.load(worldName, readOnly);
     final RealmFormatWorld world;
     try {
       world = RealmFormatSerializers.deserialize(serializedWorld, properties);
