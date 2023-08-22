@@ -1,8 +1,9 @@
 package io.github.portlek.realmformat.paper.api;
 
 import io.github.portlek.realmformat.format.realm.RealmFormat;
-import java.util.List;
+import java.util.Collection;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Unmodifiable;
 import tr.com.infumia.terminable.TerminableModule;
 
 /**
@@ -31,7 +32,8 @@ public interface RealmFormatLoader extends TerminableModule {
    * @return World list.
    */
   @NotNull
-  List<String> list();
+  @Unmodifiable
+  Collection<String> list();
 
   /**
    * Tries to load the world.

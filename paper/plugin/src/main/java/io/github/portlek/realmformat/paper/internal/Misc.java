@@ -1,4 +1,4 @@
-package io.github.portlek.realmformat.paper.internal.misc;
+package io.github.portlek.realmformat.paper.internal;
 
 import lombok.experimental.UtilityClass;
 

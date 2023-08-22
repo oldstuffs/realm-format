@@ -3,17 +3,13 @@ package io.github.portlek.realmformat.paper.module;
 import cloud.commandframework.Command;
 import cloud.commandframework.paper.PaperCommandManager;
 import io.github.portlek.realmformat.paper.RealmFormatPlugin;
-import io.github.portlek.realmformat.paper.file.RealmFormatMessages;
-import io.github.portlek.realmformat.paper.internal.cloud.Cloud;
-import io.github.portlek.realmformat.paper.internal.misc.Services;
-import lombok.extern.log4j.Log4j2;
+import io.github.portlek.realmformat.paper.internal.Cloud;
+import jdk.vm.ci.services.Services;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
-import tr.com.infumia.task.Schedulers;
 import tr.com.infumia.terminable.TerminableConsumer;
 import tr.com.infumia.terminable.TerminableModule;
 
-@Log4j2
 public final class RealmFormatCommandModule implements TerminableModule {
 
   @Override
@@ -25,7 +21,6 @@ public final class RealmFormatCommandModule implements TerminableModule {
       "realmformat",
       "rf"
     );
-    Cloud.registerHelpCommand(commandManager, builder, "realmformat");
     commandManager.command(
       builder
         .literal("reload")

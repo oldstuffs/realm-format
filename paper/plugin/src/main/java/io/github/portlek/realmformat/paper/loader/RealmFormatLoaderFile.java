@@ -1,23 +1,25 @@
 package io.github.portlek.realmformat.paper.loader;
 
+import com.google.common.base.Preconditions;
 import io.github.portlek.realmformat.format.realm.RealmFormat;
 import io.github.portlek.realmformat.paper.api.RealmFormatLoader;
 import io.github.portlek.realmformat.paper.api.RealmFormatManager;
-import io.github.portlek.realmformat.paper.file.RealmFormatConfig;
-import io.github.portlek.realmformat.paper.internal.misc.Services;
 import java.io.File;
 import java.io.RandomAccessFile;
 import java.nio.channels.FileChannel;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.List;
+import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Stream;
+
+import jdk.vm.ci.services.Services;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.io.FileUtils;
 import org.jetbrains.annotations.NotNull;
+import tr.com.infumia.terminable.TerminableConsumer;
 
 @Log4j2
 public final class RealmFormatLoaderFile implements RealmFormatLoader {
@@ -59,7 +61,7 @@ public final class RealmFormatLoaderFile implements RealmFormatLoader {
   @NotNull
   @Override
   @SneakyThrows
-  public List<String> list() {
+  public Collection<String> list() {
     try (final Stream<Path> paths = Files.list(this.directory)) {
       return paths
         .map(Path::getFileName)

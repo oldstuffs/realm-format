@@ -5,7 +5,7 @@ event = "0.1.5-SNAPSHOT"
 junit = "5.10.0"
 
 [libraries]
-bukkit = { module = "org.bukkit:bukkit", version = "1.8-R0.1-SNAPSHOT" }
+bukkit = { module = "org.bukkit:bukkit", version = "1.8.8-R0.1-SNAPSHOT" }
 lombok = { module = "org.projectlombok:lombok", version = "1.18.28" }
 annotations = { module = "org.jetbrains:annotations", version = "24.0.1" }
 nbt = { module = "io.github.shiruka:nbt", version = "2.0.2" }
@@ -22,14 +22,12 @@ junit-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "jun
 junit-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit" }
 
 # Unnecessary dependencies, refactor the project to remove all of those.
-adventure-configurate = { module = "net.kyori:adventure-serializer-configurate4", version = "4.14.0" }
-configurate-yaml = { module = "org.spongepowered:configurate-yaml", version = "4.2.0-SNAPSHOT" }
 cloud-core = { module = "cloud.commandframework:cloud-core", version.ref = "cloud" }
 cloud-annotations = { module = "cloud.commandframework:cloud-annotations", version.ref = "cloud" }
 cloud-paper = { module = "cloud.commandframework:cloud-paper", version.ref = "cloud" }
 cloud-brigadier = { module = "cloud.commandframework:cloud-brigadier", version.ref = "cloud" }
 cloud-tasks = { module = "cloud.commandframework:cloud-tasks", version.ref = "cloud" }
-cloud-minecraft-extras = { module = "cloud.commandframework:cloud-minecraft-extras", version.ref = "cloud" }
+terminable = { module = "tr.com.infumia:terminable", version = "0.1.5-SNAPSHOT" }
 task-common = { module = "tr.com.infumia:TaskCommon", version.ref = "task" }
 task-bukkit = { module = "tr.com.infumia:TaskBukkit", version.ref = "task" }
 event-common = { module = "tr.com.infumia:EventCommon", version.ref = "event" }

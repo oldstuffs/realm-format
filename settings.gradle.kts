@@ -21,8 +21,6 @@ include0(
     ":paper:nms" to null,
     ":paper:nms:common" to "realm-format-paper-nms-common",
     ":paper:nms:v1_19_R3" to "realm-format-paper-nms-v1_19_R3",
-    ":paper:nms:v1_18_R2" to "realm-format-paper-nms-v1_18_R2",
-    ":paper:nms:v1_8_R3" to "realm-format-paper-nms-v1_8_R3",
     ":paper:plugin" to "realm-format-paper-plugin",
   ),
 )

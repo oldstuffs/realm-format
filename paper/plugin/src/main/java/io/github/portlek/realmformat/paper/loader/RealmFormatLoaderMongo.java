@@ -4,7 +4,7 @@ import io.github.portlek.realmformat.paper.api.RealmFormatLoader;
 import io.github.portlek.realmformat.paper.api.RealmFormatManager;
 import io.github.portlek.realmformat.paper.file.RealmFormatConfig;
 import io.github.portlek.realmformat.paper.internal.misc.Services;
-import java.util.List;
+import java.util.Collection;
 import org.jetbrains.annotations.NotNull;
 import tr.com.infumia.terminable.TerminableConsumer;
 
@@ -26,7 +26,7 @@ public final class RealmFormatLoaderMongo implements RealmFormatLoader {
 
   @NotNull
   @Override
-  public List<String> list() {
+  public Collection<String> list() {
     throw new UnsupportedOperationException();
   }
 
