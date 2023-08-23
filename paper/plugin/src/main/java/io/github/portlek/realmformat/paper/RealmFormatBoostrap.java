@@ -6,7 +6,9 @@ import tr.com.infumia.terminable.CompositeTerminable;
 import tr.com.infumia.terminable.Terminable;
 import tr.com.infumia.terminable.TerminableConsumer;
 
-public final class RealmFormatBoostrap extends JavaPlugin implements TerminableConsumer, Terminable {
+public final class RealmFormatBoostrap
+    extends JavaPlugin
+    implements TerminableConsumer, Terminable {
 
     private final CompositeTerminable terminable = CompositeTerminable.simple();
 
@@ -21,8 +23,7 @@ public final class RealmFormatBoostrap extends JavaPlugin implements TerminableC
     }
 
     @Override
-    public void onLoad() {
-    }
+    public void onLoad() {}
 
     @Override
     public void onDisable() {
@@ -30,6 +31,5 @@ public final class RealmFormatBoostrap extends JavaPlugin implements TerminableC
     }
 
     @Override
-    public void onEnable() {
-    }
+    public void onEnable() {}
 }

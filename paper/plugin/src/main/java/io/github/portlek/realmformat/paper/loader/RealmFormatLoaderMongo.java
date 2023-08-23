@@ -2,8 +2,6 @@ package io.github.portlek.realmformat.paper.loader;
 
 import io.github.portlek.realmformat.paper.api.RealmFormatLoader;
 import io.github.portlek.realmformat.paper.api.RealmFormatManager;
-import io.github.portlek.realmformat.paper.file.RealmFormatConfig;
-import io.github.portlek.realmformat.paper.internal.misc.Services;
 import java.util.Collection;
 import org.jetbrains.annotations.NotNull;
 import tr.com.infumia.terminable.TerminableConsumer;
