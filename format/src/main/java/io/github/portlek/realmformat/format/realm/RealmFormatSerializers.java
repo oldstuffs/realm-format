@@ -40,7 +40,7 @@ public class RealmFormatSerializers {
         final byte version = input.readByte();
         final RealmFormatSerializer serializer = Objects.requireNonNull(
             RealmFormatSerializers.SERIALIZERS.get(version),
-            "This version '%s' is NOT supported!".formatted(version)
+            String.format("This version '%s' is NOT supported!", version)
         );
         return serializer.deserialize(input, properties);
     }
@@ -56,7 +56,7 @@ public class RealmFormatSerializers {
         final DataOutputStream output = new DataOutputStream(stream);
         final RealmFormatSerializer serializer = Objects.requireNonNull(
             RealmFormatSerializers.SERIALIZERS.get(world.version()),
-            "This version '%s' is NOT supported!".formatted(world.version())
+            String.format("This version '%s' is NOT supported!", world.version())
         );
         output.write(RealmFormat.HEADER);
         output.writeByte(RealmFormat.VERSION);

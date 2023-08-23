@@ -29,7 +29,24 @@ public final class RealmFormatPlugin extends JavaPlugin implements TerminableCon
         Configs.yaml(this.dataFolder.resolve("config.yaml"))
     );
 
-    private final RealmFormatManagerImpl manager = new RealmFormatManagerImpl(this.getLogger());
+    private final NmsBackend nmsBackend = new VersionMatched<NmsBackend>()
+        .of()
+        .create()
+        .orElseThrow(() ->
+            new IllegalStateException(this.getServer().getVersion() + " not supported!")
+        );
+
+    private final ModifierBackend modifierBackend = new VersionMatched<ModifierBackend>()
+        .of(NmsBackend.class)
+        .create(this.nmsBackend)
+        .orElseThrow(() ->
+            new IllegalStateException(this.getServer().getVersion() + " not supported!")
+        );
+
+    private final RealmFormatManagerImpl manager = new RealmFormatManagerImpl(
+        this.getLogger(),
+        this.nmsBackend
+    );
 
     private final RealmFormatMessages messages = new RealmFormatMessages(
         Configs.yaml(this.dataFolder.resolve("messages.yaml"))
@@ -43,23 +60,7 @@ public final class RealmFormatPlugin extends JavaPlugin implements TerminableCon
         Plugins.init(new BukkitEventManager(this));
         RealmFormatSerializers.initiate();
         RealmFormatWorldUpgrades.initiate();
-        final VersionMatched<ModifierBackend> modifierBackend = new VersionMatched<>();
-        final VersionMatched<NmsBackend> nmsBackend = new VersionMatched<>();
-        Modifier.initiateBackend(
-            modifierBackend
-                .of(NmsBackend.class)
-                .create(
-                    nmsBackend
-                        .of()
-                        .create()
-                        .orElseThrow(() ->
-                            new IllegalStateException(nmsBackend.version() + " not supported!")
-                        )
-                )
-                .orElseThrow(() ->
-                    new IllegalStateException(modifierBackend.version() + " not supported!")
-                )
-        );
+        Modifier.initiateBackend(this.modifierBackend);
     }
 
     @Override
@@ -75,17 +76,23 @@ public final class RealmFormatPlugin extends JavaPlugin implements TerminableCon
             .bindModuleWith(this);
     }
 
-    public void reload() {
+    void reload() {
         this.config.reload();
         this.messages.reload();
         new RealmFormatLoaderFile(
             this.manager,
             this.getLogger(),
-            Paths.get(System.getProperty("user.dir"))
+            Paths.get(System.getProperty("user.dir")).resolve(this.config.loaders().local())
         )
             .bindModuleWith(this);
-        new RealmFormatLoaderMongo(this.manager, this.getLogger(), this.config)
-            .bindModuleWith(this);
+        if (this.config.loaders().mongo().enabled()) {
+            new RealmFormatLoaderMongo(
+                this.manager,
+                this.getLogger(),
+                this.config.loaders().mongo()
+            )
+                .bindModuleWith(this);
+        }
         this.getServer().getPluginManager().callEvent(new RealmFormatLoaderLoadEvent());
     }
 }

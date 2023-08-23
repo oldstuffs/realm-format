@@ -2,7 +2,7 @@ package io.github.portlek.realmformat.paper;
 
 import io.github.portlek.realmformat.paper.api.RealmFormatLoader;
 import io.github.portlek.realmformat.paper.api.RealmFormatManager;
-import io.github.portlek.realmformat.paper.config.RealmFormatConfig;
+import io.github.portlek.realmformat.paper.internal.config.MongoCredential;
 import java.util.Collection;
 import java.util.logging.Logger;
 import org.jetbrains.annotations.NotNull;
@@ -12,7 +12,7 @@ import tr.com.infumia.terminable.TerminableModule;
 final class RealmFormatLoaderMongo implements RealmFormatLoader, TerminableModule {
 
     @NotNull
-    private final RealmFormatConfig config;
+    private final MongoCredential credential;
 
     @NotNull
     private final Logger logger;
@@ -23,11 +23,11 @@ final class RealmFormatLoaderMongo implements RealmFormatLoader, TerminableModul
     RealmFormatLoaderMongo(
         @NotNull final RealmFormatManager manager,
         @NotNull final Logger logger,
-        @NotNull final RealmFormatConfig config
+        @NotNull final MongoCredential credential
     ) {
         this.manager = manager;
         this.logger = logger;
-        this.config = config;
+        this.credential = credential;
     }
 
     @Override
