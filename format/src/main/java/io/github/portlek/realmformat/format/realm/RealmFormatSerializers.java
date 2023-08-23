@@ -14,30 +14,14 @@ import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
 import org.jetbrains.annotations.NotNull;
 
-/**
- * A utility class that contains serialization methods for {@link RealmFormatWorld}.
- * <p>
- * Run {@link #initiate()} method before using other methods.
- */
 @UtilityClass
 public class RealmFormatSerializers {
 
-    /**
-     * Realm format version -> serializer.
-     */
     private final Map<Byte, RealmFormatSerializer> SERIALIZERS = Map.of(
         (byte) 1,
         RealmFormatSerializerV1.INSTANCE
     );
 
-    /**
-     * Deserializes the given bytes into {@link RealmFormatWorld}.
-     *
-     * @param serialized The serialized bytes to deserialize into {@link RealmFormatWorld}.
-     * @param properties The properties to change deserialization behavior.
-     *
-     * @return Deserialized {@link RealmFormatWorld}.
-     */
     @NotNull
     @SneakyThrows
     public RealmFormatWorld deserialize(
@@ -61,20 +45,10 @@ public class RealmFormatSerializers {
         return serializer.deserialize(input, properties);
     }
 
-    /**
-     * ignored.
-     */
     public void initiate() {
         // ignored
     }
 
-    /**
-     * Serializes the given world into bytes.
-     *
-     * @param world The world to serialize.
-     *
-     * @return Serialized bytes.
-     */
     @SneakyThrows
     public byte@NotNull[] serialize(@NotNull final RealmFormatWorld world) {
         final ByteArrayOutputStream stream = new ByteArrayOutputStream();

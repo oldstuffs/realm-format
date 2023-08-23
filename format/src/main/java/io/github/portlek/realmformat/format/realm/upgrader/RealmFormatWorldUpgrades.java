@@ -16,18 +16,10 @@ import lombok.extern.java.Log;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-/**
- * A utility class that contains upgrade methods for {@link RealmFormatWorld}.
- * <p>
- * Run {@link #initiate()} method before using other methods.
- */
 @Log
 @UtilityClass
 public class RealmFormatWorldUpgrades {
 
-    /**
-     * The upgrade list.
-     */
     private final Map<Byte, RealmFormatWorldUpgrade> UPGRADES = new HashMap<>(
         Map.of(
             (byte) 0x02,
@@ -47,12 +39,6 @@ public class RealmFormatWorldUpgrades {
         )
     );
 
-    /**
-     * Tries to upgrade the specified world to {@code to}.
-     *
-     * @param world The world to upgrade.
-     * @param version The version upgrade to.
-     */
     public void apply(@NotNull final RealmFormatWorld world, final byte version) {
         for (byte ver = (byte) (world.worldVersion() + 1); ver <= version; ver++) {
             final RealmFormatWorldUpgrade upgrade = RealmFormatWorldUpgrades.get(ver);
@@ -68,31 +54,15 @@ public class RealmFormatWorldUpgrades {
         }
     }
 
-    /**
-     * Obtains the {@link RealmFormatWorldUpgrade} instance by version.
-     *
-     * @param version The version to retrieve the upgrade instance.
-     *
-     * @return found {@link RealmFormatWorldUpgrade} instance.
-     */
     @Nullable
     public RealmFormatWorldUpgrade get(final byte version) {
         return RealmFormatWorldUpgrades.UPGRADES.get(version);
     }
 
-    /**
-     * ignored.
-     */
     public void initiate() {
         // ignored
     }
 
-    /**
-     * Registers a {@link RealmFormatWorldUpgrade} using specified version.
-     *
-     * @param version The version to register.
-     * @param upgrade The upgrade to register.
-     */
     public void register(final byte version, @NotNull final RealmFormatWorldUpgrade upgrade) {
         RealmFormatWorldUpgrades.UPGRADES.put(version, upgrade);
     }

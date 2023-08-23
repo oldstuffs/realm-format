@@ -1,5 +1,7 @@
 package io.github.portlek.realmformat.paper;
 
+import io.github.portlek.realmformat.format.realm.RealmFormatSerializers;
+import io.github.portlek.realmformat.format.realm.upgrader.RealmFormatWorldUpgrades;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import tr.com.infumia.event.bukkit.BukkitEventManager;
@@ -27,6 +29,8 @@ public final class RealmFormatBoostrap
     @Override
     public void onLoad() {
         Plugins.init(new BukkitEventManager(this));
+        RealmFormatSerializers.initiate();
+        RealmFormatWorldUpgrades.initiate();
     }
 
     @Override

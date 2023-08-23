@@ -5,9 +5,6 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 
-/**
- * A simple record class that represents {@link RealmFormatChunk}'s position.
- */
 @Getter
 @Builder
 @ToString
