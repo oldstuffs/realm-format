@@ -1,22 +1,35 @@
 package io.github.portlek.realmformat.paper;
 
-import io.github.portlek.realmformat.paper.internal.misc.Services;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
+import tr.com.infumia.terminable.CompositeTerminable;
+import tr.com.infumia.terminable.Terminable;
+import tr.com.infumia.terminable.TerminableConsumer;
 
-public final class RealmFormatBoostrap extends JavaPlugin {
+public final class RealmFormatBoostrap extends JavaPlugin implements TerminableConsumer, Terminable {
 
-  @Override
-  public void onLoad() {
-    RealmFormatPlugin.initialize(this);
-  }
+    private final CompositeTerminable terminable = CompositeTerminable.simple();
 
-  @Override
-  public void onDisable() {
-    Services.load(RealmFormatPlugin.class).onDisable();
-  }
+    @Override
+    public <T extends AutoCloseable> @NotNull T bind(@NotNull final T terminable) {
+        return this.terminable.bind(terminable);
+    }
 
-  @Override
-  public void onEnable() {
-    Services.load(RealmFormatPlugin.class).onEnable();
-  }
+    @Override
+    public void close() throws Exception {
+        this.terminable.close();
+    }
+
+    @Override
+    public void onLoad() {
+    }
+
+    @Override
+    public void onDisable() {
+        this.closeUnchecked();
+    }
+
+    @Override
+    public void onEnable() {
+    }
 }

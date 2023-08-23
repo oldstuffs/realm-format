@@ -20,16 +20,16 @@ import lombok.ToString;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public final class RealmFormatWorldV1 implements RealmFormatWorld {
 
-  private Map<RealmFormatChunkPosition, RealmFormatChunk> chunks;
+    private Map<RealmFormatChunkPosition, RealmFormatChunk> chunks;
 
-  private CompoundTag extra;
+    private CompoundTag extra;
 
-  private RealmFormatPropertyMap properties;
+    private RealmFormatPropertyMap properties;
 
-  private byte worldVersion;
+    private byte worldVersion;
 
-  @Override
-  public byte version() {
-    return 1;
-  }
+    @Override
+    public byte version() {
+        return 1;
+    }
 }

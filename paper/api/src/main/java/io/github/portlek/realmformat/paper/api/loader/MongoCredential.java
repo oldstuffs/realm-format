@@ -31,11 +31,11 @@ public final class MongoCredential {
         return this.uri != null
             ? this.uri
             : "mongodb://" +
-              this.parseAuthParams() +
-              this.address +
-              ":" +
-              this.port +
-              this.parseAuthSource();
+            this.parseAuthParams() +
+            this.address +
+            ":" +
+            this.port +
+            this.parseAuthSource();
     }
 
     @NotNull

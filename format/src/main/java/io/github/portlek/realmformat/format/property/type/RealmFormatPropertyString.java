@@ -9,36 +9,36 @@ import org.jetbrains.annotations.Nullable;
 
 public final class RealmFormatPropertyString extends RealmFormatProperty<String> {
 
-  public RealmFormatPropertyString(
-    @NotNull final String nbtName,
-    @Nullable final String defaultValue,
-    @Nullable final Predicate<String> validator
-  ) {
-    super(nbtName, defaultValue, validator);
-  }
-
-  public RealmFormatPropertyString(
-    @NotNull final String nbtName,
-    @Nullable final String defaultValue
-  ) {
-    this(nbtName, defaultValue, null);
-  }
-
-  public RealmFormatPropertyString(@NotNull final String nbtName) {
-    this(nbtName, null, null);
-  }
-
-  @Nullable
-  @Override
-  protected String readValue(@NotNull final Tag tag) {
-    if (tag.isString()) {
-      return this.defaultValue();
+    public RealmFormatPropertyString(
+        @NotNull final String nbtName,
+        @Nullable final String defaultValue,
+        @Nullable final Predicate<String> validator
+    ) {
+        super(nbtName, defaultValue, validator);
     }
-    return tag.asString().value();
-  }
 
-  @Override
-  protected void writeValue(@NotNull final CompoundTag compound, @NotNull final String value) {
-    compound.setString(this.nbtName(), value);
-  }
+    public RealmFormatPropertyString(
+        @NotNull final String nbtName,
+        @Nullable final String defaultValue
+    ) {
+        this(nbtName, defaultValue, null);
+    }
+
+    public RealmFormatPropertyString(@NotNull final String nbtName) {
+        this(nbtName, null, null);
+    }
+
+    @Nullable
+    @Override
+    protected String readValue(@NotNull final Tag tag) {
+        if (tag.isString()) {
+            return this.defaultValue();
+        }
+        return tag.asString().value();
+    }
+
+    @Override
+    protected void writeValue(@NotNull final CompoundTag compound, @NotNull final String value) {
+        compound.setString(this.nbtName(), value);
+    }
 }

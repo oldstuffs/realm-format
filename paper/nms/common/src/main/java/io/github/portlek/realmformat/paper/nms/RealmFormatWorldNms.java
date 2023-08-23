@@ -8,41 +8,41 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public interface RealmFormatWorldNms extends RealmFormatWorld {
-  @Nullable
-  RealmFormatChunk chunkAt(int x, int z);
+    @Nullable
+    RealmFormatChunk chunkAt(int x, int z);
 
-  @NotNull
-  RealmFormatWorldNms clone(@NotNull String worldName) throws Exception;
+    @NotNull
+    RealmFormatWorldNms clone(@NotNull String worldName) throws Exception;
 
-  @NotNull
-  RealmFormatWorldNms clone(@NotNull String worldName, @Nullable RealmFormatLoader loader)
-    throws Exception;
+    @NotNull
+    RealmFormatWorldNms clone(@NotNull String worldName, @Nullable RealmFormatLoader loader)
+        throws Exception;
 
-  @NotNull
-  RealmFormatWorldNms clone(
-    @NotNull String worldName,
-    @Nullable RealmFormatLoader loader,
-    boolean lock
-  ) throws Exception;
+    @NotNull
+    RealmFormatWorldNms clone(
+        @NotNull String worldName,
+        @Nullable RealmFormatLoader loader,
+        boolean lock
+    ) throws Exception;
 
-  @NotNull
-  RealmFormatWorldNms loader(@NotNull RealmFormatLoader loader);
+    @NotNull
+    RealmFormatWorldNms loader(@NotNull RealmFormatLoader loader);
 
-  @NotNull
-  RealmFormatLoader loader();
+    @NotNull
+    RealmFormatLoader loader();
 
-  boolean locked();
+    boolean locked();
 
-  @NotNull
-  String name();
+    @NotNull
+    String name();
 
-  boolean readOnly();
+    boolean readOnly();
 
-  @NotNull
-  CompletableFuture<byte[]> serialize() throws Exception;
+    @NotNull
+    CompletableFuture<byte[]> serialize() throws Exception;
 
-  void updateChunk(@NotNull RealmFormatChunk chunk);
+    void updateChunk(@NotNull RealmFormatChunk chunk);
 
-  @NotNull
-  RealmFormatWorldNms worldVersion(byte worldVersion);
+    @NotNull
+    RealmFormatWorldNms worldVersion(byte worldVersion);
 }

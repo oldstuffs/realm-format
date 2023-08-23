@@ -9,36 +9,36 @@ import org.jetbrains.annotations.Nullable;
 
 public final class RealmFormatPropertyInt extends RealmFormatProperty<Integer> {
 
-  public RealmFormatPropertyInt(
-    @NotNull final String nbtName,
-    @Nullable final Integer defaultValue,
-    @Nullable final Predicate<Integer> validator
-  ) {
-    super(nbtName, defaultValue, validator);
-  }
-
-  public RealmFormatPropertyInt(
-    @NotNull final String nbtName,
-    @Nullable final Integer defaultValue
-  ) {
-    this(nbtName, defaultValue, null);
-  }
-
-  public RealmFormatPropertyInt(@NotNull final String nbtName) {
-    this(nbtName, null, null);
-  }
-
-  @Nullable
-  @Override
-  protected Integer readValue(@NotNull final Tag tag) {
-    if (tag.isInt()) {
-      return this.defaultValue();
+    public RealmFormatPropertyInt(
+        @NotNull final String nbtName,
+        @Nullable final Integer defaultValue,
+        @Nullable final Predicate<Integer> validator
+    ) {
+        super(nbtName, defaultValue, validator);
     }
-    return tag.asInt().intValue();
-  }
 
-  @Override
-  protected void writeValue(@NotNull final CompoundTag compound, @NotNull final Integer value) {
-    compound.setInteger(this.nbtName(), value);
-  }
+    public RealmFormatPropertyInt(
+        @NotNull final String nbtName,
+        @Nullable final Integer defaultValue
+    ) {
+        this(nbtName, defaultValue, null);
+    }
+
+    public RealmFormatPropertyInt(@NotNull final String nbtName) {
+        this(nbtName, null, null);
+    }
+
+    @Nullable
+    @Override
+    protected Integer readValue(@NotNull final Tag tag) {
+        if (tag.isInt()) {
+            return this.defaultValue();
+        }
+        return tag.asInt().intValue();
+    }
+
+    @Override
+    protected void writeValue(@NotNull final CompoundTag compound, @NotNull final Integer value) {
+        compound.setInteger(this.nbtName(), value);
+    }
 }

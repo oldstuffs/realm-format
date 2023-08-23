@@ -12,34 +12,34 @@ import org.jetbrains.annotations.Nullable;
 @ToString(onlyExplicitlyIncluded = true)
 public abstract class RealmFormatProperty<T> {
 
-  @Nullable
-  @ToString.Include
-  private final T defaultValue;
+    @Nullable
+    @ToString.Include
+    private final T defaultValue;
 
-  @NotNull
-  @ToString.Include
-  private final String nbtName;
+    @NotNull
+    @ToString.Include
+    private final String nbtName;
 
-  @Nullable
-  private final Predicate<@NotNull T> validator;
+    @Nullable
+    private final Predicate<@NotNull T> validator;
 
-  protected RealmFormatProperty(
-    @NotNull final String nbtName,
-    @Nullable final T defaultValue,
-    @Nullable final Predicate<T> validator
-  ) {
-    this.nbtName = nbtName;
-    if (validator != null && defaultValue != null && !validator.test(defaultValue)) {
-      throw new IllegalArgumentException(
-        "Invalid default value for property %s! %s".formatted(nbtName, defaultValue)
-      );
+    protected RealmFormatProperty(
+        @NotNull final String nbtName,
+        @Nullable final T defaultValue,
+        @Nullable final Predicate<T> validator
+    ) {
+        this.nbtName = nbtName;
+        if (validator != null && defaultValue != null && !validator.test(defaultValue)) {
+            throw new IllegalArgumentException(
+                "Invalid default value for property %s! %s".formatted(nbtName, defaultValue)
+            );
+        }
+        this.defaultValue = defaultValue;
+        this.validator = validator;
     }
-    this.defaultValue = defaultValue;
-    this.validator = validator;
-  }
 
-  @Nullable
-  protected abstract T readValue(@NotNull Tag tag);
+    @Nullable
+    protected abstract T readValue(@NotNull Tag tag);
 
-  protected abstract void writeValue(@NotNull CompoundTag compound, @NotNull T value);
+    protected abstract void writeValue(@NotNull CompoundTag compound, @NotNull T value);
 }

@@ -10,10 +10,10 @@ import tr.com.infumia.terminable.TerminableModule;
 
 public final class RealmFormatLoaderModule implements TerminableModule {
 
-  @Override
-  public void setup(@NotNull final TerminableConsumer consumer) {
-    Services.load(RealmFormatLoaderFile.class).bindModuleWith(consumer);
-    Services.load(RealmFormatLoaderMongo.class).bindModuleWith(consumer);
-    new RealmFormatLoaderLoadEvent().callEvent();
-  }
+    @Override
+    public void setup(@NotNull final TerminableConsumer consumer) {
+        Services.load(RealmFormatLoaderFile.class).bindModuleWith(consumer);
+        Services.load(RealmFormatLoaderMongo.class).bindModuleWith(consumer);
+        new RealmFormatLoaderLoadEvent().callEvent();
+    }
 }

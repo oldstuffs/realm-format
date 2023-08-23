@@ -16,54 +16,54 @@ import org.jetbrains.annotations.Nullable;
 
 public final class RealmFormatWorldV1_19_R2 extends RealmFormatWorldNmsBase {
 
-  public RealmFormatWorldV1_19_R2(
-    @NotNull final NmsBackend nmsBackend,
-    @NotNull final String name,
-    @NotNull final Map<RealmFormatChunkPosition, RealmFormatChunk> chunks,
-    @NotNull final CompoundTag extra,
-    @NotNull final RealmFormatPropertyMap properties,
-    final byte worldVersion,
-    final byte version,
-    @NotNull final RealmFormatLoader loader,
-    final boolean locked,
-    final boolean readOnly
-  ) {
-    super(
-      nmsBackend,
-      name,
-      chunks,
-      extra,
-      properties,
-      worldVersion,
-      version,
-      loader,
-      locked,
-      readOnly
-    );
-  }
+    public RealmFormatWorldV1_19_R2(
+        @NotNull final NmsBackend nmsBackend,
+        @NotNull final String name,
+        @NotNull final Map<RealmFormatChunkPosition, RealmFormatChunk> chunks,
+        @NotNull final CompoundTag extra,
+        @NotNull final RealmFormatPropertyMap properties,
+        final byte worldVersion,
+        final byte version,
+        @NotNull final RealmFormatLoader loader,
+        final boolean locked,
+        final boolean readOnly
+    ) {
+        super(
+            nmsBackend,
+            name,
+            chunks,
+            extra,
+            properties,
+            worldVersion,
+            version,
+            loader,
+            locked,
+            readOnly
+        );
+    }
 
-  @NotNull
-  @Override
-  public RealmFormatWorldNmsBase createRealmFormatWorld(
-    @NotNull final String worldName,
-    @Nullable final RealmFormatLoader loader,
-    final boolean lock
-  ) {
-    return null;
-  }
+    @NotNull
+    @Override
+    public RealmFormatWorldNmsBase createRealmFormatWorld(
+        @NotNull final String worldName,
+        @Nullable final RealmFormatLoader loader,
+        final boolean lock
+    ) {
+        return null;
+    }
 
-  @NotNull
-  @Override
-  public CompletableFuture<RealmFormatChunk> serializeChunks(
-    @NotNull final List<RealmFormatChunk> chunks,
-    final byte worldVersion
-  ) throws IOException {
-    return null;
-  }
+    @NotNull
+    @Override
+    public CompletableFuture<RealmFormatChunk> serializeChunks(
+        @NotNull final List<RealmFormatChunk> chunks,
+        final byte worldVersion
+    ) throws IOException {
+        return null;
+    }
 
-  @NotNull
-  @Override
-  public CompletableFuture<byte[]> serialize() throws Exception {
-    return null;
-  }
+    @NotNull
+    @Override
+    public CompletableFuture<byte[]> serialize() throws Exception {
+        return null;
+    }
 }

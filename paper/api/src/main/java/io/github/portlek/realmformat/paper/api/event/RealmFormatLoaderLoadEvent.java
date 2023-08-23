@@ -11,28 +11,28 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class RealmFormatLoaderLoadEvent extends Event {
 
-  private static final HandlerList HANDLER_LIST = new HandlerList();
+    private static final HandlerList HANDLER_LIST = new HandlerList();
 
-  /**
-   * ctor.
-   */
-  public RealmFormatLoaderLoadEvent() {
-    super(!Bukkit.isPrimaryThread());
-  }
+    /**
+     * ctor.
+     */
+    public RealmFormatLoaderLoadEvent() {
+        super(!Bukkit.isPrimaryThread());
+    }
 
-  /**
-   * Returns handler list.
-   *
-   * @return Handler list.
-   */
-  @NotNull
-  public static HandlerList getHandlerList() {
-    return RealmFormatLoaderLoadEvent.HANDLER_LIST;
-  }
+    /**
+     * Returns handler list.
+     *
+     * @return Handler list.
+     */
+    @NotNull
+    public static HandlerList getHandlerList() {
+        return RealmFormatLoaderLoadEvent.HANDLER_LIST;
+    }
 
-  @NotNull
-  @Override
-  public HandlerList getHandlers() {
-    return RealmFormatLoaderLoadEvent.getHandlerList();
-  }
+    @NotNull
+    @Override
+    public HandlerList getHandlers() {
+        return RealmFormatLoaderLoadEvent.getHandlerList();
+    }
 }

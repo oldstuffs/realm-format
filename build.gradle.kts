@@ -203,7 +203,7 @@ spotless {
 
   kotlinGradle {
     target("**/*.gradle.kts")
-    indentWithSpaces(2)
+    indentWithSpaces(4)
     endWithNewline()
     trimTrailingWhitespace()
     ktlint()
@@ -213,12 +213,12 @@ spotless {
     target("**/src/**/java/**/*.java")
     importOrder()
     removeUnusedImports()
-    indentWithSpaces(2)
+    indentWithSpaces(4)
     endWithNewline()
     trimTrailingWhitespace()
     prettier(prettierConfig)
       .config(
-        mapOf("parser" to "java", "tabWidth" to 2, "useTabs" to false, "printWidth" to 100),
+        mapOf("parser" to "java", "tabWidth" to 4, "useTabs" to false, "printWidth" to 100),
       )
   }
 }

@@ -13,6 +13,6 @@ import org.jetbrains.annotations.NotNull;
 @EqualsAndHashCode
 public final class BlockDataV1_8 {
 
-  @NotNull
-  private final NibbleArray data;
+    @NotNull
+    private final NibbleArray data;
 }

@@ -11,7 +11,7 @@ import lombok.ToString;
 @EqualsAndHashCode
 final class AnvilFormatChunkEntry {
 
-  private final int offset;
+    private final int offset;
 
-  private final int paddedSize;
+    private final int paddedSize;
 }

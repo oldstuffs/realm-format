@@ -14,7 +14,7 @@ import lombok.ToString;
 @EqualsAndHashCode
 public final class RealmFormatChunkPosition {
 
-  private final int x;
+    private final int x;
 
-  private final int z;
+    private final int z;
 }

@@ -12,30 +12,34 @@ import tr.com.infumia.terminable.TerminableModule;
 
 public final class RealmFormatCommandModule implements TerminableModule {
 
-  @Override
-  public void setup(@NotNull final TerminableConsumer consumer) {
-    final RealmFormatPlugin plugin = Services.load(RealmFormatPlugin.class);
-    final RealmFormatMessages messages = Services.load(RealmFormatMessages.class);
-    final PaperCommandManager<CommandSender> commandManager = Services.load(Cloud.KEY);
-    final Command.Builder<CommandSender> builder = commandManager.commandBuilder(
-      "realmformat",
-      "rf"
-    );
-    commandManager.command(
-      builder
-        .literal("reload")
-        .handler(context -> {
-          final long now = System.currentTimeMillis();
-          Schedulers
-            .async()
-            .run(() -> {
-              plugin.reload();
-              messages
-                .reloadComplete()
-                .sendP(context.getSender(), "took", System.currentTimeMillis() - now);
-            })
-            .bindWith(consumer);
-        })
-    );
-  }
+    @Override
+    public void setup(@NotNull final TerminableConsumer consumer) {
+        final RealmFormatPlugin plugin = Services.load(RealmFormatPlugin.class);
+        final RealmFormatMessages messages = Services.load(RealmFormatMessages.class);
+        final PaperCommandManager<CommandSender> commandManager = Services.load(Cloud.KEY);
+        final Command.Builder<CommandSender> builder = commandManager.commandBuilder(
+            "realmformat",
+            "rf"
+        );
+        commandManager.command(
+            builder
+                .literal("reload")
+                .handler(context -> {
+                    final long now = System.currentTimeMillis();
+                    Schedulers
+                        .async()
+                        .run(() -> {
+                            plugin.reload();
+                            messages
+                                .reloadComplete()
+                                .sendP(
+                                    context.getSender(),
+                                    "took",
+                                    System.currentTimeMillis() - now
+                                );
+                        })
+                        .bindWith(consumer);
+                })
+        );
+    }
 }

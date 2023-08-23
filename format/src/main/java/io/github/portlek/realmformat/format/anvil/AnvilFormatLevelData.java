@@ -13,14 +13,14 @@ import org.jetbrains.annotations.NotNull;
 @EqualsAndHashCode
 final class AnvilFormatLevelData {
 
-  private final byte version;
+    private final byte version;
 
-  @NotNull
-  private final Map<String, String> gameRules;
+    @NotNull
+    private final Map<String, String> gameRules;
 
-  private final int spawnX;
+    private final int spawnX;
 
-  private final int spawnY;
+    private final int spawnY;
 
-  private final int spawnZ;
+    private final int spawnZ;
 }

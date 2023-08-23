@@ -6,9 +6,9 @@ import org.jetbrains.annotations.NotNull;
 
 public final class RealmFormatWorldUpgradeV1_18 implements RealmFormatWorldUpgrade {
 
-  @NotNull
-  @Override
-  public RealmFormatWorld apply(@NotNull final RealmFormatWorld t) {
-    return t;
-  }
+    @NotNull
+    @Override
+    public RealmFormatWorld apply(@NotNull final RealmFormatWorld t) {
+        return t;
+    }
 }

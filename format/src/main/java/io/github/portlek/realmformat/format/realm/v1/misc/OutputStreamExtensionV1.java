@@ -18,107 +18,111 @@ import org.jetbrains.annotations.Nullable;
 
 public class OutputStreamExtensionV1 extends OutputStreamExtension {
 
-  private final byte worldVersion;
+    private final byte worldVersion;
 
-  public OutputStreamExtensionV1(@NotNull final DataOutputStream output, final byte worldVersion) {
-    super(output);
-    this.worldVersion = worldVersion;
-  }
-
-  public void writeCompressedChunks(@NotNull final Collection<RealmFormatChunk> chunks)
-    throws IOException {
-    this.writeCompressed(this.serializeChunks(chunks));
-  }
-
-  public void writeEntities(@NotNull final Collection<RealmFormatChunk> chunks) throws IOException {
-    final ListTag entities = Tag.createList();
-    for (final RealmFormatChunk chunk : chunks) {
-      for (final Tag entity : chunk.entities()) {
-        entities.add(entity);
-      }
+    public OutputStreamExtensionV1(
+        @NotNull final DataOutputStream output,
+        final byte worldVersion
+    ) {
+        super(output);
+        this.worldVersion = worldVersion;
     }
-    this.writeCompressedCompound(Tag.createCompound().set("entities", entities));
-  }
 
-  public void writeTileEntities(@NotNull final Collection<RealmFormatChunk> chunks)
-    throws IOException {
-    final ListTag entities = Tag.createList();
-    for (final RealmFormatChunk chunk : chunks) {
-      for (final Tag entity : chunk.tileEntities()) {
-        entities.add(entity);
-      }
+    public void writeCompressedChunks(@NotNull final Collection<RealmFormatChunk> chunks)
+        throws IOException {
+        this.writeCompressed(this.serializeChunks(chunks));
     }
-    this.writeCompressedCompound(Tag.createCompound().set("tiles", entities));
-  }
 
-  @ApiStatus.Internal
-  protected byte@NotNull[] serializeChunks(@NotNull final Collection<RealmFormatChunk> chunks)
-    throws IOException {
-    final ByteArrayOutputStream outputStream = new ByteArrayOutputStream(16384);
-    @Cleanup
-    final OutputStreamExtensionV1 output = this.with(outputStream);
-    output.writeChunks(chunks);
-    return outputStream.toByteArray();
-  }
-
-  @ApiStatus.Internal
-  protected OutputStreamExtensionV1 with(@NotNull final OutputStream stream) {
-    return new OutputStreamExtensionV1(new DataOutputStream(stream), this.worldVersion);
-  }
-
-  @ApiStatus.Internal
-  protected void writeChunkSections(@Nullable final RealmFormatChunkSection@NotNull[] sections)
-    throws IOException {
-    final int sectionCount = Math.toIntExact(
-      Arrays.stream(sections).filter(Objects::nonNull).count()
-    );
-    this.writeInt(sectionCount);
-    for (int i = 0; i < sections.length; i++) {
-      final RealmFormatChunkSection section = sections[i];
-      if (section == null) {
-        continue;
-      }
-      this.writeInt(i);
-      this.writeOptionalNibbleArray(section.blockLight());
-      this.writeOptionalNibbleArray(section.skyLight());
-      if (this.worldVersion < 4) {
-        final BlockDataV1_8 blockDataV1_8 = Objects.requireNonNull(
-          section.blockDataV1_8(),
-          "Block data for 1.8 not found!"
-        );
-        this.writeNibbleArray(blockDataV1_8.data());
-      } else if (this.worldVersion < 8) {
-        final BlockDataV1_14 blockDataV1_14 = Objects.requireNonNull(
-          section.blockDataV1_14(),
-          "Block data for 1.14 not found!"
-        );
-        this.writeListTag(blockDataV1_14.palette());
-        this.writeLongArray(blockDataV1_14.blockStates());
-      } else {
-        final BlockDataV1_18 blockDataV1_18 = Objects.requireNonNull(
-          section.blockDataV1_18(),
-          "Block data for 1.18 not found!"
-        );
-        this.writeCompound(blockDataV1_18.blockStates());
-        this.writeCompound(blockDataV1_18.biomes());
-      }
-    }
-  }
-
-  @ApiStatus.Internal
-  protected void writeChunks(@NotNull final Collection<RealmFormatChunk> chunks)
-    throws IOException {
-    this.writeArray(
-        chunks.toArray(RealmFormatChunk[]::new),
-        (__, chunk) -> {
-          this.writeInt(chunk.x());
-          this.writeInt(chunk.z());
-          this.writeOptionalIntArray(chunk.biomes());
-          this.writeCompound(chunk.heightMaps());
-          this.writeInt(chunk.minSection());
-          this.writeInt(chunk.maxSection());
-          this.writeChunkSections(chunk.sections());
+    public void writeEntities(@NotNull final Collection<RealmFormatChunk> chunks)
+        throws IOException {
+        final ListTag entities = Tag.createList();
+        for (final RealmFormatChunk chunk : chunks) {
+            for (final Tag entity : chunk.entities()) {
+                entities.add(entity);
+            }
         }
-      );
-  }
+        this.writeCompressedCompound(Tag.createCompound().set("entities", entities));
+    }
+
+    public void writeTileEntities(@NotNull final Collection<RealmFormatChunk> chunks)
+        throws IOException {
+        final ListTag entities = Tag.createList();
+        for (final RealmFormatChunk chunk : chunks) {
+            for (final Tag entity : chunk.tileEntities()) {
+                entities.add(entity);
+            }
+        }
+        this.writeCompressedCompound(Tag.createCompound().set("tiles", entities));
+    }
+
+    @ApiStatus.Internal
+    protected byte@NotNull[] serializeChunks(@NotNull final Collection<RealmFormatChunk> chunks)
+        throws IOException {
+        final ByteArrayOutputStream outputStream = new ByteArrayOutputStream(16384);
+        @Cleanup
+        final OutputStreamExtensionV1 output = this.with(outputStream);
+        output.writeChunks(chunks);
+        return outputStream.toByteArray();
+    }
+
+    @ApiStatus.Internal
+    protected OutputStreamExtensionV1 with(@NotNull final OutputStream stream) {
+        return new OutputStreamExtensionV1(new DataOutputStream(stream), this.worldVersion);
+    }
+
+    @ApiStatus.Internal
+    protected void writeChunkSections(@Nullable final RealmFormatChunkSection@NotNull[] sections)
+        throws IOException {
+        final int sectionCount = Math.toIntExact(
+            Arrays.stream(sections).filter(Objects::nonNull).count()
+        );
+        this.writeInt(sectionCount);
+        for (int i = 0; i < sections.length; i++) {
+            final RealmFormatChunkSection section = sections[i];
+            if (section == null) {
+                continue;
+            }
+            this.writeInt(i);
+            this.writeOptionalNibbleArray(section.blockLight());
+            this.writeOptionalNibbleArray(section.skyLight());
+            if (this.worldVersion < 4) {
+                final BlockDataV1_8 blockDataV1_8 = Objects.requireNonNull(
+                    section.blockDataV1_8(),
+                    "Block data for 1.8 not found!"
+                );
+                this.writeNibbleArray(blockDataV1_8.data());
+            } else if (this.worldVersion < 8) {
+                final BlockDataV1_14 blockDataV1_14 = Objects.requireNonNull(
+                    section.blockDataV1_14(),
+                    "Block data for 1.14 not found!"
+                );
+                this.writeListTag(blockDataV1_14.palette());
+                this.writeLongArray(blockDataV1_14.blockStates());
+            } else {
+                final BlockDataV1_18 blockDataV1_18 = Objects.requireNonNull(
+                    section.blockDataV1_18(),
+                    "Block data for 1.18 not found!"
+                );
+                this.writeCompound(blockDataV1_18.blockStates());
+                this.writeCompound(blockDataV1_18.biomes());
+            }
+        }
+    }
+
+    @ApiStatus.Internal
+    protected void writeChunks(@NotNull final Collection<RealmFormatChunk> chunks)
+        throws IOException {
+        this.writeArray(
+                chunks.toArray(RealmFormatChunk[]::new),
+                (__, chunk) -> {
+                    this.writeInt(chunk.x());
+                    this.writeInt(chunk.z());
+                    this.writeOptionalIntArray(chunk.biomes());
+                    this.writeCompound(chunk.heightMaps());
+                    this.writeInt(chunk.minSection());
+                    this.writeInt(chunk.maxSection());
+                    this.writeChunkSections(chunk.sections());
+                }
+            );
+    }
 }

@@ -13,9 +13,9 @@ import org.jetbrains.annotations.NotNull;
 @EqualsAndHashCode
 public final class BlockDataV1_18 {
 
-  @NotNull
-  private final CompoundTag biomes;
+    @NotNull
+    private final CompoundTag biomes;
 
-  @NotNull
-  private final CompoundTag blockStates;
+    @NotNull
+    private final CompoundTag blockStates;
 }
