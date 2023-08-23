@@ -4,12 +4,11 @@ import io.github.portlek.realmformat.format.realm.RealmFormat;
 import java.util.Collection;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
-import tr.com.infumia.terminable.TerminableModule;
 
 /**
  * An interface that represents loader for {@link RealmFormat} worlds.
  */
-public interface RealmFormatLoader extends TerminableModule {
+public interface RealmFormatLoader {
     /**
      * Deletes the world.
      *

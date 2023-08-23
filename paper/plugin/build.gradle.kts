@@ -13,6 +13,12 @@ dependencies {
 
   compileOnly(libs.commonsio)
 
+  implementation(libs.event.common)
+  implementation(libs.event.bukkit)
+
+  implementation(libs.task.common)
+  implementation(libs.task.bukkit)
+
   implementation(libs.cloud.core)
   implementation(libs.cloud.annotations)
   implementation(libs.cloud.paper)

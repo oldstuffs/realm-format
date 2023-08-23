@@ -10,15 +10,17 @@ import java.nio.file.Path;
 import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import lombok.SneakyThrows;
 import org.apache.commons.io.FileUtils;
 import org.jetbrains.annotations.NotNull;
-import org.slf4j.Logger;
 import tr.com.infumia.terminable.TerminableConsumer;
+import tr.com.infumia.terminable.TerminableModule;
 
-public final class RealmFormatLoaderFile implements RealmFormatLoader {
+public final class RealmFormatLoaderFile implements RealmFormatLoader, TerminableModule {
 
     @NotNull
     private final Path folder;
@@ -42,17 +44,17 @@ public final class RealmFormatLoaderFile implements RealmFormatLoader {
             );
         }
         final RandomAccessFile file = this.randomAccessFile(worldName);
-        this.logger.info("Trying to unlock '{}' world...", worldName);
+        this.logger.log(Level.INFO, "Trying to unlock '{}' world...", worldName);
         this.unlock(worldName);
-        this.logger.info("World '{}' is successfully unlocked!", worldName);
-        this.logger.info("Trying to delete '{}' world...", worldName);
+        this.logger.log(Level.INFO, "World '{}' is successfully unlocked!", worldName);
+        this.logger.log(Level.INFO, "Trying to delete '{}' world...", worldName);
         file.seek(0);
         file.setLength(0);
         file.write(null);
         file.close();
         this.worlds.remove(worldName);
         FileUtils.forceDelete(this.pathFor(worldName).toFile());
-        this.logger.info("World '{}' is successfully deleted!", worldName);
+        this.logger.log(Level.INFO, "World '{}' is successfully deleted!", worldName);
     }
 
     @Override
@@ -83,7 +85,7 @@ public final class RealmFormatLoaderFile implements RealmFormatLoader {
         }
         final RandomAccessFile file = this.randomAccessFile(worldName);
         if (!readOnly && file.getChannel().isOpen()) {
-            this.logger.info("World '{}' is unlocked by loading it.", worldName);
+            this.logger.log(Level.INFO, "World '{}' is unlocked by loading it.", worldName);
         }
         final long fileLength = file.length();
         if (fileLength > Integer.MAX_VALUE) {
@@ -159,7 +161,8 @@ public final class RealmFormatLoaderFile implements RealmFormatLoader {
                     try {
                         file.close();
                     } catch (final Exception e) {
-                        this.logger.error(
+                        this.logger.log(
+                                Level.SEVERE,
                                 "Unexpected error occurred while closing the file " + fileName,
                                 e
                             );

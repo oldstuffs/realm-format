@@ -1,7 +1,7 @@
 [versions]
 cloud = "1.8.3"
-task = "0.1.6-SNAPSHOT"
-event = "0.1.5-SNAPSHOT"
+task = "0.1.7-SNAPSHOT"
+event = "0.1.6-SNAPSHOT"
 junit = "5.10.0"
 
 [libraries]
@@ -28,10 +28,10 @@ cloud-paper = { module = "cloud.commandframework:cloud-paper", version.ref = "cl
 cloud-brigadier = { module = "cloud.commandframework:cloud-brigadier", version.ref = "cloud" }
 cloud-tasks = { module = "cloud.commandframework:cloud-tasks", version.ref = "cloud" }
 terminable = { module = "tr.com.infumia:terminable", version = "0.1.5-SNAPSHOT" }
-task-common = { module = "tr.com.infumia:TaskCommon", version.ref = "task" }
-task-bukkit = { module = "tr.com.infumia:TaskBukkit", version.ref = "task" }
-event-common = { module = "tr.com.infumia:EventCommon", version.ref = "event" }
-event-paper = { module = "tr.com.infumia:EventPaper", version.ref = "event" }
+task-common = { module = "tr.com.infumia:task-common", version.ref = "task" }
+task-bukkit = { module = "tr.com.infumia:task-bukkit", version.ref = "task" }
+event-common = { module = "tr.com.infumia:event-common", version.ref = "event" }
+event-bukkit = { module = "tr.com.infumia:event-bukkit", version.ref = "event" }
 versionmatched = { module = "tr.com.infumia:versionmatched", version = "0.1.6-SNAPSHOT" }
 
 [plugins]

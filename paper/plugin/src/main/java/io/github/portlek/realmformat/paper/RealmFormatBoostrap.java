@@ -2,6 +2,8 @@ package io.github.portlek.realmformat.paper;
 
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
+import tr.com.infumia.event.bukkit.BukkitEventManager;
+import tr.com.infumia.event.common.Plugins;
 import tr.com.infumia.terminable.CompositeTerminable;
 import tr.com.infumia.terminable.Terminable;
 import tr.com.infumia.terminable.TerminableConsumer;
@@ -23,7 +25,9 @@ public final class RealmFormatBoostrap
     }
 
     @Override
-    public void onLoad() {}
+    public void onLoad() {
+        Plugins.init(new BukkitEventManager(this));
+    }
 
     @Override
     public void onDisable() {

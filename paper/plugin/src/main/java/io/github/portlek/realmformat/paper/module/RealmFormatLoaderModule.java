@@ -1,7 +1,6 @@
 package io.github.portlek.realmformat.paper.module;
 
 import io.github.portlek.realmformat.paper.api.event.RealmFormatLoaderLoadEvent;
-import io.github.portlek.realmformat.paper.internal.misc.Services;
 import io.github.portlek.realmformat.paper.loader.RealmFormatLoaderFile;
 import io.github.portlek.realmformat.paper.loader.RealmFormatLoaderMongo;
 import org.jetbrains.annotations.NotNull;

@@ -1,16 +1,28 @@
 package io.github.portlek.realmformat.paper.loader;
 
 import io.github.portlek.realmformat.paper.api.RealmFormatLoader;
-import io.github.portlek.realmformat.paper.api.RealmFormatManager;
+import io.github.portlek.realmformat.paper.api.loader.MongoCredential;
 import java.util.Collection;
+import java.util.logging.Logger;
 import org.jetbrains.annotations.NotNull;
 import tr.com.infumia.terminable.TerminableConsumer;
+import tr.com.infumia.terminable.TerminableModule;
 
-public final class RealmFormatLoaderMongo implements RealmFormatLoader {
+public final class RealmFormatLoaderMongo implements RealmFormatLoader, TerminableModule {
 
-    private final RealmFormatConfig config = Services.load(RealmFormatConfig.class);
+    @NotNull
+    private final MongoCredential credential;
 
-    private final RealmFormatManager manager = Services.load(RealmFormatManager.class);
+    @NotNull
+    private final Logger logger;
+
+    public RealmFormatLoaderMongo(
+        @NotNull final MongoCredential credential,
+        @NotNull final Logger logger
+    ) {
+        this.credential = credential;
+        this.logger = logger;
+    }
 
     @Override
     public void delete(@NotNull final String worldName) {
@@ -53,7 +65,5 @@ public final class RealmFormatLoaderMongo implements RealmFormatLoader {
     }
 
     @Override
-    public void setup(@NotNull final TerminableConsumer consumer) {
-        this.manager.registerLoader("mongo", this);
-    }
+    public void setup(@NotNull final TerminableConsumer consumer) {}
 }
