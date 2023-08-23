@@ -13,6 +13,9 @@ import org.spongepowered.configurate.objectmapping.meta.Setting;
 @ConfigSerializable
 public final class RealmFormatConfig implements Config {
 
+    @NotNull
+    private final ConfigurationLoader<?> loader;
+
     @Setting
     @Comment(
         "Realm world loader settings.\n" +
@@ -20,19 +23,13 @@ public final class RealmFormatConfig implements Config {
     )
     private Loaders loaders = new Loaders();
 
-    @NotNull
-    private final ConfigurationLoader<?> loader;
-
     public RealmFormatConfig(@NotNull final ConfigurationLoader<?> loader) {
         this.loader = loader;
     }
 
+    @Getter
     @ConfigSerializable
     public static final class Loaders {
-
-        @Setting
-        @Comment("Stores realm worlds in mongodb.")
-        private MongoCredential mongo = MongoCredential.builder().build();
 
         @Setting
         @Comment(
@@ -40,5 +37,9 @@ public final class RealmFormatConfig implements Config {
             "This is a fallback loader which means enables whenever all the other loaders are disabled."
         )
         private String local = "realms";
+
+        @Setting
+        @Comment("Stores realm worlds in mongodb.")
+        private MongoCredential mongo = MongoCredential.builder().build();
     }
 }

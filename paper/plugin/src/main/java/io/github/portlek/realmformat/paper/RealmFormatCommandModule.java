@@ -1,8 +1,7 @@
-package io.github.portlek.realmformat.paper.module;
+package io.github.portlek.realmformat.paper;
 
 import cloud.commandframework.annotations.AnnotationParser;
 import cloud.commandframework.annotations.CommandMethod;
-import io.github.portlek.realmformat.paper.RealmFormatPlugin;
 import io.github.portlek.realmformat.paper.config.RealmFormatMessages;
 import io.github.portlek.realmformat.paper.internal.Misc;
 import org.bukkit.command.CommandSender;
@@ -11,18 +10,18 @@ import tr.com.infumia.task.Schedulers;
 import tr.com.infumia.terminable.TerminableConsumer;
 import tr.com.infumia.terminable.TerminableModule;
 
-public final class RealmFormatCommandModule implements TerminableModule {
+final class RealmFormatCommandModule implements TerminableModule {
 
     @NotNull
     private final AnnotationParser<CommandSender> annotationParser;
 
     @NotNull
-    private final RealmFormatPlugin plugin;
-
-    @NotNull
     private final RealmFormatMessages messages;
 
-    public RealmFormatCommandModule(
+    @NotNull
+    private final RealmFormatPlugin plugin;
+
+    RealmFormatCommandModule(
         @NotNull final RealmFormatPlugin plugin,
         @NotNull final AnnotationParser<CommandSender> annotationParser,
         @NotNull final RealmFormatMessages messages

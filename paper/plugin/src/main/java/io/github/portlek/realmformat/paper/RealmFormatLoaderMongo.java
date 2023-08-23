@@ -1,27 +1,33 @@
-package io.github.portlek.realmformat.paper.loader;
+package io.github.portlek.realmformat.paper;
 
 import io.github.portlek.realmformat.paper.api.RealmFormatLoader;
-import io.github.portlek.realmformat.paper.internal.config.MongoCredential;
+import io.github.portlek.realmformat.paper.api.RealmFormatManager;
+import io.github.portlek.realmformat.paper.config.RealmFormatConfig;
 import java.util.Collection;
 import java.util.logging.Logger;
 import org.jetbrains.annotations.NotNull;
 import tr.com.infumia.terminable.TerminableConsumer;
 import tr.com.infumia.terminable.TerminableModule;
 
-public final class RealmFormatLoaderMongo implements RealmFormatLoader, TerminableModule {
+final class RealmFormatLoaderMongo implements RealmFormatLoader, TerminableModule {
 
     @NotNull
-    private final MongoCredential credential;
+    private final RealmFormatConfig config;
 
     @NotNull
     private final Logger logger;
 
-    public RealmFormatLoaderMongo(
-        @NotNull final MongoCredential credential,
-        @NotNull final Logger logger
+    @NotNull
+    private final RealmFormatManager manager;
+
+    RealmFormatLoaderMongo(
+        @NotNull final RealmFormatManager manager,
+        @NotNull final Logger logger,
+        @NotNull final RealmFormatConfig config
     ) {
-        this.credential = credential;
+        this.manager = manager;
         this.logger = logger;
+        this.config = config;
     }
 
     @Override
@@ -65,5 +71,7 @@ public final class RealmFormatLoaderMongo implements RealmFormatLoader, Terminab
     }
 
     @Override
-    public void setup(@NotNull final TerminableConsumer consumer) {}
+    public void setup(@NotNull final TerminableConsumer consumer) {
+        this.manager.registerLoader("mongo", this);
+    }
 }

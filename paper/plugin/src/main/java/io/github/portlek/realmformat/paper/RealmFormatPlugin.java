@@ -1,20 +1,18 @@
 package io.github.portlek.realmformat.paper;
 
-import cloud.commandframework.annotations.AnnotationParser;
-import cloud.commandframework.bukkit.BukkitCommandManager;
 import io.github.portlek.realmformat.format.realm.RealmFormatSerializers;
 import io.github.portlek.realmformat.format.realm.upgrader.RealmFormatWorldUpgrades;
 import io.github.portlek.realmformat.modifier.Modifier;
 import io.github.portlek.realmformat.modifier.ModifierBackend;
+import io.github.portlek.realmformat.paper.api.event.RealmFormatLoaderLoadEvent;
 import io.github.portlek.realmformat.paper.config.RealmFormatConfig;
 import io.github.portlek.realmformat.paper.config.RealmFormatMessages;
 import io.github.portlek.realmformat.paper.internal.Cloud;
 import io.github.portlek.realmformat.paper.internal.config.Configs;
-import io.github.portlek.realmformat.paper.module.RealmFormatCommandModule;
 import io.github.portlek.realmformat.paper.nms.NmsBackend;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import lombok.experimental.Delegate;
-import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 import tr.com.infumia.event.bukkit.BukkitEventManager;
 import tr.com.infumia.event.common.Plugins;
@@ -30,6 +28,8 @@ public final class RealmFormatPlugin extends JavaPlugin implements TerminableCon
     private final RealmFormatConfig config = new RealmFormatConfig(
         Configs.yaml(this.dataFolder.resolve("config.yaml"))
     );
+
+    private final RealmFormatManagerImpl manager = new RealmFormatManagerImpl(this.getLogger());
 
     private final RealmFormatMessages messages = new RealmFormatMessages(
         Configs.yaml(this.dataFolder.resolve("messages.yaml"))
@@ -69,13 +69,23 @@ public final class RealmFormatPlugin extends JavaPlugin implements TerminableCon
 
     @Override
     public void onEnable() {
-        final BukkitCommandManager<CommandSender> commandManager = Cloud.create(this);
-        final AnnotationParser<CommandSender> annotationParser = Cloud.annotation(commandManager);
-        new RealmFormatCommandModule(this, annotationParser, this.messages).bindModuleWith(this);
+        this.manager.bindWith(this);
+        this.reload();
+        new RealmFormatCommandModule(this, Cloud.annotation(Cloud.create(this)), this.messages)
+            .bindModuleWith(this);
     }
 
     public void reload() {
         this.config.reload();
         this.messages.reload();
+        new RealmFormatLoaderFile(
+            this.manager,
+            this.getLogger(),
+            Paths.get(System.getProperty("user.dir"))
+        )
+            .bindModuleWith(this);
+        new RealmFormatLoaderMongo(this.manager, this.getLogger(), this.config)
+            .bindModuleWith(this);
+        this.getServer().getPluginManager().callEvent(new RealmFormatLoaderLoadEvent());
     }
 }

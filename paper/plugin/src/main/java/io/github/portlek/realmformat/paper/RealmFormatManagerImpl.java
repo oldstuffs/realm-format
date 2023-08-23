@@ -7,20 +7,40 @@ import io.github.portlek.realmformat.format.realm.RealmFormatWorld;
 import io.github.portlek.realmformat.format.realm.upgrader.RealmFormatWorldUpgrades;
 import io.github.portlek.realmformat.paper.api.RealmFormatLoader;
 import io.github.portlek.realmformat.paper.api.RealmFormatManager;
+import io.github.portlek.realmformat.paper.nms.NmsBackend;
 import java.io.File;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.logging.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnmodifiableView;
+import tr.com.infumia.terminable.Terminable;
 
-final class RealmFormatManagerImpl implements RealmFormatManager {
+final class RealmFormatManagerImpl implements RealmFormatManager, Terminable {
+
+    @NotNull
+    private final NmsBackend backend;
 
     private final Map<String, RealmFormatWorld> loadedWorlds = new ConcurrentHashMap<>();
 
     private final Map<String, RealmFormatLoader> loaders = new ConcurrentHashMap<>();
+
+    @NotNull
+    private final Logger logger;
+
+    RealmFormatManagerImpl(@NotNull final Logger logger, @NotNull final NmsBackend backend) {
+        this.logger = logger;
+        this.backend = backend;
+    }
+
+    @Override
+    public void close() {
+        this.loadedWorlds.clear();
+        this.loaders.clear();
+    }
 
     @NotNull
     @Override
@@ -52,7 +72,7 @@ final class RealmFormatManagerImpl implements RealmFormatManager {
         @NotNull final RealmFormatPropertyMap properties
     ) {
         final long start = System.currentTimeMillis();
-        RealmFormatManagerImpl.log.info("Loading world {}.", worldName);
+        this.logger.info(String.format("Loading world %s.", worldName));
         final byte[] serializedWorld = loader.load(worldName, readOnly);
         final RealmFormatWorld world;
         try {
@@ -70,11 +90,13 @@ final class RealmFormatManagerImpl implements RealmFormatManager {
             }
             throw e;
         }
-        RealmFormatManagerImpl.log.info(
-            "World {} loaded in {}ms.",
-            worldName,
-            System.currentTimeMillis() - start
-        );
+        this.logger.info(
+                String.format(
+                    "World %s loaded in %sms.",
+                    worldName,
+                    System.currentTimeMillis() - start
+                )
+            );
         this.loadedWorlds.put(worldName, world);
         return Optional.of(world);
     }
@@ -102,7 +124,7 @@ final class RealmFormatManagerImpl implements RealmFormatManager {
     @Override
     public void registerLoader(
         @NotNull final String type,
-        final @NotNull RealmFormatLoader loader
+        @NotNull final RealmFormatLoader loader
     ) {
         this.loaders.put(type, loader);
     }

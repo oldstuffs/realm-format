@@ -11,11 +11,11 @@ import org.spongepowered.configurate.objectmapping.meta.Setting;
 @ConfigSerializable
 public final class RealmFormatMessages implements Config {
 
-    @Setting
-    private String reloadComplete = "&aReload complete, took %took%ms.";
-
     @NotNull
     private final ConfigurationLoader<?> loader;
+
+    @Setting
+    private String reloadComplete = "&aReload complete, took %took%ms.";
 
     public RealmFormatMessages(@NotNull final ConfigurationLoader<?> loader) {
         this.loader = loader;

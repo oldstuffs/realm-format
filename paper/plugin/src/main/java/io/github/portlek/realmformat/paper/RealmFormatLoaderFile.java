@@ -1,8 +1,9 @@
-package io.github.portlek.realmformat.paper.loader;
+package io.github.portlek.realmformat.paper;
 
 import com.google.common.base.Preconditions;
 import io.github.portlek.realmformat.format.realm.RealmFormat;
 import io.github.portlek.realmformat.paper.api.RealmFormatLoader;
+import io.github.portlek.realmformat.paper.api.RealmFormatManager;
 import java.io.RandomAccessFile;
 import java.nio.channels.FileChannel;
 import java.nio.file.Files;
@@ -20,7 +21,7 @@ import org.jetbrains.annotations.NotNull;
 import tr.com.infumia.terminable.TerminableConsumer;
 import tr.com.infumia.terminable.TerminableModule;
 
-public final class RealmFormatLoaderFile implements RealmFormatLoader, TerminableModule {
+final class RealmFormatLoaderFile implements RealmFormatLoader, TerminableModule {
 
     @NotNull
     private final Path folder;
@@ -28,9 +29,17 @@ public final class RealmFormatLoaderFile implements RealmFormatLoader, Terminabl
     @NotNull
     private final Logger logger;
 
+    @NotNull
+    private final RealmFormatManager manager;
+
     private final Map<String, RandomAccessFile> worlds = new ConcurrentHashMap<>();
 
-    public RealmFormatLoaderFile(@NotNull final Logger logger, @NotNull final Path folder) {
+    RealmFormatLoaderFile(
+        @NotNull final RealmFormatManager manager,
+        @NotNull final Logger logger,
+        @NotNull final Path folder
+    ) {
+        this.manager = manager;
         this.logger = logger;
         this.folder = folder;
     }
@@ -44,17 +53,17 @@ public final class RealmFormatLoaderFile implements RealmFormatLoader, Terminabl
             );
         }
         final RandomAccessFile file = this.randomAccessFile(worldName);
-        this.logger.log(Level.INFO, "Trying to unlock '{}' world...", worldName);
+        this.logger.info(String.format("Trying to unlock '%s' world...", worldName));
         this.unlock(worldName);
-        this.logger.log(Level.INFO, "World '{}' is successfully unlocked!", worldName);
-        this.logger.log(Level.INFO, "Trying to delete '{}' world...", worldName);
+        this.logger.info(String.format("World '%s' is successfully unlocked!", worldName));
+        this.logger.info(String.format("Trying to delete '%s' world...", worldName));
         file.seek(0);
         file.setLength(0);
         file.write(null);
         file.close();
         this.worlds.remove(worldName);
         FileUtils.forceDelete(this.pathFor(worldName).toFile());
-        this.logger.log(Level.INFO, "World '{}' is successfully deleted!", worldName);
+        this.logger.info(String.format("World '%s' is successfully deleted!", worldName));
     }
 
     @Override
@@ -85,7 +94,7 @@ public final class RealmFormatLoaderFile implements RealmFormatLoader, Terminabl
         }
         final RandomAccessFile file = this.randomAccessFile(worldName);
         if (!readOnly && file.getChannel().isOpen()) {
-            this.logger.log(Level.INFO, "World '{}' is unlocked by loading it.", worldName);
+            this.logger.info(String.format("World '%s' is unlocked by loading it.", worldName));
         }
         final long fileLength = file.length();
         if (fileLength > Integer.MAX_VALUE) {
@@ -148,6 +157,7 @@ public final class RealmFormatLoaderFile implements RealmFormatLoader, Terminabl
     @Override
     @SneakyThrows
     public void setup(@NotNull final TerminableConsumer consumer) {
+        this.manager.registerLoader("file", this);
         Preconditions.checkState(
             Files.notExists(this.folder) || Files.isDirectory(this.folder),
             "This file '%s' is not a directory! Please delete or rename the file to start the RealmFormat plugin!",
@@ -163,7 +173,10 @@ public final class RealmFormatLoaderFile implements RealmFormatLoader, Terminabl
                     } catch (final Exception e) {
                         this.logger.log(
                                 Level.SEVERE,
-                                "Unexpected error occurred while closing the file " + fileName,
+                                String.format(
+                                    "Unexpected error occurred while closing the file '%s'!",
+                                    fileName
+                                ),
                                 e
                             );
                     }
