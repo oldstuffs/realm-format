@@ -1,7 +1,9 @@
 package io.github.portlek.realmformat.paper.internal;
 
+import cloud.commandframework.annotations.AnnotationParser;
 import cloud.commandframework.bukkit.BukkitCommandManager;
 import cloud.commandframework.execution.CommandExecutionCoordinator;
+import cloud.commandframework.meta.SimpleCommandMeta;
 import cloud.commandframework.paper.PaperCommandManager;
 import lombok.SneakyThrows;
 import org.bukkit.command.CommandSender;
@@ -10,6 +12,17 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import org.jetbrains.annotations.NotNull;
 
 public interface Cloud {
+    @NotNull
+    static AnnotationParser<CommandSender> annotation(
+        @NotNull final BukkitCommandManager<CommandSender> commandManager
+    ) {
+        return new AnnotationParser<>(
+            commandManager,
+            CommandSender.class,
+            parserParameters -> SimpleCommandMeta.empty()
+        );
+    }
+
     @NotNull
     @SneakyThrows
     static BukkitCommandManager<CommandSender> create(@NotNull final Plugin plugin) {

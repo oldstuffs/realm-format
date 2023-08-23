@@ -15,9 +15,11 @@ dependencies {
 
   implementation(libs.event.common)
   implementation(libs.event.bukkit)
-
   implementation(libs.task.common)
   implementation(libs.task.bukkit)
+  implementation(libs.versionmatched)
+  implementation(libs.configurate.core)
+  implementation(libs.configurate.yaml)
 
   implementation(libs.cloud.core)
   implementation(libs.cloud.annotations)

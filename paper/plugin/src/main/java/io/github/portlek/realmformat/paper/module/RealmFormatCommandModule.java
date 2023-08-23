@@ -1,45 +1,74 @@
 package io.github.portlek.realmformat.paper.module;
 
-import cloud.commandframework.Command;
-import cloud.commandframework.paper.PaperCommandManager;
+import cloud.commandframework.annotations.AnnotationParser;
+import cloud.commandframework.annotations.CommandMethod;
 import io.github.portlek.realmformat.paper.RealmFormatPlugin;
-import io.github.portlek.realmformat.paper.internal.Cloud;
-import jdk.vm.ci.services.Services;
+import io.github.portlek.realmformat.paper.config.RealmFormatMessages;
+import io.github.portlek.realmformat.paper.internal.Misc;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
+import tr.com.infumia.task.Schedulers;
 import tr.com.infumia.terminable.TerminableConsumer;
 import tr.com.infumia.terminable.TerminableModule;
 
 public final class RealmFormatCommandModule implements TerminableModule {
 
+    @NotNull
+    private final AnnotationParser<CommandSender> annotationParser;
+
+    @NotNull
+    private final RealmFormatPlugin plugin;
+
+    @NotNull
+    private final RealmFormatMessages messages;
+
+    public RealmFormatCommandModule(
+        @NotNull final RealmFormatPlugin plugin,
+        @NotNull final AnnotationParser<CommandSender> annotationParser,
+        @NotNull final RealmFormatMessages messages
+    ) {
+        this.plugin = plugin;
+        this.annotationParser = annotationParser;
+        this.messages = messages;
+    }
+
     @Override
     public void setup(@NotNull final TerminableConsumer consumer) {
-        final RealmFormatPlugin plugin = Services.load(RealmFormatPlugin.class);
-        final RealmFormatMessages messages = Services.load(RealmFormatMessages.class);
-        final PaperCommandManager<CommandSender> commandManager = Services.load(Cloud.KEY);
-        final Command.Builder<CommandSender> builder = commandManager.commandBuilder(
-            "realmformat",
-            "rf"
-        );
-        commandManager.command(
-            builder
-                .literal("reload")
-                .handler(context -> {
-                    final long now = System.currentTimeMillis();
-                    Schedulers
-                        .async()
-                        .run(() -> {
-                            plugin.reload();
-                            messages
-                                .reloadComplete()
-                                .sendP(
-                                    context.getSender(),
-                                    "took",
-                                    System.currentTimeMillis() - now
-                                );
-                        })
-                        .bindWith(consumer);
+        this.annotationParser.parse(new Cmd(this.plugin, this.messages));
+    }
+
+    @CommandMethod("realmformat|rf")
+    private static final class Cmd {
+
+        @NotNull
+        private final RealmFormatMessages messages;
+
+        @NotNull
+        private final RealmFormatPlugin plugin;
+
+        private Cmd(
+            @NotNull final RealmFormatPlugin plugin,
+            @NotNull final RealmFormatMessages messages
+        ) {
+            this.plugin = plugin;
+            this.messages = messages;
+        }
+
+        @CommandMethod("reload")
+        public void reload(final CommandSender sender) {
+            final long now = System.currentTimeMillis();
+            Schedulers
+                .async()
+                .run(() -> {
+                    this.plugin.reload();
+                    sender.sendMessage(
+                        Misc.colorize(
+                            this.messages.reloadComplete()
+                                .replace("%took%", String.valueOf(System.currentTimeMillis() - now))
+                        )
+                    );
                 })
-        );
+                .bindWith(this.plugin);
+        }
     }
 }

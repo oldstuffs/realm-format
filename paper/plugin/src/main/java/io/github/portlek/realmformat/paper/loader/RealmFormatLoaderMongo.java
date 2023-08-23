@@ -1,7 +1,7 @@
 package io.github.portlek.realmformat.paper.loader;
 
 import io.github.portlek.realmformat.paper.api.RealmFormatLoader;
-import io.github.portlek.realmformat.paper.api.loader.MongoCredential;
+import io.github.portlek.realmformat.paper.internal.config.MongoCredential;
 import java.util.Collection;
 import java.util.logging.Logger;
 import org.jetbrains.annotations.NotNull;

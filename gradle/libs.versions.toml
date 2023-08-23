@@ -1,5 +1,6 @@
 [versions]
 cloud = "1.8.3"
+configurate = "4.2.0-SNAPSHOT"
 task = "0.1.7-SNAPSHOT"
 event = "0.1.6-SNAPSHOT"
 junit = "5.10.0"
@@ -21,7 +22,8 @@ snakeyaml = { module = "org.yaml:snakeyaml", version = "2.1" }
 junit-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit" }
 junit-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit" }
 
-# Unnecessary dependencies, refactor the project to remove all of those.
+configurate-core = { module = "org.spongepowered:configurate-core", version.ref = "configurate" }
+configurate-yaml = { module = "org.spongepowered:configurate-yaml", version.ref = "configurate" }
 cloud-core = { module = "cloud.commandframework:cloud-core", version.ref = "cloud" }
 cloud-annotations = { module = "cloud.commandframework:cloud-annotations", version.ref = "cloud" }
 cloud-paper = { module = "cloud.commandframework:cloud-paper", version.ref = "cloud" }
