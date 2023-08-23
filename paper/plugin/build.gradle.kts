@@ -11,8 +11,9 @@ dependencies {
 
   compileOnly(libs.bukkit)
 
-  compileOnly(libs.commonsio)
+  implementation(libs.commonsio)
 
+  implementation(libs.nbt)
   implementation(libs.event.common)
   implementation(libs.event.bukkit)
   implementation(libs.task.common)
@@ -20,16 +21,15 @@ dependencies {
   implementation(libs.versionmatched)
   implementation(libs.configurate.core)
   implementation(libs.configurate.yaml)
-
   implementation(libs.cloud.core)
   implementation(libs.cloud.annotations)
   implementation(libs.cloud.paper)
   implementation(libs.cloud.brigadier)
   implementation(libs.cloud.tasks)
+
+  implementation(libs.zstd)
   implementation(libs.mariadb)
   implementation(libs.mongodb)
-  implementation(libs.nbt)
-  implementation(libs.zstd)
 }
 
 tasks {
