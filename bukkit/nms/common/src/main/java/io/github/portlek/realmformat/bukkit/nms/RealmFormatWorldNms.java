@@ -1,8 +1,8 @@
 package io.github.portlek.realmformat.bukkit.nms;
 
+import io.github.portlek.realmformat.bukkit.api.RealmFormatLoader;
 import io.github.portlek.realmformat.format.realm.RealmFormatChunk;
 import io.github.portlek.realmformat.format.realm.RealmFormatWorld;
-import io.github.portlek.realmformat.bukkit.api.RealmFormatLoader;
 import java.util.concurrent.CompletableFuture;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

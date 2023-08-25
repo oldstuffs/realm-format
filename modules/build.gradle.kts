@@ -10,7 +10,6 @@ subprojects {
   tasks {
     jar {
       archiveBaseName.set(archiveBaseName.get().replace("realm-format-modules-", ""))
-      archiveVersion.set("")
       manifest {
         attributes(
           "Plugin-Id" to project.name,
@@ -22,7 +21,6 @@ subprojects {
 
     withType<ShadowJar> {
       archiveBaseName.set(archiveBaseName.get().replace("realm-format-modules-", ""))
-      archiveVersion.set("")
     }
 
     val copy = register("copy-to-modules") {

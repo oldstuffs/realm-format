@@ -40,6 +40,6 @@ jobs:
         files: |
           bukkit/plugin/build/libs/realm-format-bukkit-plugin-${{ github.event.release.tag_name }}.jar
           modifier/agent/build/libs/realm-format-modifier-agent.jar
-          modules/mongo/build/libs/mongo.jar
-          modules/mariadb/build/libs/mariadb.jar
-          modules/redis/build/libs/redis.jar
+          modules/mongo/build/libs/mongo-${{ github.event.release.tag_name }}.jar
+          modules/mariadb/build/libs/mariadb-${{ github.event.release.tag_name }}.jar
+          modules/redis/build/libs/redis-${{ github.event.release.tag_name }}.jar

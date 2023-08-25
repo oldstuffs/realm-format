@@ -1,10 +1,10 @@
 package io.github.portlek.realmformat.bukkit.nms;
 
 import com.google.common.base.Preconditions;
+import io.github.portlek.realmformat.bukkit.api.RealmFormatLoader;
 import io.github.portlek.realmformat.format.property.RealmFormatPropertyMap;
 import io.github.portlek.realmformat.format.realm.RealmFormatChunk;
 import io.github.portlek.realmformat.format.realm.RealmFormatChunkPosition;
-import io.github.portlek.realmformat.bukkit.api.RealmFormatLoader;
 import io.github.shiruka.nbt.CompoundTag;
 import java.io.IOException;
 import java.util.List;

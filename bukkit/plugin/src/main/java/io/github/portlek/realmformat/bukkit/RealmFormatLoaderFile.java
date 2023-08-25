@@ -1,9 +1,9 @@
 package io.github.portlek.realmformat.bukkit;
 
 import com.google.common.base.Preconditions;
-import io.github.portlek.realmformat.format.realm.RealmFormat;
 import io.github.portlek.realmformat.bukkit.api.RealmFormatLoader;
 import io.github.portlek.realmformat.bukkit.api.RealmFormatManager;
+import io.github.portlek.realmformat.format.realm.RealmFormat;
 import java.io.RandomAccessFile;
 import java.nio.channels.FileChannel;
 import java.nio.file.Files;
