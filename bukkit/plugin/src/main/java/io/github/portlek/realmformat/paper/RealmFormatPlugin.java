@@ -10,6 +10,8 @@ import io.github.portlek.realmformat.paper.config.RealmFormatConfig;
 import io.github.portlek.realmformat.paper.config.RealmFormatMessages;
 import io.github.portlek.realmformat.paper.internal.Cloud;
 import io.github.portlek.realmformat.paper.nms.NmsBackend;
+import io.github.portlek.realmformat.paper.nms.v1_19_R3.ModifierBackendV1_19_R3;
+import io.github.portlek.realmformat.paper.nms.v1_19_R3.NmsBackendV1_19_R3;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import lombok.experimental.Delegate;
@@ -23,14 +25,16 @@ import tr.com.infumia.versionmatched.VersionMatched;
 
 public final class RealmFormatPlugin extends JavaPlugin implements TerminableConsumer, Terminable {
 
-    private final NmsBackend nmsBackend = new VersionMatched<NmsBackend>()
+    private final NmsBackend nmsBackend = new VersionMatched<NmsBackend>(NmsBackendV1_19_R3.class)
         .of()
         .create()
         .orElseThrow(() ->
             new IllegalStateException(this.getServer().getVersion() + " not supported!")
         );
 
-    private final ModifierBackend modifierBackend = new VersionMatched<ModifierBackend>()
+    private final ModifierBackend modifierBackend = new VersionMatched<ModifierBackend>(
+        ModifierBackendV1_19_R3.class
+    )
         .of(NmsBackend.class)
         .create(this.nmsBackend)
         .orElseThrow(() ->
