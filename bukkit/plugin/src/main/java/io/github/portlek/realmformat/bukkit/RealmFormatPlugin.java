@@ -1,14 +1,14 @@
-package io.github.portlek.realmformat.paper;
+package io.github.portlek.realmformat.bukkit;
 
+import io.github.portlek.realmformat.bukkit.config.RealmFormatConfig;
+import io.github.portlek.realmformat.bukkit.config.RealmFormatMessages;
+import io.github.portlek.realmformat.bukkit.internal.Cloud;
 import io.github.portlek.realmformat.format.realm.RealmFormatSerializers;
 import io.github.portlek.realmformat.format.realm.upgrader.RealmFormatWorldUpgrades;
 import io.github.portlek.realmformat.modifier.Modifier;
 import io.github.portlek.realmformat.modifier.ModifierBackend;
 import io.github.portlek.realmformat.paper.api.event.RealmFormatLoaderLoadEvent;
 import io.github.portlek.realmformat.paper.api.internal.config.Configs;
-import io.github.portlek.realmformat.paper.config.RealmFormatConfig;
-import io.github.portlek.realmformat.paper.config.RealmFormatMessages;
-import io.github.portlek.realmformat.paper.internal.Cloud;
 import io.github.portlek.realmformat.paper.nms.NmsBackend;
 import io.github.portlek.realmformat.paper.nms.v1_19_R2.ModifierBackendV1_19_R2;
 import io.github.portlek.realmformat.paper.nms.v1_19_R2.NmsBackendV1_19_R2;

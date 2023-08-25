@@ -1,4 +1,4 @@
-package io.github.portlek.realmformat.paper.internal.module;
+package io.github.portlek.realmformat.bukkit.internal.module;
 
 import java.nio.file.Path;
 import org.jetbrains.annotations.NotNull;

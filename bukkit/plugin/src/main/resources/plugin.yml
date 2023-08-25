@@ -1,5 +1,5 @@
 ---
 name: RealmFormat
-main: io.github.portlek.realmformat.paper.RealmFormatPlugin
+main: io.github.portlek.realmformat.bukkit.RealmFormatPlugin
 version: "${project.version}"
 api-version: 1.13

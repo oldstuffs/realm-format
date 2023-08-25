@@ -1,7 +1,7 @@
-package io.github.portlek.realmformat.paper;
+package io.github.portlek.realmformat.bukkit;
 
-import io.github.portlek.realmformat.paper.internal.module.ModuleFactory;
-import io.github.portlek.realmformat.paper.internal.module.ModuleManager;
+import io.github.portlek.realmformat.bukkit.internal.module.ModuleFactory;
+import io.github.portlek.realmformat.bukkit.internal.module.ModuleManager;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import lombok.extern.log4j.Log4j2;

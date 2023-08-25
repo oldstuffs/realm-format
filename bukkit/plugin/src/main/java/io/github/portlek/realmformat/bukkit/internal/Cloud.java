@@ -1,4 +1,4 @@
-package io.github.portlek.realmformat.paper.internal;
+package io.github.portlek.realmformat.bukkit.internal;
 
 import cloud.commandframework.annotations.AnnotationParser;
 import cloud.commandframework.bukkit.BukkitCommandManager;

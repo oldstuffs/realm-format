@@ -1,4 +1,4 @@
-package io.github.portlek.realmformat.paper.internal.module;
+package io.github.portlek.realmformat.bukkit.internal.module;
 
 import io.github.portlek.realmformat.paper.api.internal.module.Module;
 import io.github.portlek.realmformat.paper.api.internal.module.ModuleContext;

@@ -1,9 +1,9 @@
-package io.github.portlek.realmformat.paper;
+package io.github.portlek.realmformat.bukkit;
 
 import cloud.commandframework.annotations.AnnotationParser;
 import cloud.commandframework.annotations.CommandMethod;
-import io.github.portlek.realmformat.paper.config.RealmFormatMessages;
-import io.github.portlek.realmformat.paper.internal.Misc;
+import io.github.portlek.realmformat.bukkit.config.RealmFormatMessages;
+import io.github.portlek.realmformat.bukkit.internal.Misc;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import tr.com.infumia.task.Schedulers;

@@ -1,4 +1,4 @@
-package io.github.portlek.realmformat.paper.internal;
+package io.github.portlek.realmformat.bukkit.internal;
 
 public interface RealmConstants {
     long LOCK_INTERVAL = 60000L;

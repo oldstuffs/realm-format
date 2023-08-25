@@ -1,4 +1,4 @@
-package io.github.portlek.realmformat.paper;
+package io.github.portlek.realmformat.bukkit;
 
 import com.google.common.base.Preconditions;
 import io.github.portlek.realmformat.format.realm.RealmFormat;

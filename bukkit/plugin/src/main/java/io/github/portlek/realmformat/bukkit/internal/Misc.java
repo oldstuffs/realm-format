@@ -1,4 +1,4 @@
-package io.github.portlek.realmformat.paper.internal;
+package io.github.portlek.realmformat.bukkit.internal;
 
 import lombok.experimental.UtilityClass;
 import org.bukkit.ChatColor;
