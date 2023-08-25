@@ -77,7 +77,7 @@ public final class Transformer implements ClassFileTransformer {
         final Yaml yaml = new Yaml();
         @Cleanup
         final InputStreamReader reader = new InputStreamReader(fileStream);
-        final Map<String, Object> versionData = yaml.<Map<String, Object>>load(reader);
+        final Map<String, Object> versionData = yaml.load(reader);
         for (final String version : versionData.keySet()) {
             final Map<String, Object> data = (Map<String, Object>) versionData.get(version);
             for (final String originalClass : data.keySet()) {
@@ -150,6 +150,8 @@ public final class Transformer implements ClassFileTransformer {
             case "1.19.2":
             case "1.19.3":
                 return "v1_19_R2";
+            case "1.19.4":
+                return "v1_19_R3";
             default:
                 throw new UnsupportedOperationException(minecraftVersion);
         }
@@ -255,9 +257,9 @@ public final class Transformer implements ClassFileTransformer {
                     final byte[] contents = Transformer.readAllBytes(
                         zipFile.getInputStream(zipEntry)
                     );
-                    final Map<String, String> versionInfo = Transformer.YAML.<
-                        Map<String, String>
-                    >load(new String(contents, StandardCharsets.UTF_8));
+                    final Map<String, String> versionInfo = Transformer.YAML.load(
+                        new String(contents, StandardCharsets.UTF_8)
+                    );
                     this.version = Transformer.nmsVersion(versionInfo.get("id"));
                     this.filesChecked = null;
                 }
@@ -290,10 +292,10 @@ public final class Transformer implements ClassFileTransformer {
         private final boolean optional;
 
         private Change(
-            @NotNull String methodName,
-            @NotNull String@NotNull[] parameters,
-            @NotNull String content,
-            boolean optional
+            @NotNull final String methodName,
+            @NotNull final String@NotNull[] parameters,
+            @NotNull final String content,
+            final boolean optional
         ) {
             this.methodName = methodName;
             this.parameters = parameters;

@@ -23,16 +23,6 @@ import tr.com.infumia.versionmatched.VersionMatched;
 
 public final class RealmFormatPlugin extends JavaPlugin implements TerminableConsumer, Terminable {
 
-    private final Path dataFolder = this.getDataFolder().toPath();
-
-    private final RealmFormatConfig config = new RealmFormatConfig(
-        Configs.yaml(this.dataFolder.resolve("config.yaml"))
-    );
-
-    private final RealmFormatMessages messages = new RealmFormatMessages(
-        Configs.yaml(this.dataFolder.resolve("messages.yaml"))
-    );
-
     private final NmsBackend nmsBackend = new VersionMatched<NmsBackend>()
         .of()
         .create()
@@ -46,6 +36,16 @@ public final class RealmFormatPlugin extends JavaPlugin implements TerminableCon
         .orElseThrow(() ->
             new IllegalStateException(this.getServer().getVersion() + " not supported!")
         );
+
+    private final Path dataFolder = this.getDataFolder().toPath();
+
+    private final RealmFormatConfig config = new RealmFormatConfig(
+        Configs.yaml(this.dataFolder.resolve("config.yaml"))
+    );
+
+    private final RealmFormatMessages messages = new RealmFormatMessages(
+        Configs.yaml(this.dataFolder.resolve("messages.yaml"))
+    );
 
     private final RealmFormatManagerImpl manager = new RealmFormatManagerImpl(
         this.getLogger(),

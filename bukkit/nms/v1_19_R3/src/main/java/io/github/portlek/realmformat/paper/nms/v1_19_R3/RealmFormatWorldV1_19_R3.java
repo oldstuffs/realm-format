@@ -1,4 +1,4 @@
-package io.github.portlek.realmformat.paper.nms.v1_19_R2;
+package io.github.portlek.realmformat.paper.nms.v1_19_R3;
 
 import io.github.portlek.realmformat.format.property.RealmFormatPropertyMap;
 import io.github.portlek.realmformat.format.realm.RealmFormatChunk;
@@ -14,9 +14,9 @@ import java.util.concurrent.CompletableFuture;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public final class RealmFormatWorldV1_19_R2 extends RealmFormatWorldNmsBase {
+public final class RealmFormatWorldV1_19_R3 extends RealmFormatWorldNmsBase {
 
-    public RealmFormatWorldV1_19_R2(
+    public RealmFormatWorldV1_19_R3(
         @NotNull final NmsBackend nmsBackend,
         @NotNull final String name,
         @NotNull final Map<RealmFormatChunkPosition, RealmFormatChunk> chunks,

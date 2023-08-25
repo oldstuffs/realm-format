@@ -1,4 +1,4 @@
-package io.github.portlek.realmformat.paper.nms.v1_19_R2;
+package io.github.portlek.realmformat.paper.nms.v1_19_R3;
 
 import io.github.portlek.realmformat.format.misc.NibbleArray;
 import lombok.experimental.UtilityClass;
