@@ -6,7 +6,7 @@ event = "0.1.6-SNAPSHOT"
 junit = "5.10.0"
 
 [libraries]
-bukkit = { module = "org.bukkit:bukkit", version = "1.8.8-R0.1-SNAPSHOT" }
+spigot = { module = "org.spigotmc:spigot-api", version = "1.8.8-R0.1-SNAPSHOT" }
 lombok = { module = "org.projectlombok:lombok", version = "1.18.28" }
 annotations = { module = "org.jetbrains:annotations", version = "24.0.1" }
 nbt = { module = "io.github.shiruka:nbt", version = "2.0.2" }
@@ -22,6 +22,7 @@ snakeyaml = { module = "org.yaml:snakeyaml", version = "2.1" }
 junit-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit" }
 junit-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit" }
 
+pf4j = { module = "org.pf4j:pf4j", version = "3.9.0" }
 configurate-core = { module = "org.spongepowered:configurate-core", version.ref = "configurate" }
 configurate-yaml = { module = "org.spongepowered:configurate-yaml", version.ref = "configurate" }
 cloud-core = { module = "cloud.commandframework:cloud-core", version.ref = "cloud" }
