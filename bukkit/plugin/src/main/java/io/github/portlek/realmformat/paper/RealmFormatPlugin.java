@@ -10,6 +10,8 @@ import io.github.portlek.realmformat.paper.config.RealmFormatConfig;
 import io.github.portlek.realmformat.paper.config.RealmFormatMessages;
 import io.github.portlek.realmformat.paper.internal.Cloud;
 import io.github.portlek.realmformat.paper.nms.NmsBackend;
+import io.github.portlek.realmformat.paper.nms.v1_19_R2.ModifierBackendV1_19_R2;
+import io.github.portlek.realmformat.paper.nms.v1_19_R2.NmsBackendV1_19_R2;
 import io.github.portlek.realmformat.paper.nms.v1_19_R3.ModifierBackendV1_19_R3;
 import io.github.portlek.realmformat.paper.nms.v1_19_R3.NmsBackendV1_19_R3;
 import java.nio.file.Path;
@@ -25,7 +27,10 @@ import tr.com.infumia.versionmatched.VersionMatched;
 
 public final class RealmFormatPlugin extends JavaPlugin implements TerminableConsumer, Terminable {
 
-    private final NmsBackend nmsBackend = new VersionMatched<NmsBackend>(NmsBackendV1_19_R3.class)
+    private final NmsBackend nmsBackend = new VersionMatched<NmsBackend>(
+        NmsBackendV1_19_R2.class,
+        NmsBackendV1_19_R3.class
+    )
         .of()
         .create()
         .orElseThrow(() ->
@@ -33,6 +38,7 @@ public final class RealmFormatPlugin extends JavaPlugin implements TerminableCon
         );
 
     private final ModifierBackend modifierBackend = new VersionMatched<ModifierBackend>(
+        ModifierBackendV1_19_R2.class,
         ModifierBackendV1_19_R3.class
     )
         .of(NmsBackend.class)

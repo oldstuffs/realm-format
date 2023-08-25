@@ -143,15 +143,15 @@ public final class Transformer implements ClassFileTransformer {
     private static String nmsVersion(@NotNull final String minecraftVersion) {
         switch (minecraftVersion) {
             case "1.18.2":
-                return "v1_18_R2";
+                return "v1.18.2";
             case "1.19":
             case "1.19.1":
-                return "v1_19_R1";
+                return "v1.19-1.19.1";
             case "1.19.2":
+                return "v1.19.2";
             case "1.19.3":
-                return "v1_19_R2";
             case "1.19.4":
-                return "v1_19_R3";
+                return "v1.19.3-1.19.4";
             default:
                 throw new UnsupportedOperationException(minecraftVersion);
         }

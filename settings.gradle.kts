@@ -20,6 +20,7 @@ include0(
     ":bukkit:api" to "realm-format-bukkit-api",
     ":bukkit:nms" to null,
     ":bukkit:nms:common" to "realm-format-bukkit-nms-common",
+    ":bukkit:nms:v1_19_R2" to "realm-format-bukkit-nms-v1_19_R2",
     ":bukkit:nms:v1_19_R3" to "realm-format-bukkit-nms-v1_19_R3",
     ":bukkit:plugin" to "realm-format-bukkit-plugin",
     ":modules" to null,

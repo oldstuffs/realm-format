@@ -6,11 +6,16 @@ dependencies {
   implementation(project(":bukkit:realm-format-bukkit-api"))
   implementation(project(":bukkit:nms:realm-format-bukkit-nms-common"))
 
+  compileOnly(project(":bukkit:nms:realm-format-bukkit-nms-v1_19_R2"))
   compileOnly(project(":bukkit:nms:realm-format-bukkit-nms-v1_19_R3"))
+  implementation(project(":bukkit:nms:realm-format-bukkit-nms-v1_19_R2", "reobf"))
   implementation(project(":bukkit:nms:realm-format-bukkit-nms-v1_19_R3", "reobf"))
 
   compileOnly(libs.spigot)
 
+  implementation(libs.log4j2.api)
+  implementation(libs.log4j2.core)
+  implementation(libs.log4j2.slf4j2)
   implementation(libs.commonsio)
   implementation(libs.pf4j)
   implementation(libs.zstd)
