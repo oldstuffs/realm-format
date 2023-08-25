@@ -5,6 +5,11 @@ subprojects {
     compileOnly(project(":bukkit:realm-format-bukkit-api"))
 
     compileOnly(rootProject.libs.pf4j)
+    compileOnly(rootProject.libs.terminable)
+    compileOnly(rootProject.libs.configurate.core)
+    compileOnly(rootProject.libs.configurate.yaml)
+    compileOnly(rootProject.libs.spigot)
+    compileOnly(rootProject.libs.log4j2.api)
   }
 
   tasks {
@@ -12,7 +17,7 @@ subprojects {
       archiveBaseName.set(archiveBaseName.get().replace("realm-format-modules-", ""))
       manifest {
         attributes(
-          "Plugin-Id" to project.name,
+          "Plugin-Id" to project.name.replace("realm-format-modules-", ""),
           "Plugin-Version" to project.version,
           "Plugin-Provider" to "portlek",
         )

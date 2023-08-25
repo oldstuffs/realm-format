@@ -51,7 +51,7 @@ public final class ModuleFactory implements PluginFactory {
             return (Module) MethodHandles
                 .lookup()
                 .findConstructor(cls, MethodType.methodType(void.class, ModuleContext.class))
-                .invokeExact(new ModuleContext(pluginWrapper, directory));
+                .invoke(new ModuleContext(pluginWrapper, directory));
         } catch (final Throwable e) {
             ModuleFactory.log.fatal(String.format("Cannot create '%s' module!", className), e);
         }
