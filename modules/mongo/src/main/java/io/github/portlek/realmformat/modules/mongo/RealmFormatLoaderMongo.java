@@ -1,7 +1,7 @@
 package io.github.portlek.realmformat.modules.mongo;
 
-import io.github.portlek.realmformat.paper.api.RealmFormatLoader;
-import io.github.portlek.realmformat.paper.api.RealmFormatManager;
+import io.github.portlek.realmformat.bukkit.api.RealmFormatLoader;
+import io.github.portlek.realmformat.bukkit.api.RealmFormatManager;
 import java.util.Collection;
 import lombok.extern.log4j.Log4j2;
 import org.jetbrains.annotations.NotNull;

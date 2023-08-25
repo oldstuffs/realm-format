@@ -1,6 +1,6 @@
 package io.github.portlek.realmformat.bukkit.config;
 
-import io.github.portlek.realmformat.paper.api.internal.config.Config;
+import io.github.portlek.realmformat.bukkit.api.internal.config.Config;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.configurate.loader.ConfigurationLoader;

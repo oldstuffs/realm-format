@@ -1,7 +1,7 @@
 package io.github.portlek.realmformat.bukkit.internal.module;
 
-import io.github.portlek.realmformat.paper.api.internal.module.Module;
-import io.github.portlek.realmformat.paper.api.internal.module.ModuleContext;
+import io.github.portlek.realmformat.bukkit.api.internal.module.Module;
+import io.github.portlek.realmformat.bukkit.api.internal.module.ModuleContext;
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.MethodType;
 import java.lang.reflect.Modifier;
