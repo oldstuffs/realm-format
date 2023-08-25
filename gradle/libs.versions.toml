@@ -4,6 +4,7 @@ configurate = "4.2.0-SNAPSHOT"
 task = "0.1.7-SNAPSHOT"
 event = "0.1.6-SNAPSHOT"
 junit = "5.10.0"
+log4j2 = "2.20.0"
 
 [libraries]
 spigot = { module = "org.spigotmc:spigot-api", version = "1.8.8-R0.1-SNAPSHOT" }
@@ -35,7 +36,8 @@ task-bukkit = { module = "tr.com.infumia:task-bukkit", version.ref = "task" }
 event-common = { module = "tr.com.infumia:event-common", version.ref = "event" }
 event-bukkit = { module = "tr.com.infumia:event-bukkit", version.ref = "event" }
 versionmatched = { module = "tr.com.infumia:versionmatched", version = "0.1.6-SNAPSHOT" }
-log4j2-api = { module = "org.apache.logging.log4j:log4j-api", version = "2.20.0" }
+log4j2-api = { module = "org.apache.logging.log4j:log4j-api", version.ref = "log4j2" }
+log4j2-slf4j2 = { module = "org.apache.logging.log4j:log4j-slf4j2-impl", version.ref = "log4j2" }
 
 [plugins]
 spotless = { id = "com.diffplug.spotless", version = "6.20.0" }
