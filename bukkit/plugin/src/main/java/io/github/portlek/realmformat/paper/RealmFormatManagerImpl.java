@@ -14,11 +14,12 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.logging.Logger;
+import lombok.extern.log4j.Log4j2;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnmodifiableView;
 import tr.com.infumia.terminable.Terminable;
 
+@Log4j2
 final class RealmFormatManagerImpl implements RealmFormatManager, Terminable {
 
     @NotNull
@@ -28,11 +29,7 @@ final class RealmFormatManagerImpl implements RealmFormatManager, Terminable {
 
     private final Map<String, RealmFormatLoader> loaders = new ConcurrentHashMap<>();
 
-    @NotNull
-    private final Logger logger;
-
-    RealmFormatManagerImpl(@NotNull final Logger logger, @NotNull final NmsBackend backend) {
-        this.logger = logger;
+    RealmFormatManagerImpl(@NotNull final NmsBackend backend) {
         this.backend = backend;
     }
 
@@ -72,7 +69,7 @@ final class RealmFormatManagerImpl implements RealmFormatManager, Terminable {
         @NotNull final RealmFormatPropertyMap properties
     ) {
         final long start = System.currentTimeMillis();
-        this.logger.info(String.format("Loading world %s.", worldName));
+        RealmFormatManagerImpl.log.info("Loading world {}.", worldName);
         final byte[] serializedWorld = loader.load(worldName, readOnly);
         final RealmFormatWorld world;
         try {
@@ -90,13 +87,11 @@ final class RealmFormatManagerImpl implements RealmFormatManager, Terminable {
             }
             throw e;
         }
-        this.logger.info(
-                String.format(
-                    "World %s loaded in %sms.",
-                    worldName,
-                    System.currentTimeMillis() - start
-                )
-            );
+        RealmFormatManagerImpl.log.info(
+            "World {} loaded in {}ms.",
+            worldName,
+            System.currentTimeMillis() - start
+        );
         this.loadedWorlds.put(worldName, world);
         return Optional.of(world);
     }

@@ -3,29 +3,25 @@ package io.github.portlek.realmformat.modules.mongo;
 import io.github.portlek.realmformat.paper.api.RealmFormatLoader;
 import io.github.portlek.realmformat.paper.api.RealmFormatManager;
 import java.util.Collection;
-import java.util.logging.Logger;
+import lombok.extern.log4j.Log4j2;
 import org.jetbrains.annotations.NotNull;
 import tr.com.infumia.terminable.TerminableConsumer;
 import tr.com.infumia.terminable.TerminableModule;
 
+@Log4j2
 final class RealmFormatLoaderMongo implements RealmFormatLoader, TerminableModule {
 
     @NotNull
     private final MongoCredential credential;
 
     @NotNull
-    private final Logger logger;
-
-    @NotNull
     private final RealmFormatManager manager;
 
     RealmFormatLoaderMongo(
         @NotNull final RealmFormatManager manager,
-        @NotNull final Logger logger,
         @NotNull final MongoCredential credential
     ) {
         this.manager = manager;
-        this.logger = logger;
         this.credential = credential;
     }
 

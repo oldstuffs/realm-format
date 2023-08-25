@@ -27,7 +27,7 @@ import tr.com.infumia.versionmatched.VersionMatched;
 
 public final class RealmFormatPlugin extends JavaPlugin implements TerminableConsumer, Terminable {
 
-    private final NmsBackend nmsBackend = new VersionMatched<NmsBackend>(
+    private final NmsBackend nmsBackend = new VersionMatched<>(
         NmsBackendV1_19_R2.class,
         NmsBackendV1_19_R3.class
     )
@@ -37,7 +37,7 @@ public final class RealmFormatPlugin extends JavaPlugin implements TerminableCon
             new IllegalStateException(this.getServer().getVersion() + " not supported!")
         );
 
-    private final ModifierBackend modifierBackend = new VersionMatched<ModifierBackend>(
+    private final ModifierBackend modifierBackend = new VersionMatched<>(
         ModifierBackendV1_19_R2.class,
         ModifierBackendV1_19_R3.class
     )
@@ -57,10 +57,7 @@ public final class RealmFormatPlugin extends JavaPlugin implements TerminableCon
         Configs.yaml(this.dataFolder.resolve("messages.yaml"))
     );
 
-    private final RealmFormatManagerImpl manager = new RealmFormatManagerImpl(
-        this.getLogger(),
-        this.nmsBackend
-    );
+    private final RealmFormatManagerImpl manager = new RealmFormatManagerImpl(this.nmsBackend);
 
     @Delegate(types = { TerminableConsumer.class, Terminable.class })
     private final CompositeTerminable terminable = CompositeTerminable.simple();
@@ -82,7 +79,7 @@ public final class RealmFormatPlugin extends JavaPlugin implements TerminableCon
     public void onEnable() {
         this.manager.bindWith(this);
         this.reload();
-        new RealmFormatModuleModule(this.dataFolder, this.getLogger()).bindModuleWith(this);
+        new RealmFormatModuleModule(this.dataFolder).bindModuleWith(this);
         new RealmFormatCommandModule(this, Cloud.annotation(Cloud.create(this)), this.messages)
             .bindModuleWith(this);
     }
@@ -92,7 +89,6 @@ public final class RealmFormatPlugin extends JavaPlugin implements TerminableCon
         this.messages.reload();
         new RealmFormatLoaderFile(
             this.manager,
-            this.getLogger(),
             Paths.get(System.getProperty("user.dir")).resolve(this.config.local())
         )
             .bindModuleWith(this);

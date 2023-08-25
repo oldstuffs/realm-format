@@ -4,23 +4,19 @@ import io.github.portlek.realmformat.paper.internal.module.ModuleFactory;
 import io.github.portlek.realmformat.paper.internal.module.ModuleManager;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import lombok.extern.log4j.Log4j2;
 import org.jetbrains.annotations.NotNull;
 import tr.com.infumia.terminable.TerminableConsumer;
 import tr.com.infumia.terminable.TerminableModule;
 
+@Log4j2
 final class RealmFormatModuleModule implements TerminableModule {
 
     @NotNull
     private final Path dataFolder;
 
-    @NotNull
-    private final Logger logger;
-
-    RealmFormatModuleModule(@NotNull final Path dataFolder, @NotNull final Logger logger) {
+    RealmFormatModuleModule(@NotNull final Path dataFolder) {
         this.dataFolder = dataFolder;
-        this.logger = logger;
     }
 
     @Override
@@ -28,7 +24,7 @@ final class RealmFormatModuleModule implements TerminableModule {
         final Path modulesFolder = this.dataFolder.resolve("modules");
         final ModuleManager moduleManager = new ModuleManager(
             modulesFolder,
-            new ModuleFactory(modulesFolder, this.logger)
+            new ModuleFactory(modulesFolder)
         );
         System.setProperty("pf4j.mode", "deployment");
         try {
@@ -36,7 +32,7 @@ final class RealmFormatModuleModule implements TerminableModule {
                 Files.createDirectories(modulesFolder);
             }
         } catch (final Exception e) {
-            this.logger.log(Level.SEVERE, "Failed to create modules directory!", e);
+            RealmFormatModuleModule.log.fatal("Failed to create modules directory!", e);
         }
         moduleManager.loadPlugins();
         moduleManager.startPlugins();
