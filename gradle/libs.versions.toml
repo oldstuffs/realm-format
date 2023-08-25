@@ -16,8 +16,8 @@ redis = { module = "io.lettuce:lettuce-core", version = "6.2.6.RELEASE" }
 hikari = { module = "com.zaxxer:HikariCP", version = "5.0.1" }
 commonsio = { module = "commons-io:commons-io", version = "2.13.0" }
 gson = { module = "com.google.code.gson:gson", version = "2.10.1" }
-mariadb = { module = "org.mariadb.jdbc:mariadb-java-client", version = "3.1.4" }
 mongodb = { module = "org.mongodb:mongodb-driver-sync", version = "4.10.2" }
+mariadb = { module = "org.mariadb.jdbc:mariadb-java-client", version = "3.2.0" }
 javassist = { module = "org.javassist:javassist", version = "3.29.2-GA" }
 snakeyaml = { module = "org.yaml:snakeyaml", version = "2.1" }
 junit-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit" }
