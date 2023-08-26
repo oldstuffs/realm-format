@@ -11,7 +11,7 @@ import org.spongepowered.configurate.objectmapping.meta.Setting;
 @ConfigSerializable
 public final class RealmFormatMongoConfig implements Config {
 
-    @Setting
+    @Setting(nodeFromParent = true)
     private MongoCredential credential = MongoCredential.builder().build();
 
     @NotNull

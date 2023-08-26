@@ -6,6 +6,7 @@ import java.lang.invoke.MethodHandles;
 import java.lang.invoke.MethodType;
 import java.lang.reflect.Modifier;
 import java.nio.file.Path;
+import java.util.Locale;
 import lombok.extern.log4j.Log4j2;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -46,7 +47,10 @@ public final class ModuleFactory implements PluginFactory {
             ModuleFactory.log.fatal("The plugin class '{}' is not valid!", className);
             return null;
         }
-        final Path directory = this.modulessPath.resolve(cls.getSimpleName().replace("Module", ""));
+        final Path directory =
+            this.modulessPath.resolve(
+                    cls.getSimpleName().replace("Module", "").toLowerCase(Locale.ROOT)
+                );
         try {
             return (Module) MethodHandles
                 .lookup()

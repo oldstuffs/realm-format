@@ -16,7 +16,7 @@ public final class MongoModule extends Module {
     @Override
     protected void enable() {
         final RealmFormatMongoConfig config = new RealmFormatMongoConfig(
-            Configs.yaml(this.context.dataFolder().resolve("config.yaml"))
+            Configs.yaml(this.context.dataFolder().resolve("mongo.yaml"))
         );
         config.reload();
         Events
