@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import tr.com.infumia.terminable.TerminableConsumer;
 import tr.com.infumia.terminable.TerminableModule;
 
-@Log4j2
+@Log4j2(topic = "ModuleFactory")
 final class RealmFormatLoaderMongo implements RealmFormatLoader, TerminableModule {
 
     @NotNull

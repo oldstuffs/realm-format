@@ -6,10 +6,11 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import lombok.extern.log4j.Log4j2;
 import org.jetbrains.annotations.NotNull;
+import org.pf4j.AbstractPluginManager;
 import tr.com.infumia.terminable.TerminableConsumer;
 import tr.com.infumia.terminable.TerminableModule;
 
-@Log4j2
+@Log4j2(topic = "RealmFormatModuleModule")
 final class RealmFormatModuleModule implements TerminableModule {
 
     @NotNull
@@ -26,7 +27,7 @@ final class RealmFormatModuleModule implements TerminableModule {
             modulesFolder,
             new ModuleFactory(modulesFolder)
         );
-        System.setProperty("pf4j.mode", "deployment");
+        System.setProperty(AbstractPluginManager.MODE_PROPERTY_NAME, "deployment");
         try {
             if (Files.notExists(modulesFolder)) {
                 Files.createDirectories(modulesFolder);

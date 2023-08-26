@@ -1,16 +1,23 @@
 package io.github.portlek.realmformat.bukkit.api.event;
 
+import io.github.portlek.realmformat.bukkit.api.RealmFormatManager;
+import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 
+@Getter
 public final class RealmFormatLoaderLoadEvent extends Event {
 
     private static final HandlerList HANDLER_LIST = new HandlerList();
 
-    public RealmFormatLoaderLoadEvent() {
+    @NotNull
+    private final RealmFormatManager manager;
+
+    public RealmFormatLoaderLoadEvent(@NotNull final RealmFormatManager manager) {
         super(!Bukkit.isPrimaryThread());
+        this.manager = manager;
     }
 
     @NotNull

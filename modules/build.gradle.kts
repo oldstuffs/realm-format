@@ -10,6 +10,8 @@ subprojects {
     compileOnly(rootProject.libs.configurate.yaml)
     compileOnly(rootProject.libs.spigot)
     compileOnly(rootProject.libs.log4j2.api)
+    compileOnly(rootProject.libs.event.common)
+    compileOnly(rootProject.libs.event.bukkit)
   }
 
   tasks {

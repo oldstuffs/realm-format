@@ -13,7 +13,7 @@ import org.pf4j.Plugin;
 import org.pf4j.PluginFactory;
 import org.pf4j.PluginWrapper;
 
-@Log4j2
+@Log4j2(topic = "ModuleFactory")
 @SuppressWarnings("unchecked")
 public final class ModuleFactory implements PluginFactory {
 

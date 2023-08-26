@@ -19,7 +19,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnmodifiableView;
 import tr.com.infumia.terminable.Terminable;
 
-@Log4j2
+@Log4j2(topic = "RealmFormatManagerImpl")
 final class RealmFormatManagerImpl implements RealmFormatManager, Terminable {
 
     @NotNull

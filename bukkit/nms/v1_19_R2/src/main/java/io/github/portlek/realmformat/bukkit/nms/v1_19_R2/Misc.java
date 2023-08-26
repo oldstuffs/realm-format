@@ -19,7 +19,7 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.world.level.chunk.DataLayer;
 import org.jetbrains.annotations.NotNull;
 
-@Log4j2
+@Log4j2(topic = "Misc")
 @UtilityClass
 class Misc {
 

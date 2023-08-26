@@ -92,6 +92,6 @@ public final class RealmFormatPlugin extends JavaPlugin implements TerminableCon
             Paths.get(System.getProperty("user.dir")).resolve(this.config.local())
         )
             .bindModuleWith(this);
-        this.getServer().getPluginManager().callEvent(new RealmFormatLoaderLoadEvent());
+        this.getServer().getPluginManager().callEvent(new RealmFormatLoaderLoadEvent(this.manager));
     }
 }
