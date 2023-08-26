@@ -1,6 +1,7 @@
 package io.github.portlek.realmformat.bukkit;
 
 import io.github.portlek.realmformat.bukkit.api.event.RealmFormatLoaderLoadEvent;
+import io.github.portlek.realmformat.bukkit.api.event.RealmFormatReloadEvent;
 import io.github.portlek.realmformat.bukkit.api.internal.config.Configs;
 import io.github.portlek.realmformat.bukkit.config.RealmFormatConfig;
 import io.github.portlek.realmformat.bukkit.config.RealmFormatMessages;
@@ -79,6 +80,12 @@ public final class RealmFormatPlugin extends JavaPlugin implements TerminableCon
     public void onEnable() {
         this.manager.bindWith(this);
         this.reload();
+        new RealmFormatLoaderFile(
+            this.manager,
+            Paths.get(System.getProperty("user.dir")).resolve(this.config.local())
+        )
+            .bindModuleWith(this);
+        this.getServer().getPluginManager().callEvent(new RealmFormatLoaderLoadEvent(this.manager));
         new RealmFormatModuleModule(this.dataFolder).bindModuleWith(this);
         new RealmFormatCommandModule(this, Cloud.annotation(Cloud.create(this)), this.messages)
             .bindModuleWith(this);
@@ -87,11 +94,6 @@ public final class RealmFormatPlugin extends JavaPlugin implements TerminableCon
     void reload() {
         this.config.reload();
         this.messages.reload();
-        new RealmFormatLoaderFile(
-            this.manager,
-            Paths.get(System.getProperty("user.dir")).resolve(this.config.local())
-        )
-            .bindModuleWith(this);
-        this.getServer().getPluginManager().callEvent(new RealmFormatLoaderLoadEvent(this.manager));
+        this.getServer().getPluginManager().callEvent(new RealmFormatReloadEvent());
     }
 }

@@ -1,6 +1,7 @@
 package io.github.portlek.realmformat.modules.mongo;
 
 import io.github.portlek.realmformat.bukkit.api.event.RealmFormatLoaderLoadEvent;
+import io.github.portlek.realmformat.bukkit.api.event.RealmFormatReloadEvent;
 import io.github.portlek.realmformat.bukkit.api.internal.config.Configs;
 import io.github.portlek.realmformat.bukkit.api.internal.module.Module;
 import io.github.portlek.realmformat.bukkit.api.internal.module.ModuleContext;
@@ -15,10 +16,10 @@ public final class MongoModule extends Module {
 
     @Override
     protected void enable() {
-        final RealmFormatMongoConfig config = new RealmFormatMongoConfig(
+        final RealmFormatMongoConfig mongo = new RealmFormatMongoConfig(
             Configs.yaml(this.context.dataFolder().resolve("mongo.yaml"))
         );
-        config.reload();
+        Events.subscribe(RealmFormatReloadEvent.class).handler(mongo::reload).bindWith(this);
         Events
             .subscribe(RealmFormatLoaderLoadEvent.class)
             .handler(event ->
@@ -26,7 +27,7 @@ public final class MongoModule extends Module {
                     .manager()
                     .registerLoader(
                         "mongo",
-                        new RealmFormatLoaderMongo(event.manager(), config.credential())
+                        new RealmFormatLoaderMongo(event.manager(), mongo.credential())
                     )
             )
             .bindWith(this);
