@@ -17,7 +17,7 @@ commonsio = { module = "commons-io:commons-io", version = "2.13.0" }
 gson = { module = "com.google.code.gson:gson", version = "2.10.1" }
 mariadb = { module = "org.mariadb.jdbc:mariadb-java-client", version = "3.2.0" }
 javassist = { module = "org.javassist:javassist", version = "3.29.2-GA" }
-snakeyaml = { module = "org.yaml:snakeyaml", version = "2.1" }
+snakeyaml = { module = "org.yaml:snakeyaml", version = "2.2" }
 junit-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit" }
 junit-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit" }
 
