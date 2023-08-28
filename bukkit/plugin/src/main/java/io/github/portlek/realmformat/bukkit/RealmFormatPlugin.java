@@ -21,6 +21,7 @@ import lombok.experimental.Delegate;
 import org.bukkit.plugin.java.JavaPlugin;
 import tr.com.infumia.event.bukkit.BukkitEventManager;
 import tr.com.infumia.event.common.Plugins;
+import tr.com.infumia.task.BukkitTasks;
 import tr.com.infumia.terminable.CompositeTerminable;
 import tr.com.infumia.terminable.Terminable;
 import tr.com.infumia.terminable.TerminableConsumer;
@@ -66,6 +67,7 @@ public final class RealmFormatPlugin extends JavaPlugin implements TerminableCon
     @Override
     public void onLoad() {
         Plugins.init(new BukkitEventManager(this));
+        BukkitTasks.init(this);
         RealmFormatSerializers.initiate();
         RealmFormatWorldUpgrades.initiate();
         Modifier.initiateBackend(this.modifierBackend);
