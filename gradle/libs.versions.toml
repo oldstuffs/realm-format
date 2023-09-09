@@ -1,5 +1,5 @@
 [versions]
-cloud = "1.8.3"
+cloud = "1.8.4"
 task = "0.1.4"
 event = "0.1.3"
 junit = "5.10.0"
