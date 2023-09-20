@@ -6,7 +6,7 @@ junit = "5.10.0"
 
 [libraries]
 paper = { module = "io.papermc.paper:paper-api", version = "1.19.4-R0.1-SNAPSHOT" }
-lombok = { module = "org.projectlombok:lombok", version = "1.18.28" }
+lombok = { module = "org.projectlombok:lombok", version = "1.18.30" }
 annotations = { module = "org.jetbrains:annotations", version = "24.0.1" }
 nbt = { module = "io.github.shiruka:nbt", version = "2.0.2" }
 zstd = { module = "com.github.luben:zstd-jni", version = "1.5.5-5" }
