@@ -1,6 +1,21 @@
 package io.github.portlek.realmformat.format.realm;
 
 import io.github.shiruka.nbt.CompoundTag;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.ToString;
 import org.jetbrains.annotations.NotNull;
 
-public record BlockDataV1_18(@NotNull CompoundTag biomes, @NotNull CompoundTag blockStates) {}
+@Getter
+@Builder
+@ToString
+@EqualsAndHashCode
+public final class BlockDataV1_18 {
+
+    @NotNull
+    private final CompoundTag biomes;
+
+    @NotNull
+    private final CompoundTag blockStates;
+}

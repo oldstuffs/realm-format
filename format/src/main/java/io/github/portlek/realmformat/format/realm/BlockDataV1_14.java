@@ -11,13 +11,13 @@ import org.jetbrains.annotations.NotNull;
 @EqualsAndHashCode
 public final class BlockDataV1_14 {
 
-  private final long@NotNull[] blockStates;
+    private final long@NotNull[] blockStates;
 
-  @NotNull
-  private final ListTag palette;
+    @NotNull
+    private final ListTag palette;
 
-  public BlockDataV1_14(@NotNull final ListTag palette, final long@NotNull[] blockStates) {
-    this.palette = palette;
-    this.blockStates = blockStates;
-  }
+    public BlockDataV1_14(@NotNull final ListTag palette, final long@NotNull[] blockStates) {
+        this.palette = palette;
+        this.blockStates = blockStates;
+    }
 }

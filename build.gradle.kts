@@ -37,7 +37,10 @@ subprojects {
   val shadowRelocation = findProperty("shadow.relocation")?.toString().toBoolean()
   val mavenPublish = findProperty("maven.publish")?.toString().toBoolean()
 
-  java { toolchain { languageVersion.set(JavaLanguageVersion.of(17)) } }
+  java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+  }
 
   tasks {
     test {
@@ -156,17 +159,15 @@ subprojects {
     compileOnly(rootProject.libs.annotations)
 
     annotationProcessor(rootProject.libs.lombok)
-    annotationProcessor(rootProject.libs.annotations)
 
     testImplementation(rootProject.libs.junit.api)
     testRuntimeOnly(rootProject.libs.junit.engine)
 
     testAnnotationProcessor(rootProject.libs.lombok)
-    testAnnotationProcessor(rootProject.libs.annotations)
   }
 }
 
-nexusPublishing { repositories { sonatype() } }
+nexusPublishing.repositories.sonatype()
 
 spotless {
   lineEndings = LineEnding.UNIX
@@ -174,7 +175,7 @@ spotless {
   val prettierConfig =
     mapOf(
       "prettier" to "2.8.8",
-      "prettier-plugin-java" to "2.2.0",
+      "prettier-plugin-java" to "2.3.0",
     )
 
   format("encoding") {
@@ -202,7 +203,7 @@ spotless {
 
   kotlinGradle {
     target("**/*.gradle.kts")
-    indentWithSpaces(2)
+    indentWithSpaces(4)
     endWithNewline()
     trimTrailingWhitespace()
     ktlint()
@@ -212,12 +213,12 @@ spotless {
     target("**/src/**/java/**/*.java")
     importOrder()
     removeUnusedImports()
-    indentWithSpaces(2)
+    indentWithSpaces(4)
     endWithNewline()
     trimTrailingWhitespace()
     prettier(prettierConfig)
       .config(
-        mapOf("parser" to "java", "tabWidth" to 2, "useTabs" to false, "printWidth" to 100),
+        mapOf("parser" to "java", "tabWidth" to 4, "useTabs" to false, "printWidth" to 100),
       )
   }
 }

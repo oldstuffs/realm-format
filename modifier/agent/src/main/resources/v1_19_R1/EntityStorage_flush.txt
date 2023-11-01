@@ -1,5 +1,0 @@
-{
-    if (io.github.portlek.realmformat.modifier.Modifier.flushEntities($0)) {
-        return;
-    }
-}

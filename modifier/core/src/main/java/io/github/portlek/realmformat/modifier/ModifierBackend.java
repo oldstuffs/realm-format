@@ -4,31 +4,31 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public interface ModifierBackend {
-  @NotNull
-  Object chunkAt(@NotNull Object world, int x, int z);
+    @NotNull
+    Object chunkAt(@NotNull Object world, int x, int z);
 
-  @NotNull
-  Object chunkTask(
-    @NotNull Object scheduler,
-    @NotNull Object world,
-    int chunkX,
-    int chunkZ,
-    @NotNull Object chunkHolder,
-    @NotNull Object priority,
-    @NotNull Object status
-  );
+    @NotNull
+    Object chunkTask(
+        @NotNull Object scheduler,
+        @NotNull Object world,
+        int chunkX,
+        int chunkZ,
+        @NotNull Object chunkHolder,
+        @NotNull Object priority,
+        @NotNull Object status
+    );
 
-  boolean flushEntities(@NotNull Object storage);
+    boolean flushEntities(@NotNull Object storage);
 
-  @Nullable
-  Object injectCustomWorlds();
+    @Nullable
+    Object injectCustomWorlds();
 
-  boolean isCustomWorld(@NotNull Object world);
+    boolean isCustomWorld(@NotNull Object world);
 
-  @Nullable
-  Object loadEntities(@NotNull Object storage, @NotNull Object chunkCoordinates);
+    @Nullable
+    Object loadEntities(@NotNull Object storage, @NotNull Object chunkCoordinates);
 
-  boolean saveChunk(@NotNull Object world, @NotNull Object chunkAccess);
+    boolean saveChunk(@NotNull Object world, @NotNull Object chunkAccess);
 
-  boolean storeEntities(@NotNull Object storage, @NotNull Object entities);
+    boolean storeEntities(@NotNull Object storage, @NotNull Object entities);
 }

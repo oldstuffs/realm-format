@@ -4,54 +4,14 @@ import io.github.portlek.realmformat.format.property.RealmFormatPropertyMap;
 import io.github.shiruka.nbt.CompoundTag;
 import java.util.Map;
 
-/**
- * An interface that represents Realm format's worlds.
- */
 public interface RealmFormatWorld {
-  /**
-   * Gets world's chunks.
-   *
-   * @return Chunks of the world.
-   *
-   * @since 1
-   */
-  Map<RealmFormatChunkPosition, RealmFormatChunk> chunks();
+    Map<RealmFormatChunkPosition, RealmFormatChunk> chunks();
 
-  /**
-   * Gets extra data of the world.
-   *
-   * @return Extra data of the world.
-   *
-   * @since 1
-   */
-  CompoundTag extra();
+    CompoundTag extra();
 
-  /**
-   * Gets properties of the world.
-   *
-   * @return Properties of the world.
-   *
-   * @since 1
-   */
-  RealmFormatPropertyMap properties();
+    RealmFormatPropertyMap properties();
 
-  /**
-   * Gets world version.
-   *
-   * @return Realm's world version.
-   *
-   * @since 1
-   */
-  byte version();
+    byte version();
 
-  /**
-   * Gets Minecraft world version.
-   * <p>
-   * This does NOT represent RealmFormat version.
-   *
-   * @return Minecraft world version.
-   *
-   * @since 1
-   */
-  byte worldVersion();
+    byte worldVersion();
 }

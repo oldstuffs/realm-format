@@ -18,21 +18,21 @@ import lombok.ToString;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public final class RealmFormatChunkV1 implements RealmFormatChunk {
 
-  private int[] biomes;
+    private int[] biomes;
 
-  private ListTag entities;
+    private ListTag entities;
 
-  private CompoundTag heightMaps;
+    private CompoundTag heightMaps;
 
-  private int maxSection;
+    private int maxSection;
 
-  private int minSection;
+    private int minSection;
 
-  private RealmFormatChunkSection[] sections;
+    private RealmFormatChunkSection[] sections;
 
-  private ListTag tileEntities;
+    private ListTag tileEntities;
 
-  private int x;
+    private int x;
 
-  private int z;
+    private int z;
 }

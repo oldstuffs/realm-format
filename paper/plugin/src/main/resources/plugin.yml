@@ -1,5 +1,0 @@
----
-name: RealmFormat
-main: io.github.portlek.realmformat.paper.RealmFormatBoostrap
-version: "${project.version}"
-api-version: 1.13

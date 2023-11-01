@@ -19,13 +19,13 @@ import lombok.ToString;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public final class RealmFormatChunkSectionV1 implements RealmFormatChunkSection {
 
-  private BlockDataV1_14 blockDataV1_14;
+    private BlockDataV1_14 blockDataV1_14;
 
-  private BlockDataV1_18 blockDataV1_18;
+    private BlockDataV1_18 blockDataV1_18;
 
-  private BlockDataV1_8 blockDataV1_8;
+    private BlockDataV1_8 blockDataV1_8;
 
-  private NibbleArray blockLight;
+    private NibbleArray blockLight;
 
-  private NibbleArray skyLight;
+    private NibbleArray skyLight;
 }
